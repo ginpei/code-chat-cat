@@ -6,8 +6,8 @@
     div.layout-main
       textarea.main(@input="main_onInput" @scroll="main_onScroll" :value="textMarkdown" ref="main")
     div.layout-sub
-      article.content(@scroll="sub_onScroll" ref="sub")
-        div.content-body(v-html="contentHtml")
+      div.content(@scroll="sub_onScroll" ref="sub")
+        MainText.content-body(:markdown="textMarkdown")
     div.layout-sidebar
       div.sidebar
         section.sidebar-section
@@ -15,14 +15,13 @@
 </template>
 
 <script>
+import MainText from '~/components/MainText.vue';
 import firebase from '~/plugins/firebase.js';
-import MarkdownIt from 'markdown-it';
 import { mapState, mapGetters, mapActions } from 'vuex';
-
-const mdit = new MarkdownIt();
 
 export default {
   components: {
+    MainText,
   },
 
   data () {
@@ -38,15 +37,6 @@ export default {
 
     textMarkdown () {
       return this.textMarkdownOf(this.roomId);
-    },
-
-    contentHtml () {
-      const markdown = this.textMarkdown;
-      if (typeof markdown !== 'string') {
-        console.log('# markdown', markdown);
-        return '';
-      }
-      return mdit.render(markdown);
     },
 
     ...mapState({

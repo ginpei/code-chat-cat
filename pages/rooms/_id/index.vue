@@ -4,7 +4,7 @@
       div.header
         div.header-logo Code Class &amp; Chat
     div.layout-main
-      article.text(v-html="contentHtml")
+      MainText.content-body(:markdown="textMarkdown")
     div.layout-sidebar
       div.sidebar
         section.sidebar-section
@@ -12,15 +12,15 @@
 </template>
 
 <script>
+import MainText from '~/components/MainText.vue';
 import firebase from '~/plugins/firebase.js';
 import { mapState, mapGetters } from 'vuex';
-import MarkdownIt from 'markdown-it';
 
 const db = firebase.database();
-const mdit = new MarkdownIt();
 
 export default {
   components: {
+    MainText,
   },
 
   data () {
@@ -36,15 +36,6 @@ export default {
 
     textMarkdown () {
       return this.textMarkdownOf(this.roomId);
-    },
-
-    contentHtml () {
-      const markdown = this.textMarkdown;
-      if (typeof markdown !== 'string') {
-        console.log('# markdown', this.roomId, markdown);
-        return '';
-      }
-      return mdit.render(markdown);
     },
 
     ...mapState({
@@ -97,5 +88,9 @@ export default {
     line-height: var(--layout-header-height);
     grid-area: header;
     padding: 0 1rem;
+}
+
+.content-body {
+  margin: 1rem;
 }
 </style>
