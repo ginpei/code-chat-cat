@@ -18,10 +18,10 @@
             button.signIn-signIn Sign In
     div.layout-main(v-if="!initializing && signedIn")
       div.classBoard
-        div.classBoard-textbook(v-if="signedIn")
+        div.classBoard-textbook
           div.textbook
             MainText.textbook-body(:markdown="textMarkdown")
-        div.classBoard-sidebar(v-if="signedIn")
+        div.classBoard-sidebar
           div.sidebar
             section.sidebar-section.fileManager
               h1.sidebar-heading Files
