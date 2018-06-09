@@ -23,12 +23,6 @@ export default {
     MainText,
   },
 
-  data () {
-    return {
-      html: new Array(100).join('# Hey\n\n'),
-    }
-  },
-
   computed: {
     roomId () {
       return this.$route.params.id;
