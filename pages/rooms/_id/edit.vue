@@ -40,6 +40,18 @@ export default {
     }
   },
 
+  async asyncData ({ params, store, error }) {
+    const roomsRef = firebase.database().ref('rooms');
+    store.dispatch('setRoomsRef', roomsRef);
+    await roomsRef.once('value');
+    const room = store.getters['roomOf'](params.id);
+    if (!room) {
+      error({ statusCode: 404, message: 'Room not found' })
+    }
+
+    return { room };
+  },
+
   data () {
     return {
       elBeingScrolled: null,
@@ -53,7 +65,7 @@ export default {
     },
 
     roomTitle () {
-      return this.roomOf(this.roomId).title;
+      return this.room && this.room.title;
     },
 
     textMarkdown () {
