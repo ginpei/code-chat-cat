@@ -3,18 +3,12 @@
     div.layout-header
       div.header
         div.header-logo {{ roomTitle }}
-    div.layout-main(v-if="signedIn")
-      MainText.content-body(:markdown="textMarkdown")
-    div.layout-sidebar(v-if="signedIn")
-      div.sidebar
-        section.sidebar-section.fileManager
-          h1.sidebar-heading Files
-          FileList(:files="files")
-        section.sidebar-section.accountManager
-          h1.sidebar-heading Account
-          div
-            button(@click="signOut") Sign Out
-    div.layout-signIn(v-if="!initializing && !signedIn")
+    div.layout-main(v-if="initializing")
+      div.initializing
+        div.initializing-box *
+        div.initializing-box *
+        div.initializing-box *
+    div.layout-main(v-if="!initializing && !signedIn")
       div.signIn
         form.signIn-box(@submit.prevent="signIn_onSubmit")
           h1.signIn-heading Welcome!
@@ -22,10 +16,20 @@
           div.signIn-form
             input.signIn-input(v-model="userNameInput" placeholder="Alice")
             button.signIn-signIn Sign In
-    div.initializing(v-if="initializing")
-      div.initializing-box *
-      div.initializing-box *
-      div.initializing-box *
+    div.layout-main(v-if="!initializing && signedIn")
+      div.classBoard
+        div.classBoard-textbook(v-if="signedIn")
+          div.textbook
+            MainText.textbook-body(:markdown="textMarkdown")
+        div.classBoard-sidebar(v-if="signedIn")
+          div.sidebar
+            section.sidebar-section.fileManager
+              h1.sidebar-heading Files
+              FileList(:files="files")
+            section.sidebar-section.accountManager
+              h1.sidebar-heading Account
+              div
+                button(@click="signOut") Sign Out
 </template>
 
 <script>
@@ -138,34 +142,16 @@ export default {
   display: grid;
   grid-template:
     "header" var(--layout-header-height)
-    "signIn" calc(100% - var(--layout-header-height))
+    "main" calc(100% - var(--layout-header-height))
     / auto;
   height: 100vh;
-
-  &[signedIn] {
-    grid-template:
-      "header header" var(--layout-header-height)
-      "sidebar main" calc(100% - var(--layout-header-height))
-      / 10rem auto;
-  }
 
   .layout-header {
     grid-area: header;
   }
 
   .layout-main {
-    box-shadow: 0.2rem 0.2rem 0.2rem #0003 inset;
     grid-area: main;
-    overflow: auto;
-  }
-
-  .layout-sidebar {
-    border-right: 1px solid gray;
-    grid-area: sidebar;
-  }
-
-  .layout-signIn {
-    grid-area: signIn;
   }
 }
 
@@ -178,16 +164,36 @@ export default {
     padding: 0 1rem;
 }
 
-.content-body {
-  margin: 1rem;
+.initializing {
+  background-color: #fff3;
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  position: fixed;
+  width: 100%;
+
+  .initializing-box {
+    animation: rotate 1s infinite;
+    height: 30px;
+    text-align: center;
+    width: 30px;
+
+    &:nth-child(1) {
+      animation-delay: 0ms;
+    }
+    &:nth-child(2) {
+      animation-delay: 100ms;
+    }
+    &:nth-child(3) {
+      animation-delay: 200ms;
+    }
+  }
 }
 
-.sidebar-section {
-  padding: 0 1rem;
-}
-
-.fileManager {
-  min-height: 200px;
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .signIn {
@@ -234,35 +240,38 @@ export default {
   }
 }
 
-.initializing {
-  background-color: #fff3;
-  align-items: center;
-  display: flex;
+.classBoard {
+  display: grid;
+  grid-template:
+    "sidebar textbook" auto
+    / 10rem calc(100% - 10rem);
   height: 100%;
-  justify-content: center;
-  position: fixed;
-  width: 100%;
 
-  .initializing-box {
-    animation: rotate 1s infinite;
-    height: 30px;
-    text-align: center;
-    width: 30px;
+  .classBoard-textbook {
+    box-shadow: 0.2rem 0.2rem 0.2rem #0003 inset;
+    grid-area: textbook;
+    overflow: auto;
+  }
 
-    &:nth-child(1) {
-      animation-delay: 0ms;
-    }
-    &:nth-child(2) {
-      animation-delay: 100ms;
-    }
-    &:nth-child(3) {
-      animation-delay: 200ms;
-    }
+  .classBoard-sidebar {
+    border-right: 1px solid gray;
+    grid-area: sidebar;
   }
 }
 
-@keyframes rotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.textbook {
+  .textbook-body {
+    margin: 1rem;
+  }
+}
+
+.sidebar {
+  .sidebar-section {
+    padding: 0 1rem;
+  }
+}
+
+.fileManager {
+  min-height: 200px;
 }
 </style>
