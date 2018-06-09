@@ -1,4 +1,4 @@
-import firebase from 'firebase'
+import firebase from 'firebase';
 
 if (!firebase.apps.length) {
   firebase.initializeApp({
