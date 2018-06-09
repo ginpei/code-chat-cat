@@ -15,6 +15,9 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  css: [
+    { src: 'node_modules/highlight.js/styles/atom-one-dark.css' }
+  ],
   /*
   ** Customize the progress bar color
   */
