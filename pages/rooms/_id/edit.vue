@@ -2,7 +2,7 @@
   div.layout
     div.layout-header
       div.header
-        div.header-logo Code Class &amp; Chat
+        div.header-logo {{ roomTitle }}
     div.layout-main
       textarea.main(@input="main_onInput" @scroll="main_onScroll" :value="textMarkdown" ref="main")
     div.layout-sub
@@ -34,6 +34,12 @@ export default {
     FileList,
   },
 
+  head () {
+    return {
+      titleTemplate: `${this.roomTitle} - %s`,
+    }
+  },
+
   data () {
     return {
       elBeingScrolled: null,
@@ -44,6 +50,10 @@ export default {
   computed: {
     roomId () {
       return this.$route.params.id;
+    },
+
+    roomTitle () {
+      return this.roomOf(this.roomId).title;
     },
 
     textMarkdown () {

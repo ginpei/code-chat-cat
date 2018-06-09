@@ -2,7 +2,7 @@
   div.layout
     div.layout-header
       div.header
-        div.header-logo Code Class &amp; Chat
+        div.header-logo {{ roomTitle }}
     div.layout-main
       MainText.content-body(:markdown="textMarkdown")
     div.layout-sidebar
@@ -26,9 +26,19 @@ export default {
     FileList,
   },
 
+  head () {
+    return {
+      titleTemplate: `${this.roomTitle} - %s`,
+    }
+  },
+
   computed: {
     roomId () {
       return this.$route.params.id;
+    },
+
+    roomTitle () {
+      return this.roomOf(this.roomId).title;
     },
 
     textMarkdown () {
