@@ -46,7 +46,7 @@ export const actions = {
       throw new Error('Valid room ID is required');
     }
 
-    roomsRef.child(roomId).set({ textMarkdown: value });
+    roomsRef.child(roomId).child('textMarkdown').set(value);
   }),
 
   uploadFile: async ({ getters }, { roomId, file }) => {
