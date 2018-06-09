@@ -21,6 +21,15 @@ html {
   margin: 0;
 }
 
+button {
+  cursor: pointer;
+}
+
+:link,
+:visited {
+  color: #039;
+}
+
 .button--green {
   display: inline-block;
   border-radius: 4px;

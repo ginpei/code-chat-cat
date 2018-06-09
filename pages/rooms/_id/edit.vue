@@ -17,13 +17,12 @@
           :data-fileDraggingOver="fileDraggingOver"
         )
           h1.sidebar-heading Files
-          ul
-            li(v-for="file in files")
-              a(:href="file.url") {{ file.name }}
+          FileList(:files="files")
 </template>
 
 <script>
 import MainText from '~/components/MainText.vue';
+import FileList from '~/components/FileList.vue';
 import firebase from '~/plugins/firebase.js';
 import { mapState, mapGetters, mapActions } from 'vuex';
 
@@ -32,6 +31,7 @@ const storageRef = firebase.storage().ref();
 export default {
   components: {
     MainText,
+    FileList,
   },
 
   data () {
@@ -182,6 +182,7 @@ textarea.main {
 
 .fileManager {
   min-height: 200px;
+  padding: 0 1rem;
 
   &[data-fileDraggingOver] {
     background-color: khaki;
