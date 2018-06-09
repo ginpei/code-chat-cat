@@ -50,6 +50,7 @@ export default {
     font-size: 85%;
     margin-bottom: 1em;
     margin-top: 1em;
+    overflow: auto;
     padding: 1em;
   }
 }
