@@ -33,11 +33,23 @@ export default {
 
 <style lang="scss">
 .MainText {
+  h1,
+  h2,
+  h3 {
+    margin-top: 1em;
+  }
+
+  p {
+    margin-top: 0.5em;
+  }
+
   pre {
     background-color: #282b2e;
     color: #a9b7c6;
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;  // from GitHub
     font-size: 85%;
+    margin-bottom: 1em;
+    margin-top: 1em;
     padding: 1em;
   }
 }
