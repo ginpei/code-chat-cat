@@ -15,7 +15,7 @@ export const getters = {
 
   filesOf: (_, getters) => (id) => {
     const room = getters['roomOf'](id);
-    if (!room) {
+    if (!room || !room.files || room.files.length < 1) {
       return [];
     }
 
