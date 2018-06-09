@@ -112,10 +112,12 @@ export default {
 
   methods: {
     async signIn ({ name }) {
+      this.loadingUser = true;
       await firebase.auth().signInAnonymously();
     },
 
     async signOut () {
+      this.loadingUser = true;
       await firebase.auth().signOut();
     },
 
