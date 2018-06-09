@@ -133,7 +133,7 @@ export default {
   grid-template:
     "header header header" var(--layout-header-height)
     "sidebar main sub" calc(100% - var(--layout-header-height))
-    / 10rem calc((100% - 5rem) / 2) calc((100% - 5rem) / 2);
+    / 10rem calc((100% - 10rem) / 2) calc((100% - 10rem) / 2);
   height: 100vh;
 
   .layout-header {
