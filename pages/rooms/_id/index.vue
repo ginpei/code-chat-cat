@@ -7,12 +7,14 @@
       MainText.content-body(:markdown="textMarkdown")
     div.layout-sidebar
       div.sidebar
-        section.sidebar-section
+        section.sidebar-section.fileManager
           h1.sidebar-heading Files
+          FileList(:files="files")
 </template>
 
 <script>
 import MainText from '~/components/MainText.vue';
+import FileList from '~/components/FileList.vue';
 import firebase from '~/plugins/firebase.js';
 import { mapState, mapGetters } from 'vuex';
 
@@ -21,6 +23,7 @@ const db = firebase.database();
 export default {
   components: {
     MainText,
+    FileList,
   },
 
   computed: {
@@ -32,12 +35,17 @@ export default {
       return this.textMarkdownOf(this.roomId);
     },
 
+    files () {
+      return this.filesOf(this.roomId);
+    },
+
     ...mapState({
       rooms: 'rooms',
     }),
 
     ...mapGetters({
       roomOf: 'roomOf',
+      filesOf: 'filesOf',
       textMarkdownOf: 'textMarkdownOf',
     }),
   },
@@ -56,7 +64,7 @@ export default {
   grid-template:
     "header header" var(--layout-header-height)
     "sidebar main" calc(100% - var(--layout-header-height))
-    / 5rem auto;
+    / 10rem auto;
   height: 100vh;
 
   .layout-header {
@@ -86,5 +94,10 @@ export default {
 
 .content-body {
   margin: 1rem;
+}
+
+.fileManager {
+  min-height: 200px;
+  padding: 0 1rem;
 }
 </style>

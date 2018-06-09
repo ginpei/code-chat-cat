@@ -17,7 +17,7 @@
           :data-fileDraggingOver="fileDraggingOver"
         )
           h1.sidebar-heading Files
-          FileList(@FileList-delete="FileList_delete" :files="files")
+          FileList(@FileList-delete="FileList_delete" :files="files" :editable="true")
 </template>
 
 <script>

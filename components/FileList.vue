@@ -2,7 +2,7 @@
   ul.FileList
     li.fileItem(v-for="file in files")
       a.fileItem-link(:href="file.url") {{ file.name }}
-      button.fileItem-remove(@click="remove_onClick(file)") ✘
+      button.fileItem-remove(@click="remove_onClick(file)" v-if="editable") ✘
 </template>
 
 <script>
@@ -10,6 +10,7 @@
 export default {
   props: [
     'files',
+    'editable',
   ],
 
   methods: {
