@@ -18,8 +18,6 @@ import FileList from '~/components/FileList.vue';
 import firebase from '~/plugins/firebase.js';
 import { mapState, mapGetters } from 'vuex';
 
-const db = firebase.database();
-
 export default {
   components: {
     MainText,
@@ -49,19 +47,15 @@ export default {
       return this.filesOf(this.roomId);
     },
 
-    ...mapState({
-      rooms: 'rooms',
-    }),
-
-    ...mapGetters({
-      roomOf: 'roomOf',
-      filesOf: 'filesOf',
-      textMarkdownOf: 'textMarkdownOf',
-    }),
+    ...mapGetters([
+      'roomOf',
+      'filesOf',
+      'textMarkdownOf',
+    ]),
   },
 
   created () {
-    this.$store.dispatch('setRoomsRef', db.ref('rooms'));
+    this.$store.dispatch('setRoomsRef', firebase.database().ref('rooms'));
   },
 }
 </script>

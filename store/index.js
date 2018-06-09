@@ -10,7 +10,6 @@ export const state = () => ({
 
 export const getters = {
   roomOf: (state) => (id) => state.rooms.find(v => v['.key'] === id),
-
   roomRefOf: () => (id) => roomsRef.child(id),
   roomStorageRefOf: () => (id) => roomsStorageRef.child(id),
 
@@ -42,13 +41,13 @@ export const actions = {
     bindFirebaseRef('rooms', ref);
   }),
 
-  setTextMarkdown: firebaseAction(({ getters }, { roomId, value }) => {
+  setTextMarkdown: (_, { roomId, value }) => {
     if (!roomId) {
       throw new Error('Valid room ID is required');
     }
 
     roomsRef.child(roomId).child('textMarkdown').set(value);
-  }),
+  },
 
   uploadFile: async ({ getters }, { roomId, file }) => {
     if (!roomId) {

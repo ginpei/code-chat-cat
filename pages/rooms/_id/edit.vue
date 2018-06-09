@@ -64,15 +64,11 @@ export default {
       return this.filesOf(this.roomId);
     },
 
-    ...mapState({
-      rooms: 'rooms',
-    }),
-
-    ...mapGetters({
-      roomOf: 'roomOf',
-      filesOf: 'filesOf',
-      textMarkdownOf: 'textMarkdownOf',
-    }),
+    ...mapGetters([
+      'roomOf',
+      'filesOf',
+      'textMarkdownOf',
+    ]),
   },
 
   created () {
