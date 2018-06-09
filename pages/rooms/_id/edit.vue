@@ -10,14 +10,24 @@
         MainText.content-body(:markdown="textMarkdown")
     div.layout-sidebar
       div.sidebar
-        section.sidebar-section
+        section.sidebar-section.fileManager(
+          @dragover.prevent="fileManager_onDragOver"
+          @dragleave.prevent="fileManager_onDragLeave"
+          @drop.prevent="fileManager_onDrop"
+          :data-fileDraggingOver="fileDraggingOver"
+        )
           h1.sidebar-heading Files
+          ul
+            li(v-for="file in files")
+              a(:href="file.url") {{ file.name }}
 </template>
 
 <script>
 import MainText from '~/components/MainText.vue';
 import firebase from '~/plugins/firebase.js';
 import { mapState, mapGetters, mapActions } from 'vuex';
+
+const storageRef = firebase.storage().ref();
 
 export default {
   components: {
@@ -27,6 +37,7 @@ export default {
   data () {
     return {
       elBeingScrolled: null,
+      fileDraggingOver: false,
     }
   },
 
@@ -39,12 +50,17 @@ export default {
       return this.textMarkdownOf(this.roomId);
     },
 
+    files () {
+      return this.filesOf(this.roomId);
+    },
+
     ...mapState({
       rooms: 'rooms',
     }),
 
     ...mapGetters({
       roomOf: 'roomOf',
+      filesOf: 'filesOf',
       textMarkdownOf: 'textMarkdownOf',
     }),
   },
@@ -88,6 +104,23 @@ export default {
     sub_onScroll () {
       this.synchronizeScrolling(this.$refs.sub, this.$refs.main);
     },
+
+    fileManager_onDragOver () {
+      this.fileDraggingOver = true;
+    },
+
+    fileManager_onDragLeave () {
+      this.fileDraggingOver = false;
+    },
+
+    fileManager_onDrop (event) {
+      this.fileDraggingOver = false;
+      const files = Array.from(event.dataTransfer.files);
+      files.forEach((file) => {
+        console.log(`${file.name} (${file.type})`, file);
+        this.$store.dispatch('uploadFile', { roomId: this.roomId, file });
+      });
+    },
   }
 }
 </script>
@@ -100,7 +133,7 @@ export default {
   grid-template:
     "header header header" var(--layout-header-height)
     "sidebar main sub" calc(100% - var(--layout-header-height))
-    / 5rem calc((100% - 5rem) / 2) calc((100% - 5rem) / 2);
+    / 10rem calc((100% - 5rem) / 2) calc((100% - 5rem) / 2);
   height: 100vh;
 
   .layout-header {
@@ -144,6 +177,14 @@ textarea.main {
 
   .content-body {
     margin: 1rem;
+  }
+}
+
+.fileManager {
+  min-height: 200px;
+
+  &[data-fileDraggingOver] {
+    background-color: khaki;
   }
 }
 </style>

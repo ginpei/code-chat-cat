@@ -1,8 +1,8 @@
 import firebase from '~/plugins/firebase';
 import { firebaseMutations, firebaseAction } from 'vuexfire'
 
-const db = firebase.database();
-const roomsRef = db.ref('/rooms');
+const roomsRef = firebase.database().ref('/rooms');
+const roomStorageRef = firebase.storage().ref('/rooms');
 
 export const state = () => ({
   rooms: [],
@@ -11,7 +11,22 @@ export const state = () => ({
 export const getters = {
   roomOf: (state) => (id) => state.rooms.find(v => v['.key'] === id),
 
-  textMarkdownOf: (state, getters) => (id) => {
+  roomRefOf: () => (id) => roomsRef.child(id),
+
+  filesOf: (_, getters) => (id) => {
+    const room = getters['roomOf'](id);
+    if (!room) {
+      return [];
+    }
+
+    const fileMap = room.files;
+    const files = Object.keys(fileMap)
+      .map((key) => fileMap[key] )
+      .sort((f1, f2) => f1.name.toLowerCase() > f2.name.toLowerCase());
+    return files;
+  },
+
+  textMarkdownOf: (_, getters) => (id) => {
     const room = getters['roomOf'](id);
     return room && room.textMarkdown.value;
   },
@@ -33,4 +48,26 @@ export const actions = {
 
     roomsRef.child(roomId).set({ textMarkdown: value });
   }),
+
+  uploadFile: async ({ getters }, { roomId, file }) => {
+    if (!roomId) {
+      throw new Error('Valid room ID is required');
+    }
+
+    // upload
+    const fname = file.name;  // TODO escape
+    const fileRef = roomStorageRef.child(roomId).child(fname);
+    const snapshot = await fileRef.put(file);
+
+    // save info
+    const url = await snapshot.ref.getDownloadURL();
+    const info = {
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      url,
+    };
+    const storageDataRef = getters['roomRefOf'](roomId).child('files');
+    storageDataRef.push(info);
+  },
 }

@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import 'firebase/storage';
 
 if (!firebase.apps.length) {
   firebase.initializeApp({
@@ -6,7 +7,7 @@ if (!firebase.apps.length) {
     // authDomain: 'hello-nuxt-firebase.firebaseapp.com',
     databaseURL: 'https://hello-nuxt-firebase.firebaseio.com/',
     // projectId: 'hello-nuxt-firebase',
-    // storageBucket: process.env.STORAGEBUCKET,
+    storageBucket: 'gs://hello-nuxt-firebase.appspot.com/',
   });
 }
 
