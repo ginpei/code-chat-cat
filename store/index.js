@@ -2,7 +2,7 @@ import firebase from '~/plugins/firebase';
 import { firebaseMutations, firebaseAction } from 'vuexfire'
 
 const roomsRef = firebase.database().ref('/rooms');
-const roomStorageRef = firebase.storage().ref('/rooms');
+const roomsStorageRef = firebase.storage().ref('/rooms');
 
 export const state = () => ({
   rooms: [],
@@ -12,6 +12,7 @@ export const getters = {
   roomOf: (state) => (id) => state.rooms.find(v => v['.key'] === id),
 
   roomRefOf: () => (id) => roomsRef.child(id),
+  roomStorageRefOf: () => (id) => roomsStorageRef.child(id),
 
   filesOf: (_, getters) => (id) => {
     const room = getters['roomOf'](id);
@@ -54,20 +55,36 @@ export const actions = {
       throw new Error('Valid room ID is required');
     }
 
+    // prepare space and key
+    const storageDataRef = getters['roomRefOf'](roomId).child('files');
+    const infoRef = storageDataRef.push();
+
     // upload
-    const fname = file.name;  // TODO escape
-    const fileRef = roomStorageRef.child(roomId).child(fname);
-    const snapshot = await fileRef.put(file);
+    const fileRef = getters['roomStorageRefOf'](roomId).child(infoRef.key);
+    const storedFile = await fileRef.put(file);
 
     // save info
-    const url = await snapshot.ref.getDownloadURL();
-    const info = {
+    const url = await storedFile.ref.getDownloadURL();
+    infoRef.set({
+      key: infoRef.key,
       name: file.name,
       size: file.size,
       type: file.type,
       url,
-    };
-    const storageDataRef = getters['roomRefOf'](roomId).child('files');
-    storageDataRef.push(info);
+    });
+  },
+
+  deleteFile: async ({ getters }, { roomId, file }) => {
+    if (!roomId || !file || !file.key) {
+      throw new Error('Valid room ID and file info are required');
+    }
+
+    // delete file
+    const fileRef = getters['roomStorageRefOf'](roomId).child(file.key);
+    await fileRef.delete();
+
+    // delete info
+    const infoRef = getters['roomRefOf'](roomId).child('files').child(file.key);
+    await infoRef.remove();
   },
 }

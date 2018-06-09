@@ -17,7 +17,7 @@
           :data-fileDraggingOver="fileDraggingOver"
         )
           h1.sidebar-heading Files
-          FileList(:files="files")
+          FileList(@FileList-delete="FileList_delete" :files="files")
 </template>
 
 <script>
@@ -120,6 +120,10 @@ export default {
         console.log(`${file.name} (${file.type})`, file);
         this.$store.dispatch('uploadFile', { roomId: this.roomId, file });
       });
+    },
+
+    FileList_delete (file) {
+        this.$store.dispatch('deleteFile', { roomId: this.roomId, file });
     },
   }
 }

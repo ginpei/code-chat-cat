@@ -16,8 +16,9 @@ export default {
     remove_onClick (file) {
       const message = `${file.name}\n\nAre you sure you want to delete this file?`;
       const ok = confirm(message);
-
-      alert(`WIP ${ok}`);
+      if (ok) {
+        this.$emit('FileList-delete', file);
+      }
     },
   },
 }
