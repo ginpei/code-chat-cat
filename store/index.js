@@ -5,6 +5,7 @@ const roomsRef = firebase.database().ref('/rooms');
 const roomsStorageRef = firebase.storage().ref('/rooms');
 
 export const state = () => ({
+  userName: '',
   rooms: [],
 });
 
@@ -33,6 +34,10 @@ export const getters = {
 };
 
 export const mutations = {
+  setUserName(state, { name }) {
+    state.userName = name;
+  },
+
   ...firebaseMutations
 };
 

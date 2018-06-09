@@ -28,7 +28,8 @@
               FileList(:files="files")
             section.sidebar-section.accountManager
               h1.sidebar-heading Account
-              div
+              p {{ userName }}
+              // div
                 button(@click="signOut") Sign Out
 </template>
 
@@ -78,7 +79,7 @@ export default {
     },
 
     signedIn () {
-      return Boolean(this.user);
+      return Boolean(this.userName);
     },
 
     roomId () {
@@ -96,6 +97,10 @@ export default {
     files () {
       return this.filesOf(this.roomId);
     },
+
+    ...mapState([
+      'userName',
+    ]),
 
     ...mapGetters([
       'roomOf',
@@ -117,7 +122,13 @@ export default {
   methods: {
     async signIn ({ name }) {
       this.loadingUser = true;
-      await firebase.auth().signInAnonymously();
+      // await firebase.auth().signInAnonymously();
+
+      // for this time, simply remember name local
+      setTimeout(() => {
+        this.loadingUser = false;
+        this.$store.commit('setUserName', { name });
+      }, 300);
     },
 
     async signOut () {
