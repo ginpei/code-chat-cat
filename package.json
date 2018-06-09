@@ -1,5 +1,5 @@
 {
-  "name": "class-md-share-prototype",
+  "name": "code-class-chat",
   "version": "1.0.0",
   "description": "Prototype",
   "author": "ginpei <ginpei@gmail.com>",
@@ -13,7 +13,14 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "nuxt": "^1.0.0"
+    "firebase": "^5.0.4",
+    "markdown-it": "^8.4.1",
+    "node-sass": "^4.9.0",
+    "nuxt": "^1.0.0",
+    "pug": "^2.0.3",
+    "pug-loader": "^2.4.0",
+    "sass-loader": "^7.0.3",
+    "vuexfire": "^2.3.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",

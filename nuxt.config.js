@@ -1,9 +1,11 @@
+const webpack = require('webpack');
+
 module.exports = {
   /*
   ** Headers of the page
   */
   head: {
-    title: 'class-md-share-prototype',
+    title: 'Code Class & Chat',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -33,6 +35,15 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
+
+      // const envKeys = [
+      //   'APIKEY',
+      //   'AUTHDOMAIN',
+      //   'DATABASEURL',
+      //   'PROJECTID',
+      //   'STORAGEBUCKET',
+      // ];
+      // config.plugins.push(new webpack.EnvironmentPlugin(envKeys))
     }
   }
 }
