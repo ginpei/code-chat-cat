@@ -5,39 +5,47 @@ const roomsRef = firebase.database().ref('/rooms');
 const roomsStorageRef = firebase.storage().ref('/rooms');
 
 export const state = () => ({
-  userName: '',
   rooms: [],
 });
 
 export const getters = {
   roomOf: (state) => (id) => state.rooms.find(v => v['.key'] === id),
   roomRefOf: () => (id) => roomsRef.child(id),
+  usersRefOf: () => (id) => roomsRef.child(id).child('users'),
+  userRefOf: (_, getters) => (roomId, userId) => getters['usersRefOf'](roomId).child(userId),
+  messagesRefOf: () => (id) => roomsRef.child(id).child('messages'),
   roomStorageRefOf: () => (id) => roomsStorageRef.child(id),
 
   filesOf: (_, getters) => (id) => {
-    const room = getters['roomOf'](id);
-    if (!room || !room.files || room.files.length < 1) {
-      return [];
-    }
-
-    const fileMap = room.files;
-    const files = Object.keys(fileMap)
-      .map((key) => fileMap[key] )
-      .sort((f1, f2) => f1.name.toLowerCase() > f2.name.toLowerCase());
-    return files;
+    const sort = (f1, f2) => f1.name.toLowerCase() > f2.name.toLowerCase();
+    return getters.anyOf(id, 'files', sort);
   },
 
   textMarkdownOf: (_, getters) => (id) => {
     const room = getters['roomOf'](id);
     return room && room.textMarkdown.value;
   },
+
+  messagesOf: (_, getters) => (id) => {
+    const sort = (m1, m2) => m1.createdAt < m2.createdAt;
+    return getters.anyOf(id, 'messages', sort);
+  },
+
+  anyOf: (_, getters) => (roomId, childKey, sort) => {
+    const room = getters['roomOf'](roomId);
+    if (!room || !room[childKey] || room[childKey].length < 1) {
+      return [];
+    }
+
+    const itemMap = room[childKey];
+    const items = Object.keys(itemMap)
+      .map((key) => itemMap[key])
+      .sort(sort);
+    return items;
+  },
 };
 
 export const mutations = {
-  setUserName(state, { name }) {
-    state.userName = name;
-  },
-
   ...firebaseMutations
 };
 
@@ -90,5 +98,31 @@ export const actions = {
     // delete info
     const infoRef = getters['roomRefOf'](roomId).child('files').child(file.key);
     await infoRef.remove();
+  },
+
+  saveUser: async ({ getters }, { roomId, userId, name }) => {
+    if (!roomId || !userId || !name) {
+      throw new Error('Valid room ID and file info are required');
+    }
+
+    const userRef = getters['userRefOf'](roomId, userId);
+    await userRef.set({ name });
+  },
+
+  postChat: async ({ getters }, { roomId, userId, message }) => {
+    if (!roomId || !userId || !message) {
+      throw new Error('Valid info are required');
+    }
+
+    const messagesRef = getters['messagesRefOf'](roomId);
+    const userRef = getters['userRefOf'](roomId, userId);
+    const { name } = (await userRef.once('value')).val();
+
+    messagesRef.push({
+      userId,
+      name,
+      body: message,
+      createdAt: Date.now(),
+    });
   },
 }

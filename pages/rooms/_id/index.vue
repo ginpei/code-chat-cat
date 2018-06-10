@@ -28,12 +28,14 @@
               FileList(:files="files")
             section.sidebar-section.accountManager
               h1.sidebar-heading Account
-              p {{ userName }}
-              // div
+              div
                 button(@click="signOut") Sign Out
+        div.classBoard-chat
+          Chat(@Chat-submit="chat_onSubmit" :messages="messages")
 </template>
 
 <script>
+import Chat from '~/components/Chat.vue';
 import MainText from '~/components/MainText.vue';
 import FileList from '~/components/FileList.vue';
 import firebase from '~/plugins/firebase.js';
@@ -41,6 +43,7 @@ import { mapState, mapGetters } from 'vuex';
 
 export default {
   components: {
+    Chat,
     MainText,
     FileList,
   },
@@ -79,7 +82,7 @@ export default {
     },
 
     signedIn () {
-      return Boolean(this.userName);
+      return Boolean(this.user);
     },
 
     roomId () {
@@ -94,6 +97,10 @@ export default {
       return this.textMarkdownOf(this.roomId);
     },
 
+    messages () {
+      return this.messagesOf(this.roomId);
+    },
+
     files () {
       return this.filesOf(this.roomId);
     },
@@ -106,6 +113,7 @@ export default {
       'roomOf',
       'filesOf',
       'textMarkdownOf',
+      'messagesOf',
     ]),
   },
 
@@ -122,13 +130,8 @@ export default {
   methods: {
     async signIn ({ name }) {
       this.loadingUser = true;
-      // await firebase.auth().signInAnonymously();
-
-      // for this time, simply remember name local
-      setTimeout(() => {
-        this.loadingUser = false;
-        this.$store.commit('setUserName', { name });
-      }, 300);
+      await firebase.auth().signInAnonymously();
+      this.saveUser({ name });
     },
 
     async signOut () {
@@ -136,11 +139,29 @@ export default {
       await firebase.auth().signOut();
     },
 
+    saveUser ({ name }) {
+      const payload = {
+        roomId: this.roomId,
+        userId: this.user.uid,
+        name: name,
+      };
+      this.$store.dispatch('saveUser', payload);
+    },
+
     signIn_onSubmit () {
       const name = this.userNameInput.trim();
       if (name) {
         this.signIn({ name });
       }
+    },
+
+    chat_onSubmit ({ message }) {
+      const payload = {
+        roomId: this.roomId,
+        userId: this.user.uid,
+        message,
+      };
+      this.$store.dispatch('postChat', payload);
     },
   },
 }
@@ -254,8 +275,8 @@ export default {
 .classBoard {
   display: grid;
   grid-template:
-    "sidebar textbook" auto
-    / 10rem calc(100% - 10rem);
+    "sidebar textbook chat" auto
+    / 10rem calc(100% - 30rem) 20rem;
   height: 100%;
 
   .classBoard-textbook {
@@ -267,6 +288,11 @@ export default {
   .classBoard-sidebar {
     border-right: 1px solid gray;
     grid-area: sidebar;
+  }
+
+  .classBoard-chat {
+    border-left: 1px solid gray;
+    grid-area: chat;
   }
 }
 
