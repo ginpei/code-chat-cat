@@ -288,11 +288,13 @@ export default {
   .classBoard-sidebar {
     border-right: 1px solid gray;
     grid-area: sidebar;
+    overflow: auto;
   }
 
   .classBoard-chat {
     border-left: 1px solid gray;
     grid-area: chat;
+    overflow: auto;
   }
 }
 
