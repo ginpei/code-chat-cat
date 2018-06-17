@@ -99,12 +99,12 @@ export default {
       return this.filesOf(this.roomId);
     },
 
-    ...mapGetters({
-      roomOf: 'rooms/roomOf',
-      filesOf: 'rooms/filesOf',
-      textMarkdownOf: 'rooms/textMarkdownOf',
-      messagesOf: 'rooms/messagesOf',
-    }),
+    ...mapGetters('rooms', [
+      'roomOf',
+      'filesOf',
+      'textMarkdownOf',
+      'messagesOf',
+    ]),
   },
 
   created () {
@@ -150,11 +150,11 @@ export default {
       this.postChat(payload);
     },
 
-    ...mapActions({
-      setRoomsRef: 'rooms/setRoomsRef',
-      saveStudent: 'rooms/saveStudent',
-      postChat: 'rooms/postChat',
-    }),
+    ...mapActions('rooms', [
+      'setRoomsRef',
+      'saveStudent',
+      'postChat',
+    ]),
   },
 }
 </script>
