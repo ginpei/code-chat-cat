@@ -4,10 +4,7 @@
       div.header
         div.header-logo {{ roomTitle }}
     div.layout-main(v-if="initializing")
-      div.initializing
-        div.initializing-box *
-        div.initializing-box *
-        div.initializing-box *
+      Processing
     div.layout-main(v-if="!initializing && !signedIn")
       SignIn(@SignIn_submit="signIn_onSubmit")
     div.layout-main(v-if="!initializing && signedIn")
@@ -30,6 +27,7 @@
 
 <script>
 import SignIn from '~/components/rooms/SignIn.vue';
+import Processing from '~/components/rooms/Processing.vue';
 import Chat from '~/components/Chat.vue';
 import MainText from '~/components/MainText.vue';
 import FileList from '~/components/FileList.vue';
@@ -39,6 +37,7 @@ import { mapState, mapGetters } from 'vuex';
 export default {
   components: {
     SignIn,
+    Processing,
     Chat,
     MainText,
     FileList,
@@ -190,38 +189,6 @@ export default {
     line-height: var(--layout-header-height);
     grid-area: header;
     padding: 0 1rem;
-}
-
-.initializing {
-  background-color: #fff3;
-  align-items: center;
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  position: fixed;
-  width: 100%;
-
-  .initializing-box {
-    animation: rotate 1s infinite;
-    height: 30px;
-    text-align: center;
-    width: 30px;
-
-    &:nth-child(1) {
-      animation-delay: 0ms;
-    }
-    &:nth-child(2) {
-      animation-delay: 100ms;
-    }
-    &:nth-child(3) {
-      animation-delay: 200ms;
-    }
-  }
-}
-
-@keyframes rotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }
 
 .classBoard {
