@@ -32,7 +32,7 @@ import Chat from '~/components/Chat.vue';
 import Textbook from '~/components/rooms/Textbook.vue';
 import FileList from '~/components/FileList.vue';
 import firebase from '~/plugins/firebase.js';
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
@@ -111,7 +111,7 @@ export default {
   },
 
   created () {
-    this.$store.dispatch('rooms/setRoomsRef', firebase.database().ref('rooms'));
+    this.setRoomsRef(firebase.database().ref('rooms'));
     firebase.auth().onAuthStateChanged((user) => {
       this.instructor = user;
       if (this.loadingInstructor) {
@@ -124,21 +124,17 @@ export default {
     async signIn ({ name }) {
       this.loadingInstructor = true;
       await firebase.auth().signInAnonymously();
-      this.saveStudent({ name });
-    },
-
-    async signOut () {
-      this.loadingInstructor = true;
-      await firebase.auth().signOut();
-    },
-
-    saveStudent ({ name }) {
       const payload = {
         roomId: this.roomId,
         studentId: this.instructor.uid,
         name: name,
       };
-      this.$store.dispatch('rooms/saveStudent', payload);
+      this.saveStudent(payload);
+    },
+
+    async signOut () {
+      this.loadingInstructor = true;
+      await firebase.auth().signOut();
     },
 
     signIn_onSubmit ({ nameInput }) {
@@ -154,8 +150,14 @@ export default {
         studentId: this.instructor.uid,
         message,
       };
-      this.$store.dispatch('rooms/postChat', payload);
+      this.postChat(payload);
     },
+
+    ...mapActions({
+      setRoomsRef: 'rooms/setRoomsRef',
+      saveStudent: 'rooms/saveStudent',
+      postChat: 'rooms/postChat',
+    }),
   },
 }
 </script>
