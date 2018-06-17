@@ -9,13 +9,7 @@
         div.initializing-box *
         div.initializing-box *
     div.layout-main(v-if="!initializing && !signedIn")
-      div.signIn
-        form.signIn-box(@submit.prevent="signIn_onSubmit")
-          h1.signIn-heading Welcome!
-          p.signIn-message Input your name and sign in to the class.
-          div.signIn-form
-            input.signIn-input(v-model="userNameInput" placeholder="Alice")
-            button.signIn-signIn Sign In
+      SignIn(@SignIn_submit="signIn_onSubmit")
     div.layout-main(v-if="!initializing && signedIn")
       div.classBoard
         div.classBoard-textbook
@@ -35,6 +29,7 @@
 </template>
 
 <script>
+import SignIn from '~/components/rooms/SignIn.vue';
 import Chat from '~/components/Chat.vue';
 import MainText from '~/components/MainText.vue';
 import FileList from '~/components/FileList.vue';
@@ -43,6 +38,7 @@ import { mapState, mapGetters } from 'vuex';
 
 export default {
   components: {
+    SignIn,
     Chat,
     MainText,
     FileList,
@@ -148,8 +144,8 @@ export default {
       this.$store.dispatch('saveUser', payload);
     },
 
-    signIn_onSubmit () {
-      const name = this.userNameInput.trim();
+    signIn_onSubmit ({ nameInput }) {
+      const name = nameInput.trim();
       if (name) {
         this.signIn({ name });
       }
@@ -226,50 +222,6 @@ export default {
 @keyframes rotate {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
-}
-
-.signIn {
-  align-items: center;
-  display: flex;
-  height: 100%;
-  justify-content: center;
-
-  .signIn-box {
-    border: 1px solid lightgray;
-    border-radius: 0.2rem;
-    box-shadow: 0 0 1rem #0001;
-    padding: 2em;
-    width: 300px;
-  }
-
-  .signIn-heading,
-  .signIn-message {
-    margin-bottom: 1rem;
-  }
-
-  .signIn-form {
-    display: grid;
-  }
-
-  .signIn-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 1rem;
-  }
-
-  .signIn-input {
-    margin-left: 0.2em;
-    padding: 0.4em;
-  }
-
-  .signIn-controls {
-    text-align: right;
-  }
-
-  .signIn-signIn {
-    height: 2em;
-    min-width: 7em;
-  }
 }
 
 .classBoard {
