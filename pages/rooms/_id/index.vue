@@ -32,7 +32,7 @@ import Chat from '~/components/Chat.vue';
 import Textbook from '~/components/rooms/Textbook.vue';
 import FileList from '~/components/FileList.vue';
 import firebase from '~/plugins/firebase.js';
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
@@ -98,9 +98,6 @@ export default {
     files () {
       return this.filesOf(this.roomId);
     },
-
-    // ...mapState([
-    // ]),
 
     ...mapGetters({
       roomOf: 'rooms/roomOf',
