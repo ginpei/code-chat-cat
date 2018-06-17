@@ -28,6 +28,9 @@ export default {
       if (!room) {
         throw new Error('Room must be given');
       }
+      if (!room['.key']) {
+        throw new Error('Invalid room object');
+      }
       return `/rooms/${room['.key']}`;
     },
 
