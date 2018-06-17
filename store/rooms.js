@@ -98,6 +98,7 @@ export const actions = {
 
   saveStudent: async ({ getters }, { roomId, studentId, name }) => {
     if (!roomId || !studentId || !name) {
+      console.warn(roomId, studentId, name);
       throw new Error('Valid room ID and file info are required');
     }
 
