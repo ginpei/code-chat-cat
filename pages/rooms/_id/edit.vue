@@ -7,7 +7,7 @@
       textarea.main(@input="main_onInput" @scroll="main_onScroll" :value="textMarkdown" ref="main")
     div.layout-sub
       div.content(@scroll="sub_onScroll" ref="sub")
-        MainText.content-body(:markdown="textMarkdown")
+        Textbook.content-body(:markdown="textMarkdown")
     div.layout-sidebar
       div.sidebar
         section.sidebar-section.fileManager(
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import MainText from '~/components/MainText.vue';
+import Textbook from '~/components/rooms/Textbook.vue';
 import FileList from '~/components/FileList.vue';
 import firebase from '~/plugins/firebase.js';
 import { mapState, mapGetters, mapActions } from 'vuex';
@@ -30,7 +30,7 @@ const storageRef = firebase.storage().ref();
 
 export default {
   components: {
-    MainText,
+    Textbook,
     FileList,
   },
 

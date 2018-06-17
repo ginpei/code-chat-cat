@@ -11,7 +11,7 @@
       div.classBoard
         div.classBoard-textbook
           div.textbook
-            MainText.textbook-body(:markdown="textMarkdown")
+            Textbook.textbook-body(:markdown="textMarkdown")
         div.classBoard-sidebar
           div.sidebar
             section.sidebar-section.fileManager
@@ -29,7 +29,7 @@
 import SignIn from '~/components/rooms/SignIn.vue';
 import Processing from '~/components/rooms/Processing.vue';
 import Chat from '~/components/Chat.vue';
-import MainText from '~/components/MainText.vue';
+import Textbook from '~/components/rooms/Textbook.vue';
 import FileList from '~/components/FileList.vue';
 import firebase from '~/plugins/firebase.js';
 import { mapState, mapGetters } from 'vuex';
@@ -39,7 +39,7 @@ export default {
     SignIn,
     Processing,
     Chat,
-    MainText,
+    Textbook,
     FileList,
   },
 
