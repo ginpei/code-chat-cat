@@ -38,7 +38,7 @@ export default {
     input_onKeyDown (event) {
       if (event.code === 'Enter' && event.ctrlKey) {
         this.submit();
-      this.input = '';
+        this.input = '';
       }
     },
   },
@@ -93,9 +93,9 @@ export default {
   }
 }
 
-.timeline {
-  // nothing particularly?
-}
+// .timeline {
+//   // nothing particularly?
+// }
 
 .timelineItem {
   margin: 1rem;
