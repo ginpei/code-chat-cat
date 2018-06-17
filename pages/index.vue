@@ -1,11 +1,19 @@
 <template lang="pug">
-  div.container
-    div.logo
-      img.logo-image(src="~assets/logo-512.png" width="256" height="256" alt="Face of Code-Class-Chat Cat")
-    h1 Classes
-    ul
-      li(v-for="room in rooms")
-        a(:href="roomLink(room)") {{ room.title }}
+  div
+    div.container.logo
+      a(href="/signIn")
+        img.logo-image(src="~assets/logo-512.png" width="256" height="256" alt="Face of Code-Class-Chat Cat")
+    div.container
+      h1 Classes
+      ul
+        li(v-for="room in rooms")
+          a(:href="roomLink(room)") {{ room.title }}
+    footer.footer
+      p
+        a(href="/signIn") Sign in as instructor
+      p
+        | Created by&nbsp;
+        a(href="https://ginpei.info/") Ginpei Takanashi
 </template>
 
 <script>
@@ -42,6 +50,10 @@ export default {
 </script>
 
 <style lang="scss">
+body {
+  margin: 1em;
+}
+
 .container {
   max-width: 800px;
   margin: 0 auto;
@@ -61,5 +73,12 @@ export default {
       transform: scale(1.01);
     }
   }
+}
+
+.footer {
+  border-top: 1px solid gray;
+  margin-top: 3em;
+  padding: 1em 0 1em;
+  text-align: center;
 }
 </style>
