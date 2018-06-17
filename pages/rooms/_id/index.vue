@@ -51,9 +51,9 @@ export default {
 
   async asyncData ({ params, store, error }) {
     const roomsRef = firebase.database().ref('rooms');
-    store.dispatch('setRoomsRef', roomsRef);
+    store.dispatch('rooms/setRoomsRef', roomsRef);
     await roomsRef.once('value');
-    const room = store.getters['roomOf'](params.id);
+    const room = store.getters['rooms/roomOf'](params.id);
     if (!room) {
       error({ statusCode: 404, message: 'Room not found' })
     }
@@ -102,16 +102,16 @@ export default {
     // ...mapState([
     // ]),
 
-    ...mapGetters([
-      'roomOf',
-      'filesOf',
-      'textMarkdownOf',
-      'messagesOf',
-    ]),
+    ...mapGetters({
+      roomOf: 'rooms/roomOf',
+      filesOf: 'rooms/filesOf',
+      textMarkdownOf: 'rooms/textMarkdownOf',
+      messagesOf: 'rooms/messagesOf',
+    }),
   },
 
   created () {
-    this.$store.dispatch('setRoomsRef', firebase.database().ref('rooms'));
+    this.$store.dispatch('rooms/setRoomsRef', firebase.database().ref('rooms'));
     firebase.auth().onAuthStateChanged((user) => {
       this.instructor = user;
       if (this.loadingInstructor) {
@@ -138,7 +138,7 @@ export default {
         studentId: this.instructor.uid,
         name: name,
       };
-      this.$store.dispatch('saveStudent', payload);
+      this.$store.dispatch('rooms/saveStudent', payload);
     },
 
     signIn_onSubmit ({ nameInput }) {
@@ -154,7 +154,7 @@ export default {
         studentId: this.instructor.uid,
         message,
       };
-      this.$store.dispatch('postChat', payload);
+      this.$store.dispatch('rooms/postChat', payload);
     },
   },
 }
