@@ -14,13 +14,13 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
   computed: {
-    ...mapState({
-      rooms: 'rooms',
-    }),
+    ...mapState('rooms', [
+      'rooms',
+    ]),
   },
 
   created () {
-    this.$store.dispatch('setRoomsRef', firebase.database().ref('rooms'));
+    this.setRoomsRef(firebase.database().ref('rooms'));
   },
 
   methods: {
@@ -29,8 +29,12 @@ export default {
         throw new Error('Room must be given');
       }
       return `/rooms/${room['.key']}`;
-    }
-  }
+    },
+
+    ...mapActions('rooms', [
+      'setRoomsRef',
+    ]),
+  },
 };
 </script>
 
