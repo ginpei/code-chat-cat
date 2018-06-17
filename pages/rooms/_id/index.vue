@@ -28,9 +28,9 @@
 <script>
 import SignIn from '~/components/rooms/SignIn.vue';
 import Processing from '~/components/rooms/Processing.vue';
-import Chat from '~/components/Chat.vue';
+import Chat from '~/components/rooms/Chat.vue';
 import Textbook from '~/components/rooms/Textbook.vue';
-import FileList from '~/components/FileList.vue';
+import FileList from '~/components/rooms/FileList.vue';
 import firebase from '~/plugins/firebase.js';
 import { mapGetters, mapActions } from 'vuex';
 

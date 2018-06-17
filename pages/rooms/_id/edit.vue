@@ -22,7 +22,7 @@
 
 <script>
 import Textbook from '~/components/rooms/Textbook.vue';
-import FileList from '~/components/FileList.vue';
+import FileList from '~/components/rooms/FileList.vue';
 import firebase from '~/plugins/firebase.js';
 import { mapState, mapGetters, mapActions } from 'vuex';
 
