@@ -58,25 +58,25 @@ export default {
       error({ statusCode: 404, message: 'Room not found' })
     }
 
-    const user = firebase.auth().currentUser;
+    const instructor = firebase.auth().currentUser;
 
-    return { room, user };
+    return { room, instructor };
   },
 
   data () {
     return {
-      loadingUser: true,
+      loadingInstructor: true,
     };
   },
 
   computed: {
     initializing () {
       // return true;
-      return this.loadingUser;
+      return this.loadingInstructor;
     },
 
     signedIn () {
-      return Boolean(this.user);
+      return Boolean(this.instructor);
     },
 
     roomId () {
@@ -99,9 +99,8 @@ export default {
       return this.filesOf(this.roomId);
     },
 
-    ...mapState([
-      'userName',
-    ]),
+    // ...mapState([
+    // ]),
 
     ...mapGetters([
       'roomOf',
@@ -114,32 +113,32 @@ export default {
   created () {
     this.$store.dispatch('setRoomsRef', firebase.database().ref('rooms'));
     firebase.auth().onAuthStateChanged((user) => {
-      this.user = user;
-      if (this.loadingUser) {
-        this.loadingUser = false;
+      this.instructor = user;
+      if (this.loadingInstructor) {
+        this.loadingInstructor = false;
       }
     });
   },
 
   methods: {
     async signIn ({ name }) {
-      this.loadingUser = true;
+      this.loadingInstructor = true;
       await firebase.auth().signInAnonymously();
-      this.saveUser({ name });
+      this.saveStudent({ name });
     },
 
     async signOut () {
-      this.loadingUser = true;
+      this.loadingInstructor = true;
       await firebase.auth().signOut();
     },
 
-    saveUser ({ name }) {
+    saveStudent ({ name }) {
       const payload = {
         roomId: this.roomId,
-        userId: this.user.uid,
+        studentId: this.instructor.uid,
         name: name,
       };
-      this.$store.dispatch('saveUser', payload);
+      this.$store.dispatch('saveStudent', payload);
     },
 
     signIn_onSubmit ({ nameInput }) {
@@ -152,7 +151,7 @@ export default {
     chat_onSubmit ({ message }) {
       const payload = {
         roomId: this.roomId,
-        userId: this.user.uid,
+        studentId: this.instructor.uid,
         message,
       };
       this.$store.dispatch('postChat', payload);

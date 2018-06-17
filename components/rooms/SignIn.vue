@@ -4,7 +4,7 @@
       h1.signIn-heading Welcome!
       p.signIn-message Input your name and sign in to the class.
       div.signIn-form
-        input.signIn-input(v-model="userNameInput" placeholder="Alice")
+        input.signIn-input(v-model="nameInput" placeholder="Alice")
         button.signIn-signIn Sign In
 </template>
 
@@ -12,13 +12,13 @@
 export default {
   data () {
     return {
-      userNameInput: '',
+      nameInput: '',
     };
   },
 
   methods: {
     signIn_onSubmit () {
-      const data = { name: this.userNameInput };
+      const data = { nameInput: this.nameInput };
       this.$emit('SignIn_submit', data);
     },
   },

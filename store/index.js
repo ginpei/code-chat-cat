@@ -11,8 +11,8 @@ export const state = () => ({
 export const getters = {
   roomOf: (state) => (id) => state.rooms.find(v => v['.key'] === id),
   roomRefOf: () => (id) => roomsRef.child(id),
-  usersRefOf: () => (id) => roomsRef.child(id).child('users'),
-  userRefOf: (_, getters) => (roomId, userId) => getters['usersRefOf'](roomId).child(userId),
+  studentsRefOf: () => (id) => roomsRef.child(id).child('students'),
+  studentRefOf: (_, getters) => (roomId, studentId) => getters['studentsRefOf'](roomId).child(studentId),
   messagesRefOf: () => (id) => roomsRef.child(id).child('messages'),
   roomStorageRefOf: () => (id) => roomsStorageRef.child(id),
 
@@ -100,26 +100,26 @@ export const actions = {
     await infoRef.remove();
   },
 
-  saveUser: async ({ getters }, { roomId, userId, name }) => {
-    if (!roomId || !userId || !name) {
+  saveStudent: async ({ getters }, { roomId, studentId, name }) => {
+    if (!roomId || !studentId || !name) {
       throw new Error('Valid room ID and file info are required');
     }
 
-    const userRef = getters['userRefOf'](roomId, userId);
-    await userRef.set({ name });
+    const studentRef = getters['studentRefOf'](roomId, studentId);
+    await studentRef.set({ name });
   },
 
-  postChat: async ({ getters }, { roomId, userId, message }) => {
-    if (!roomId || !userId || !message) {
+  postChat: async ({ getters }, { roomId, studentId, message }) => {
+    if (!roomId || !studentId || !message) {
       throw new Error('Valid info are required');
     }
 
     const messagesRef = getters['messagesRefOf'](roomId);
-    const userRef = getters['userRefOf'](roomId, userId);
-    const { name } = (await userRef.once('value')).val();
+    const studentRef = getters['studentRefOf'](roomId, studentId);
+    const { name } = (await studentRef.once('value')).val();
 
     messagesRef.push({
-      userId,
+      studentId,
       name,
       body: message,
       createdAt: Date.now(),
