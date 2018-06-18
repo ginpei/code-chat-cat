@@ -1,13 +1,16 @@
+<template lang="pug">
+  div ...
+</template>
+
+
 <script>
+import Processing from '~/components/rooms/Processing.vue';
 import firebase from '~/plugins/firebase.js';
 
 export default {
-  async asyncData () {
+  async mounted () {
     await firebase.auth().signOut();
-    error({
-      statusCode: 200,
-      location: '/',
-    });
+    location.replace('/');
   }
 }
 </script>
