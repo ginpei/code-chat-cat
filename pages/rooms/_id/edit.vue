@@ -1,26 +1,25 @@
 <template lang="pug">
-  div.layout
-    div.layout-header
-      div.header
-        div.header-logo {{ roomTitle }}
-    div.layout-main
-      textarea.main(@input="main_onInput" @scroll="main_onScroll" :value="textMarkdown" ref="main")
-    div.layout-sub
-      div.content(@scroll="sub_onScroll" ref="sub")
-        Textbook.content-body(:markdown="textMarkdown")
-    div.layout-sidebar
-      div.sidebar
-        section.sidebar-section.fileManager(
-          @dragover.prevent="fileManager_onDragOver"
-          @dragleave.prevent="fileManager_onDragLeave"
-          @drop.prevent="fileManager_onDrop"
-          :data-fileDraggingOver="fileDraggingOver"
-        )
-          h1.sidebar-heading Files
-          FileList(@FileList-delete="FileList_delete" :files="files" :editable="true")
+  HeaderLayout.HeaderLayout(:title="roomTitle" :title-link="roomUrl" :no-footer="true")
+    div.HeaderLayout-main.layout
+      div.layout-main
+        textarea.main(@input="main_onInput" @scroll="main_onScroll" :value="textMarkdown" ref="main")
+      div.layout-sub
+        div.content(@scroll="sub_onScroll" ref="sub")
+          Textbook.content-body(:markdown="textMarkdown")
+      div.layout-sidebar
+        div.sidebar
+          section.sidebar-section.fileManager(
+            @dragover.prevent="fileManager_onDragOver"
+            @dragleave.prevent="fileManager_onDragLeave"
+            @drop.prevent="fileManager_onDrop"
+            :data-fileDraggingOver="fileDraggingOver"
+          )
+            h1.sidebar-heading Files
+            FileList(@FileList-delete="FileList_delete" :files="files" :editable="true")
 </template>
 
 <script>
+import HeaderLayout from '~/components/HeaderLayout.vue';
 import Textbook from '~/components/rooms/Textbook.vue';
 import FileList from '~/components/rooms/FileList.vue';
 import firebase from '~/plugins/firebase.js';
@@ -30,6 +29,7 @@ const storageRef = firebase.storage().ref();
 
 export default {
   components: {
+    HeaderLayout,
     Textbook,
     FileList,
   },
@@ -68,6 +68,10 @@ export default {
       return this.room && this.room.title;
     },
 
+    roomUrl () {
+      return `/rooms/${this.roomId}/`;
+    },
+
     textMarkdown () {
       return this.textMarkdownOf(this.roomId);
     },
@@ -84,13 +88,13 @@ export default {
   },
 
   created () {
-    this.$store.dispatch('setRoomsRef', firebase.database().ref('rooms'));
+    this.$store.dispatch('rooms/setRoomsRef', firebase.database().ref('rooms'));
   },
 
   methods: {
     setTextMarkdown (value) {
       const payload = { roomId: this.roomId, value };
-      this.$store.dispatch('setTextMarkdown', payload);
+      this.$store.dispatch('rooms/setTextMarkdown', payload);
     },
 
     synchronizeScrolling (elFrom, elTo) {
@@ -148,19 +152,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.layout {
-  --layout-header-height: 1.2rem;
+.HeaderLayout {
+  .HeaderLayout-main {
+    height: calc(100vh - var(--defaultLayout-headerHeight));
+  }
+}
 
+.layout {
   display: grid;
   grid-template:
-    "header header header" var(--layout-header-height)
-    "sidebar main sub" calc(100% - var(--layout-header-height))
+    "sidebar main sub" 100%
     / 10rem calc((100% - 10rem) / 2) calc((100% - 10rem) / 2);
   height: 100vh;
-
-  .layout-header {
-    grid-area: header;
-  }
 
   .layout-main {
     box-shadow: 0.2rem 0.2rem 0.2rem #0003 inset;
@@ -176,15 +179,6 @@ export default {
     border-right: 1px solid gray;
     grid-area: sidebar;
   }
-}
-
-.header {
-    background-color: #036;
-    color: #fff;
-    font-size: 0.8rem;
-    line-height: var(--layout-header-height);
-    grid-area: header;
-    padding: 0 1rem;
 }
 
 textarea.main {

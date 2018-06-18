@@ -1,5 +1,5 @@
 <template lang="pug">
-  div
+  HeaderLayout
     div.container
       h1 Sign In
       h2 Student
@@ -15,10 +15,14 @@
 </template>
 
 <script>
+import HeaderLayout from '~/components/HeaderLayout.vue';
 // import firebase from '~/plugins/firebase.js';
 // import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
+  components: {
+    HeaderLayout,
+  }
 };
 </script>
 

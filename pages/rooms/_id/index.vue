@@ -1,13 +1,10 @@
 <template lang="pug">
-  div.layout(:signedIn="signedIn")
-    div.layout-header
-      div.header
-        div.header-logo {{ roomTitle }}
-    div.layout-main(v-if="initializing")
+  HeaderLayout.HeaderLayout(:title="roomTitle" :title-link="roomUrl" :no-footer="true")
+    div.HeaderLayout-main(v-if="initializing")
       Processing
-    div.layout-main(v-if="!initializing && !signedIn")
+    div.HeaderLayout-main(v-if="!initializing && !signedIn")
       SignIn(@SignIn_submit="signIn_onSubmit")
-    div.layout-main(v-if="!initializing && signedIn")
+    div.HeaderLayout-main(v-if="!initializing && signedIn")
       div.classBoard
         div.classBoard-textbook
           div.textbook
@@ -26,6 +23,7 @@
 </template>
 
 <script>
+import HeaderLayout from '~/components/HeaderLayout.vue';
 import SignIn from '~/components/rooms/SignIn.vue';
 import Processing from '~/components/rooms/Processing.vue';
 import Chat from '~/components/rooms/Chat.vue';
@@ -36,6 +34,7 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
+    HeaderLayout,
     SignIn,
     Processing,
     Chat,
@@ -85,6 +84,10 @@ export default {
 
     roomTitle () {
       return this.room.title;
+    },
+
+    roomUrl () {
+      return `/rooms/${this.roomId}/`;
     },
 
     textMarkdown () {
@@ -160,22 +163,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.layout {
-  --layout-header-height: 1.2rem;
-
-  display: grid;
-  grid-template:
-    "header" var(--layout-header-height)
-    "main" calc(100% - var(--layout-header-height))
-    / auto;
-  height: 100vh;
-
-  .layout-header {
-    grid-area: header;
-  }
-
-  .layout-main {
-    grid-area: main;
+.HeaderLayout {
+  .HeaderLayout-main {
+    height: calc(100vh - var(--defaultLayout-headerHeight));
   }
 }
 
