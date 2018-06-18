@@ -25,7 +25,7 @@ export const mutations = {
 };
 
 export const actions = {
-  setAuth ({ state, commit }, auth) {
+  setAuth ({ commit }, auth) {
     commit('setLoadingUser', true);
     auth.onAuthStateChanged((user) => {
       commit('setCurrentUser', user);
