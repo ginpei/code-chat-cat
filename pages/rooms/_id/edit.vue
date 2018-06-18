@@ -42,9 +42,9 @@ export default {
 
   async asyncData ({ params, store, error }) {
     const roomsRef = firebase.database().ref('rooms');
-    store.dispatch('setRoomsRef', roomsRef);
+    store.dispatch('rooms/setRoomsRef', roomsRef);
     await roomsRef.once('value');
-    const room = store.getters['roomOf'](params.id);
+    const room = store.getters['rooms/roomOf'](params.id);
     if (!room) {
       error({ statusCode: 404, message: 'Room not found' })
     }
@@ -76,7 +76,7 @@ export default {
       return this.filesOf(this.roomId);
     },
 
-    ...mapGetters([
+    ...mapGetters('rooms', [
       'roomOf',
       'filesOf',
       'textMarkdownOf',
