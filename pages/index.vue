@@ -21,6 +21,12 @@ import firebase from '~/plugins/firebase.js';
 import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
+  async asyncData ({ params, store, error }) {
+    const roomsRef = firebase.database().ref('rooms');
+    store.dispatch('rooms/setRoomsRef', roomsRef);
+    await roomsRef.once('value');
+  },
+
   computed: {
     ...mapState('rooms', [
       'rooms',
