@@ -30,32 +30,21 @@ button {
   color: #039;
 }
 
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1em;
 }
 
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
+.warnMessage {
+  background-color: cornSilk;
+  border: 2px solid gold;
+  padding: 0.2em 0.4em;
 }
 
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
+.errorMessage {
+  background-color: mistyRose;
+  border: 2px solid tomato;
+  padding: 0.2em 0.4em;
 }
 </style>

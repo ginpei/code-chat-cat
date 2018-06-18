@@ -81,21 +81,4 @@ export default {
 </script>
 
 <style lang="scss">
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 1em;
-}
-
-.warnMessage {
-  background-color: cornSilk;
-  border: 2px solid gold;
-  padding: 0.2em 0.4em;
-}
-
-.errorMessage {
-  background-color: mistyRose;
-  border: 2px solid tomato;
-  padding: 0.2em 0.4em;
-}
 </style>
