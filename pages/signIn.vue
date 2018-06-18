@@ -14,7 +14,7 @@
           | You have already signed in.
         ul
           li
-            a(href="/") Manage your classes
+            a(href="/rooms/") Manage your classes
           li
             a(href="/signOut") Sign out
       div(v-if="!signedIn")
@@ -63,6 +63,10 @@ export default {
   },
 
   methods: {
+    locateAfterSigningIn () {
+      location.href = '/rooms/';
+    },
+
     async signInGoogle_onClick () {
       this.signingIn = true;
       this.signInErrorMessage = '';
@@ -75,6 +79,7 @@ export default {
       }
 
       this.signingIn = false;
+      this.locateAfterSigningIn();
     },
   },
 };
