@@ -18,17 +18,18 @@ export const mutations = {
   },
 
   setLoadingUser (state, loading) {
-    state.loadingUser = false;
+    state.loadingUser = loading;
   },
 
   ...firebaseMutations
 };
 
 export const actions = {
-  setAuth (context, auth) {
+  setAuth ({ state, commit }, auth) {
+    commit('setLoadingUser', true);
     auth.onAuthStateChanged((user) => {
-      context.commit('setCurrentUser', user);
-      context.commit('setLoadingUser', false);
+      commit('setCurrentUser', user);
+      commit('setLoadingUser', false);
     });
   },
 };

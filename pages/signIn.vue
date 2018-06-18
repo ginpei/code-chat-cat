@@ -19,7 +19,7 @@
             a(href="/signOut") Sign out
       div(v-if="!signedIn")
         p
-          button(@click="signInGoogle_onClick" :disabled="signingIn") Google
+          button(@click="signInGoogle_onClick" :disabled="loadingUser || signingIn") Google
         p.errorMessage(v-show="signInErrorMessage")
           = "ERROR: "
           | {{ signInErrorMessage }}
