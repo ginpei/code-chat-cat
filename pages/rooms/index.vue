@@ -1,13 +1,22 @@
 <template lang="pug">
   HeaderLayout
     div.container
+      h1 Create
+      ul
+        li
+          a(href="/rooms/new") Create new class room
       h1 Your class rooms
+      ul(v-if="rooms.length > 0")
+        li(v-for="room in rooms")
+          a(:href="roomUrl(room, 'edit')") {{ room.title }}
+      div(v-if="rooms.length < 1")
+        p No rooms found.
 </template>
 
 <script>
 import HeaderLayout from '~/components/HeaderLayout.vue';
 import firebase from '~/plugins/firebase.js';
-import { mapState } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
@@ -15,17 +24,34 @@ export default {
   },
 
   computed: {
+    rooms () {
+      return this.currentUser ? this.roomsOfInstructor(this.currentUser.id) : [];
+    },
+
     ...mapState([
       'currentUser',
       'loadingUser',
     ]),
+
+    ...mapGetters('rooms', [
+      'roomsOfInstructor',
+      'roomUrl',
+    ]),
   },
 
   created () {
-    this.$store.dispatch('setAuth', firebase.auth());
+    this.setAuth(firebase.auth());
+    this.setRoomsRef(firebase.database().ref('rooms'));
   },
 
   methods: {
+    ...mapActions([
+      'setAuth',
+    ]),
+
+    ...mapActions('rooms', [
+      'setRoomsRef',
+    ]),
   },
 };
 </script>

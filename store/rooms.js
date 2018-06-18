@@ -10,6 +10,8 @@ export const state = () => ({
 
 export const getters = {
   roomOf: (state) => (id) => state.rooms.find(v => v['.key'] === id),
+  roomsOfInstructor: (state) => (uid) => state.rooms.filter(v => v.userId === uid),
+  roomUrl: () => (room, suffix) => `/rooms/${room['.key']}/${suffix}`,
   roomRefOf: () => (id) => roomsRef.child(id),
   studentsRefOf: () => (id) => roomsRef.child(id).child('students'),
   studentRefOf: (_, getters) => (roomId, studentId) => getters['studentsRefOf'](roomId).child(studentId),
