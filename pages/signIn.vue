@@ -11,7 +11,7 @@
       p You are going to sign in as an instructor and will be able to manage your own classes.
       div(v-if="signedIn")
         p.warnMessage
-          | You have already signed in.
+          | You have signed in as {{ user.name }}.
         ul
           li
             a(href="/rooms/") Manage your classes
