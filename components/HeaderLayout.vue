@@ -23,7 +23,7 @@ export default {
 
   computed: {
     defaultTitle () {
-      return 'Code Class & Chat';
+      return 'Code Chat Cat';
     },
 
     titleUrl () {

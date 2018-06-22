@@ -2,7 +2,7 @@
   div
     div.container.logo
       a(href="/signIn")
-        img.logo-image(src="~assets/logo-512.png" width="256" height="256" alt="Face of Code-Class-Chat Cat")
+        img.logo-image(src="~assets/logo-512.png" width="256" height="256" alt="Face of Code Chat Cat")
     div.container
       h1 Classes
       ul
