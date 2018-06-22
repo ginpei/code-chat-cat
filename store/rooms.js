@@ -1,5 +1,5 @@
 import firebase from '~/plugins/firebase';
-import { firebaseMutations, firebaseAction } from 'vuexfire'
+import { firebaseAction } from 'vuexfire'
 
 const roomsRef = firebase.database().ref('/rooms');
 const roomsStorageRef = firebase.storage().ref('/rooms');
