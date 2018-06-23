@@ -92,7 +92,7 @@ export default {
   },
 
   methods: {
-    setTextMarkdown (value) {
+    setTextMarkdown ({ value }) {
       const payload = { roomId: this.roomId, value };
       this.$store.dispatch('rooms/setTextMarkdown', payload);
     },

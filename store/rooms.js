@@ -37,7 +37,7 @@ export const getters = {
 
   textMarkdownOf: (_, getters) => (id) => {
     const room = getters['roomOf'](id);
-    return room && room.textMarkdown.value;
+    return room && room.textMarkdown;
   },
 
   messagesOf: (_, getters) => (id) => {
@@ -90,9 +90,7 @@ export const actions = {
       ref.set({
         title: room.title,
         userId: user.uid,
-        textMarkdown: {
-          value: `# ${room.title}`,
-        },
+        textMarkdown: `# ${room.title}`,
       });
     });
   },
