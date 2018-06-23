@@ -7,9 +7,9 @@
           span.xTable-th Instructor:
           span.xTable-td {{ userName }}
         label.xTable-row
-          span.xTable-th Room name:
+          span.xTable-th Room title:
           span.xTable-td
-            input(v-model="input.name" required)
+            input(v-model="input.title" required)
         p
           button Create
 </template>
@@ -27,7 +27,7 @@ export default {
   data () {
     return {
       input: {
-        name: '',
+        title: '',
       },
     };
   },

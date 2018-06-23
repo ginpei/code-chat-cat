@@ -69,7 +69,7 @@ export const actions = {
   }),
 
   createRoom (_, room) {
-    if (!room || !room.name) {
+    if (!room || !room.title) {
       throw new Error('Invalid room data');
     }
 
@@ -88,10 +88,10 @@ export const actions = {
       });
 
       ref.set({
-        title: room.name,
+        title: room.title,
         userId: user.uid,
         textMarkdown: {
-          value: `# ${room.name}`,
+          value: `# ${room.title}`,
         },
       });
     });
