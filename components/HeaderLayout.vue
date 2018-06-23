@@ -5,7 +5,8 @@
         a.globalHeader-logo(v-if="titleUrl" :href="titleUrl") {{ title || defaultTitle }}
         span.globalHeader-logo(v-if="!titleUrl") {{ title || defaultTitle }}
     div.defaultLayout-body
-      slot
+      Processing(v-if="loading")
+      slot(v-if="!loading")
     footer.defaultLayout-footer(v-if="!noFooter")
       div.container
         p
@@ -14,12 +15,19 @@
 </template>
 
 <script>
+import Processing from '~/components/rooms/Processing.vue';
+
 export default {
   props: [
+    'loading',
     'title',
     'titleLink',
     'noFooter',
   ],
+
+  components: {
+    Processing,
+  },
 
   computed: {
     defaultTitle () {

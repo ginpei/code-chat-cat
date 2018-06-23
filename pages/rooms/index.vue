@@ -1,6 +1,6 @@
 <template lang="pug">
-  HeaderLayout
-    div.container(v-if="!loading")
+  HeaderLayout(:loading="loading")
+    div.container
       p Hello {{ userName }}!
       h1 Create
       ul
