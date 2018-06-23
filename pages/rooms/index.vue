@@ -1,6 +1,7 @@
 <template lang="pug">
   HeaderLayout
-    div.container
+    div.container(v-if="!loading")
+      p Hello {{ currentUser.name }}!
       h1 Create
       ul
         li
