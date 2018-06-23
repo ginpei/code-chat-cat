@@ -5,6 +5,10 @@ export const state = () => ({
   loadingUser: true,
 });
 
+export const getters = {
+  userName: (state) => state.currentUser && state.currentUser.name,
+};
+
 export const mutations = {
   setCurrentUser (state, user) {
     if (user) {

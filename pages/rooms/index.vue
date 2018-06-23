@@ -1,7 +1,7 @@
 <template lang="pug">
   HeaderLayout
     div.container(v-if="!loading")
-      p Hello {{ currentUser.name }}!
+      p Hello {{ userName }}!
       h1 Create
       ul
         li
@@ -41,6 +41,10 @@ export default {
 
     ...mapState('rooms', [
       'loadingRoom',
+    ]),
+
+    ...mapGetters([
+      'userName',
     ]),
 
     ...mapGetters('rooms', [
