@@ -5,13 +5,13 @@
         a.globalHeader-logo(v-if="titleUrl" :href="titleUrl") {{ title || defaultTitle }}
         span.globalHeader-logo(v-if="!titleUrl") {{ title || defaultTitle }}
     div.defaultLayout-body
-      Processing(v-if="processing")
-      slot(v-if="!processing")
+      slot(v-if="!processing || !firstTime")
     footer.defaultLayout-footer(v-if="!noFooter")
       div.container
         p
           = 'Created by '
           a(href="https://ginpei.info/") Ginpei Takanashi
+    Processing(v-if="processing")
 </template>
 
 <script>
@@ -29,6 +29,12 @@ export default {
     Processing,
   },
 
+  data () {
+    return {
+      firstTime: true,
+    };
+  },
+
   computed: {
     defaultTitle () {
       return 'Code Chat Cat';
@@ -36,6 +42,12 @@ export default {
 
     titleUrl () {
       return this.titleLink || (this.title ? '' : '/');
+    },
+  },
+
+  watch: {
+    processing () {
+      this.firstTime = false;
     },
   },
 };
