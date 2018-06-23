@@ -43,7 +43,7 @@ export default {
 
     ...mapGetters('rooms', [
       'roomOf',
-      'roomUrl',
+      'roomUrlOf',
     ]),
   },
 
@@ -54,7 +54,7 @@ export default {
   methods: {
     async onSubmit () {
       const result = await this.createRoom(this.input);
-      location.href = this.roomUrl(result.key, 'edit');
+      location.href = this.roomUrlOf(result.key, 'manage');
     },
 
     ...mapActions([

@@ -9,7 +9,7 @@
       h1 Your class rooms
       ul(v-if="rooms.length > 0")
         li(v-for="room in rooms")
-          a(:href="roomUrl(room, 'edit')") {{ room.title }}
+          a(:href="roomUrlOf(room, 'edit')") {{ room.title }}
       div(v-if="!loading && rooms.length < 1")
         p No rooms found.
 </template>
@@ -48,7 +48,7 @@ export default {
 
     ...mapGetters('rooms', [
       'roomsOfInstructor',
-      'roomUrl',
+      'roomUrlOf',
     ]),
   },
 

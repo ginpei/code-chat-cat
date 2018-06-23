@@ -24,7 +24,7 @@ export const getters = {
   messagesRefOf: () => (id) => roomsRef.child(id).child('messages'),
   roomStorageRefOf: () => (id) => roomsStorageRef.child(id),
 
-  roomUrl: () => (room, suffix = '') => {
+  roomUrlOf: () => (room, suffix = '') => {
     const key = typeof room === 'string' ? room : room['.key'];
     const url = `/rooms/${key}/${suffix}`;
     return url;
