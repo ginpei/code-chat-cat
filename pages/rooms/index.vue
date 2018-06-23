@@ -7,7 +7,6 @@
         li
           a(href="/rooms/new") Create new class room
       h1 Your class rooms
-      p(v-if="loading") ...
       ul(v-if="rooms.length > 0")
         li(v-for="room in rooms")
           a(:href="roomUrl(room, 'edit')") {{ room.title }}

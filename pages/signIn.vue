@@ -1,5 +1,5 @@
 <template lang="pug">
-  HeaderLayout
+  HeaderLayout(:loading="loadingUser")
     div.container
       h1 Sign In
       h2 Student

@@ -1,10 +1,8 @@
 <template lang="pug">
-  HeaderLayout.HeaderLayout(:title="roomTitle" :title-link="roomUrl" :no-footer="true")
-    div.HeaderLayout-main(v-if="initializing")
-      Processing
-    div.HeaderLayout-main(v-if="!initializing && !signedIn")
+  HeaderLayout.HeaderLayout(:loading="initializing" :title="roomTitle" :title-link="roomUrl" :no-footer="true")
+    div.HeaderLayout-main(v-if="!signedIn")
       SignIn(@SignIn_submit="signIn_onSubmit")
-    div.HeaderLayout-main(v-if="!initializing && signedIn")
+    div.HeaderLayout-main(v-if="signedIn")
       div.classBoard
         div.classBoard-textbook
           div.textbook
