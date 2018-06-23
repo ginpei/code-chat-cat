@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Processing from '~/components/rooms/Processing.vue';
+import Processing from '~/components/Processing.vue';
 
 export default {
   props: [

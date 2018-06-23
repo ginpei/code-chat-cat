@@ -4,7 +4,7 @@
 
 
 <script>
-import Processing from '~/components/rooms/Processing.vue';
+import Processing from '~/components/Processing.vue';
 import firebase from '~/plugins/firebase.js';
 
 export default {

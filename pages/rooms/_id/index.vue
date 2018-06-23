@@ -25,7 +25,7 @@
 <script>
 import HeaderLayout from '~/components/HeaderLayout.vue';
 import SignIn from '~/components/rooms/SignIn.vue';
-import Processing from '~/components/rooms/Processing.vue';
+import Processing from '~/components/Processing.vue';
 import Chat from '~/components/rooms/Chat.vue';
 import Textbook from '~/components/rooms/Textbook.vue';
 import FileList from '~/components/rooms/FileList.vue';
