@@ -1,5 +1,5 @@
 <template lang="pug">
-  HeaderLayout.HeaderLayout(:loading="initializing" :title="roomTitle" :title-link="roomUrl" :no-footer="true")
+  HeaderLayout.HeaderLayout(:processing="initializing" :title="roomTitle" :title-link="roomUrl" :no-footer="true")
     div.HeaderLayout-main(v-if="!signedIn")
       SignIn(@SignIn_submit="signIn_onSubmit")
     div.HeaderLayout-main(v-if="signedIn")

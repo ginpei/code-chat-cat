@@ -1,5 +1,5 @@
 <template lang="pug">
-  HeaderLayout(:loading="loading")
+  HeaderLayout(:processing="loading")
     div.container
       p Hello {{ userName }}!
       h1 Create
