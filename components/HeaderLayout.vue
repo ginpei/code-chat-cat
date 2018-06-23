@@ -11,7 +11,7 @@
         p
           = 'Created by '
           a(href="https://ginpei.info/") Ginpei Takanashi
-    Processing(v-if="processing")
+    Processing(v-show="processing")
 </template>
 
 <script>
