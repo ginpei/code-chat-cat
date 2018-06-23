@@ -18,12 +18,17 @@ export const mutations = {
 export const getters = {
   roomOf: (state) => (id) => state.rooms.find(v => v['.key'] === id),
   roomsOfInstructor: (state) => (uid) => state.rooms.filter(v => v.userId === uid),
-  roomUrl: () => (room, suffix) => `/rooms/${room['.key']}/${suffix}`,
   roomRefOf: () => (id) => roomsRef.child(id),
   studentsRefOf: () => (id) => roomsRef.child(id).child('students'),
   studentRefOf: (_, getters) => (roomId, studentId) => getters['studentsRefOf'](roomId).child(studentId),
   messagesRefOf: () => (id) => roomsRef.child(id).child('messages'),
   roomStorageRefOf: () => (id) => roomsStorageRef.child(id),
+
+  roomUrl: () => (room, suffix = '') => {
+    const key = typeof room === 'string' ? room : room['.key'];
+    const url = `/rooms/${key}/${suffix}`;
+    return url;
+  },
 
   filesOf: (_, getters) => (id) => {
     const sort = (f1, f2) => f1.name.toLowerCase() > f2.name.toLowerCase();
@@ -62,6 +67,35 @@ export const actions = {
     await ref.once('value');
     commit('setLoading', false);
   }),
+
+  createRoom (_, room) {
+    if (!room || !room.name) {
+      throw new Error('Invalid room data');
+    }
+
+    const user = firebase.auth().currentUser;
+    if (!user) {
+      throw new Error('User must have signed in');
+    }
+
+    return new Promise((resolve) => {
+      const ref = roomsRef.push();
+      ref.once('value', (snapshot) => {
+        resolve({
+          key: ref.key,
+          value: snapshot.val(),
+        });
+      });
+
+      ref.set({
+        title: room.name,
+        userId: user.uid,
+        textMarkdown: {
+          value: `# ${room.name}`,
+        },
+      });
+    });
+  },
 
   setTextMarkdown: (_, { roomId, value }) => {
     if (!roomId) {

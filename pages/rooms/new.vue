@@ -1,19 +1,90 @@
 <template lang="pug">
-  HeaderLayout
+  HeaderLayout(:processing="loadingUser")
     div.container
       h1 Create new class room
-      p WIP
+      form.xTable(@submit.prevent="onSubmit")
+        label.xTable-row
+          span.xTable-th Instructor:
+          span.xTable-td {{ userName }}
+        label.xTable-row
+          span.xTable-th Room name:
+          span.xTable-td
+            input(v-model="input.name" required)
+        p
+          button Create
 </template>
 
 <script>
 import HeaderLayout from '~/components/HeaderLayout.vue';
+import firebase from '~/plugins/firebase.js';
+import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
     HeaderLayout,
   },
+
+  data () {
+    return {
+      input: {
+        name: '',
+      },
+    };
+  },
+
+  computed: {
+    ...mapState([
+      'loadingUser',
+    ]),
+
+    ...mapGetters([
+      'userName',
+    ]),
+
+    ...mapGetters('rooms', [
+      'roomOf',
+      'roomUrl',
+    ]),
+  },
+
+  created () {
+    this.setAuth(firebase.auth());
+  },
+
+  methods: {
+    async onSubmit () {
+      const result = await this.createRoom(this.input);
+      location.href = this.roomUrl(result.key, 'edit');
+    },
+
+    ...mapActions([
+      'setAuth',
+    ]),
+
+    ...mapActions('rooms', [
+      'createRoom',
+    ]),
+  },
 };
 </script>
 
 <style lang="scss" scoped>
+// would be better to rename...
+.xTable {
+  display: table;
+
+  .xTable-row {
+    display: table-row;
+  }
+
+  .xTable-th,
+  .xTable-td {
+    display: table-cell;
+    padding: 0.2em 0.4em;
+  }
+
+  .xTable-th {
+    text-align: right;
+  }
+}
 </style>
