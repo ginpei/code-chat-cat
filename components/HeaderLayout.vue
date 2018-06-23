@@ -54,30 +54,7 @@ export default {
 </script>
 
 
-<style lang="scss">
-html {
-  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-}
-
-body {
-  margin: 0;
-}
-
-button {
-  cursor: pointer;
-}
-
-:link,
-:visited {
-  color: #039;
-}
-
+<style lang="scss" scoped>
 .defaultLayout {
   --defaultLayout-headerHeight: 1.2rem;
   --defaultLayout-footerHeight: 5rem;
