@@ -12,12 +12,13 @@ export default {
 
 <style lang="scss" scoped>
 .Processing {
-  background-color: #fff3;
+  background-color: #fff6;
   align-items: center;
   display: flex;
   height: 100%;
   justify-content: center;
   position: fixed;
+  top: 0;
   width: 100%;
 
   .Processing-box {
