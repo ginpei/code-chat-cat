@@ -5,8 +5,15 @@ const roomsRef = firebase.database().ref('/rooms');
 const roomsStorageRef = firebase.storage().ref('/rooms');
 
 export const state = () => ({
+  loadingRoom: true,
   rooms: [],
 });
+
+export const mutations = {
+  setLoading (state, loading) {
+    state.loadingRoom = loading;
+  },
+};
 
 export const getters = {
   roomOf: (state) => (id) => state.rooms.find(v => v['.key'] === id),
@@ -48,8 +55,12 @@ export const getters = {
 };
 
 export const actions = {
-  setRoomsRef: firebaseAction(({ bindFirebaseRef }, ref) => {
+  setRoomsRef: firebaseAction(async ({ bindFirebaseRef, commit }, ref) => {
     bindFirebaseRef('rooms', ref);
+
+    commit('setLoading', true);
+    await ref.once('value');
+    commit('setLoading', false);
   }),
 
   setTextMarkdown: (_, { roomId, value }) => {

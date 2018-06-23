@@ -6,10 +6,11 @@
         li
           a(href="/rooms/new") Create new class room
       h1 Your class rooms
+      p(v-if="loading") ...
       ul(v-if="rooms.length > 0")
         li(v-for="room in rooms")
           a(:href="roomUrl(room, 'edit')") {{ room.title }}
-      div(v-if="rooms.length < 1")
+      div(v-if="!loading && rooms.length < 1")
         p No rooms found.
 </template>
 
@@ -24,6 +25,10 @@ export default {
   },
 
   computed: {
+    loading () {
+      return this.loadingUser || this.loadingRoom;
+    },
+
     rooms () {
       return this.currentUser ? this.roomsOfInstructor(this.currentUser.id) : [];
     },
@@ -31,6 +36,10 @@ export default {
     ...mapState([
       'currentUser',
       'loadingUser',
+    ]),
+
+    ...mapState('rooms', [
+      'loadingRoom',
     ]),
 
     ...mapGetters('rooms', [
