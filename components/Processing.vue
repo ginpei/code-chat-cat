@@ -12,7 +12,7 @@ export default {
 
 <style lang="scss" scoped>
 .Processing {
-  background-color: #fff6;
+  box-shadow: 0 0 30vmin #0003 inset;
   align-items: center;
   display: flex;
   height: 100%;
