@@ -97,6 +97,31 @@ export const actions = {
     });
   },
 
+  updateRoom (_, { roomId, data }) {
+    if (!roomId || !data || !data.title) {
+      throw new Error('Invalid room data');
+    }
+
+    const user = firebase.auth().currentUser;
+    if (!user) {
+      throw new Error('User must have signed in');
+    }
+
+    return new Promise((resolve) => {
+      const ref = roomsRef.child(roomId);
+      ref.set({
+        title: data.title,
+      });
+
+      ref.once('value', (snapshot) => {
+        resolve({
+          key: ref.key,
+          value: snapshot.val(),
+        });
+      });
+    });
+  },
+
   setTextMarkdown: (_, { roomId, value }) => {
     if (!roomId) {
       throw new Error('Valid room ID is required');
