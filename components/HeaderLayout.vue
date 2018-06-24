@@ -5,7 +5,7 @@
         a.globalHeader-logo(v-if="titleUrl" :href="titleUrl") {{ title || defaultTitle }}
         span.globalHeader-logo(v-else) {{ title || defaultTitle }}
         div.globalHeaderMenu
-          div.globalHeaderMenu-group(v-for="link in links")
+          div.globalHeaderMenu-group(v-show="!loadingUser" v-for="link in headerLinks")
             span.globalHeaderMenu-title {{ link.title }}
             div.globalHeaderMenu-list
               a.globalHeaderMenu-item(v-for="item in link.items" :href="item.href") {{ item.title }}
@@ -21,6 +21,8 @@
 
 <script>
 import Processing from '~/components/Processing.vue';
+import firebase from '~/plugins/firebase.js';
+import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
   props: [
@@ -49,6 +51,47 @@ export default {
     titleUrl () {
       return this.titleLink || (this.title ? '' : '/');
     },
+
+    headerLinks () {
+      const links = [...(this.links || [])];
+      if (this.currentUser) {
+        links.push({
+          title: this.userName || '(No name)',
+          items: [
+            { title: 'My rooms', href: '/rooms/' },
+            { title: 'Sign out', href: '/signOut' },
+          ],
+        });
+      } else {
+        links.push({
+          title: 'Sign in',
+          items: [
+            { title: 'Sign in as student', href: '/signIn' },
+            { title: 'Sign in as instructor', href: '/signIn' },
+          ]
+        });
+      }
+      return links;
+    },
+
+    ...mapState([
+      'currentUser',
+      'loadingUser'
+    ]),
+
+    ...mapGetters([
+      'userName',
+    ]),
+  },
+
+  created () {
+    this.setAuth(firebase.auth());
+  },
+
+  methods: {
+    ...mapActions([
+      'setAuth',
+    ]),
   },
 
   watch: {

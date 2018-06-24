@@ -6,7 +6,7 @@
 <script>
 import HeaderLayout from '~/components/HeaderLayout.vue';
 import firebase from '~/plugins/firebase.js';
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -29,32 +29,11 @@ export default {
             { title: 'Edit', href: this.roomUrlOf(this.roomId, 'edit') },
           ],
         },
-        {
-          title: this.userName,
-          items: [
-            { title: 'My rooms', href: '/rooms/' },
-            { title: 'Sign out', href: '/signOut' },
-          ],
-        },
       ];
     },
 
-    ...mapGetters([
-      'userName',
-    ]),
-
     ...mapGetters('rooms', [
       'roomUrlOf',
-    ]),
-  },
-
-  created () {
-    this.setAuth(firebase.auth());
-  },
-
-  methods: {
-    ...mapActions([
-      'setAuth',
     ]),
   },
 };
