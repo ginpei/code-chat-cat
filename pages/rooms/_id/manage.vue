@@ -1,5 +1,5 @@
 <template lang="pug">
-  HeaderLayout(:processing="processing")
+  HeaderLayout(:processing="processing" :links="headerLinks")
     div.container
       h1 Manage your class room
       h2 URLs
@@ -57,6 +57,26 @@ export default {
   },
 
   computed: {
+    headerLinks () {
+      return [
+        {
+          title: 'Room',
+          items: [
+            { title: 'Home', href: this.roomUrlOf(this.roomId) },
+            { title: 'Manage', href: this.roomUrlOf(this.roomId, 'manage') },
+            { title: 'Edit', href: this.roomUrlOf(this.roomId, 'edit') },
+          ],
+        },
+        {
+          title: this.userName,
+          items: [
+            { title: 'My rooms', href: '/rooms/' },
+            { title: 'Sign out', href: '/signOut' },
+          ],
+        },
+      ];
+    },
+
     processing () {
       return this.loadingUser || this.loadingRoom || !this.input || this.updating;
     },
@@ -75,6 +95,7 @@ export default {
 
     ...mapState([
       'loadingUser',
+      'userName',
     ]),
 
     ...mapState('rooms', [
