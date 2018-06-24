@@ -17,10 +17,11 @@
             a(:href="`${roomUrl}manage`") Manage
         label.xTable-row
           span.xTable-th Status:
-          span.xTable-td Not opened
+          span.xTable-td {{ roomStatus ? 'Open' : 'Close' }}
       h2 Actions
         p
-          button(@click="activate_onClick" disabled) Activate
+          button(@click="activate_onClick") Activate
+          button(@click="close_onClick") Close
       h2 Settings
       form.xTable(@submit.prevent="onSubmit")
         label.xTable-row
@@ -68,6 +69,10 @@ export default {
       return `${location.origin}${this.roomUrlOf(this.roomId)}`;
     },
 
+    roomStatus () {
+      return this.isActiveRoom(this.roomId);
+    },
+
     ...mapState([
       'loadingUser',
     ]),
@@ -83,6 +88,7 @@ export default {
     ...mapGetters('rooms', [
       'roomOf',
       'roomUrlOf',
+      'isActiveRoom',
     ]),
   },
 
@@ -102,7 +108,28 @@ export default {
   },
 
   methods: {
-    activate_onClick () {
+    async activate (active) {
+      const p = this.activateRoom({
+        roomId: this.roomId,
+        until: active ? undefined : 0,  // respect default value
+      });
+      try {
+        await Promise.all([p, sleep(500)]);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    async activate_onClick () {
+      this.updating = true;
+      await this.activate(true);
+      this.updating = false;
+    },
+
+    async close_onClick () {
+      this.updating = true;
+      await this.activate(false);
+      this.updating = false;
     },
 
     async onSubmit () {
@@ -127,6 +154,7 @@ export default {
       'setRoomsRef',
       'createRoom',
       'updateRoom',
+      'activateRoom',
     ]),
   },
 };

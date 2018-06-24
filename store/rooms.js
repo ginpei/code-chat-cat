@@ -24,6 +24,20 @@ export const getters = {
   messagesRefOf: () => (id) => roomsRef.child(id).child('messages'),
   roomStorageRefOf: () => (id) => roomsStorageRef.child(id),
 
+  isActiveRoom (_, getters) {
+    return (id) => {
+      const room = getters.roomOf(id);
+      return room && room.activeUntil > Date.now();
+    };
+  },
+
+  activeRooms (state) {
+    const now = Date.now();
+    console.log('# state.rooms', state.rooms);
+    const activeRooms = state.rooms.filter(v => v.activeUntil > now);
+    return activeRooms;
+  },
+
   roomUrlOf: () => (room, suffix = '') => {
     const key = typeof room === 'string' ? room : room['.key'];
     const url = `/rooms/${key}/${suffix}`;
@@ -96,7 +110,7 @@ export const actions = {
   },
 
   updateRoom (_, { roomId, data }) {
-    if (!roomId || !data || !data.title) {
+    if (!roomId || !data) {
       throw new Error('Invalid room data');
     }
 
@@ -107,9 +121,7 @@ export const actions = {
 
     return new Promise((resolve) => {
       const ref = roomsRef.child(roomId);
-      ref.set({
-        title: data.title,
-      });
+      ref.update(data);
 
       ref.once('value', (snapshot) => {
         resolve({
@@ -118,6 +130,26 @@ export const actions = {
         });
       });
     });
+  },
+
+  activateRoom ({ dispatch }, { roomId, until } = {}) {
+    if (!roomId) {
+      throw new Error('Invalid room data');
+    }
+
+    const user = firebase.auth().currentUser;
+    if (!user) {
+      throw new Error('User must have signed in');
+    }
+
+    const hours24 = 24 * 60 * 60 * 1000;
+    const defaultUntil = Date.now() + hours24;
+    const activeUntil = Number.isNaN(Number(until)) ? defaultUntil : until;
+
+    const data = {
+      activeUntil,
+    };
+    dispatch('updateRoom', { roomId, data });
   },
 
   setTextMarkdown: (_, { roomId, value }) => {

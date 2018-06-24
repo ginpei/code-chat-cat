@@ -5,9 +5,10 @@
         img.logo-image(src="~assets/logo-512.png" width="256" height="256" alt="Face of Code Chat Cat")
     div.container
       h1 Classes
-      ul
-        li(v-for="room in rooms")
+      ul(v-if="activeRooms.length > 0")
+        li(v-for="room in activeRooms")
           a(:href="roomLink(room)") {{ room.title }}
+      p(v-else) No active class rooms, nyan.
     footer.footer
       p
         a(href="/signIn") Sign in as instructor
@@ -28,8 +29,8 @@ export default {
   },
 
   computed: {
-    ...mapState('rooms', [
-      'rooms',
+    ...mapGetters('rooms', [
+      'activeRooms',
     ]),
   },
 
