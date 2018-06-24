@@ -146,6 +146,7 @@ export default {
   .globalHeaderMenu-item {
     display: block;
     padding: 0.4em 1em;
+    white-space: nowrap;
   }
 }
 
