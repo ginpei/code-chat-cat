@@ -1,5 +1,5 @@
 <template lang="pug">
-  div
+  HeaderLayout
     div.container.logo
       a(href="/signIn")
         img.logo-image(src="~assets/logo-512.png" width="256" height="256" alt="Face of Code Chat Cat")
@@ -9,19 +9,25 @@
         li(v-for="room in activeRooms")
           a(:href="roomLink(room)") {{ room.title }}
       p(v-else) No active class rooms, nyan.
-    footer.footer
-      p
-        a(href="/signIn") Sign in as instructor
-      p
-        | Created by&nbsp;
-        a(href="https://ginpei.info/") Ginpei Takanashi
+    div.container
+      h1 Menu
+      ul
+        li
+          a(href="/signIn") Sign in as instructor
+        li
+          a(href="/rooms/") Your class rooms
 </template>
 
 <script>
+import HeaderLayout from '~/components/HeaderLayout.vue';
 import firebase from '~/plugins/firebase.js';
 import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
+  components: {
+    HeaderLayout,
+  },
+
   async asyncData ({ params, store, error }) {
     const roomsRef = firebase.database().ref('rooms');
     store.dispatch('rooms/setRoomsRef', roomsRef);
