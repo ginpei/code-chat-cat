@@ -33,7 +33,6 @@ export const getters = {
 
   activeRooms (state) {
     const now = Date.now();
-    console.log('# state.rooms', state.rooms);
     const activeRooms = state.rooms.filter(v => v.activeUntil > now);
     return activeRooms;
   },
