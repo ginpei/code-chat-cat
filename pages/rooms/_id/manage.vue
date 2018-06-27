@@ -2,7 +2,7 @@
   HeaderLayout(:processing="processing" :roomId="roomId")
     div.container
       h1 Manage your class room
-      h2 URLs
+      h2 Information
       form.xTable
         label.xTable-row
           span.xTable-th Instructor:
