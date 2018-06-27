@@ -74,12 +74,12 @@ export default {
       var provider = new firebase.auth.GoogleAuthProvider();
       try {
         await firebase.auth().signInWithPopup(provider);
+        this.locateAfterSigningIn();
       } catch (error) {
         this.signInErrorMessage = error.message;
       }
 
       this.signingIn = false;
-      this.locateAfterSigningIn();
     },
   },
 };
