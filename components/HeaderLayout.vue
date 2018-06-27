@@ -2,13 +2,14 @@
   div.defaultLayout
     header.defaultLayout-header
       div.globalHeader
-        a.globalHeader-logo(v-if="titleUrl" :href="titleUrl") {{ title || defaultTitle }}
-        span.globalHeader-logo(v-else) {{ title || defaultTitle }}
-        div.globalHeaderMenu
-          div.globalHeaderMenu-group(v-show="!loadingUser" v-for="link in headerLinks")
-            span.globalHeaderMenu-title {{ link.title }}
-            div.globalHeaderMenu-list
-              a.globalHeaderMenu-item(v-for="item in link.items" :href="item.href") {{ item.title }}
+        div.container.globalHeader-container
+          a.globalHeader-logo(v-if="titleUrl" :href="titleUrl") {{ title || defaultTitle }}
+          span.globalHeader-logo(v-else) {{ title || defaultTitle }}
+          div.globalHeaderMenu
+            div.globalHeaderMenu-group(v-show="!loadingUser" v-for="link in headerLinks")
+              span.globalHeaderMenu-title {{ link.title }}
+              div.globalHeaderMenu-list
+                a.globalHeaderMenu-item(v-for="item in link.items" :href="item.href") {{ item.title }}
     div.defaultLayout-body
       slot(v-if="!processing || !firstTime")
     footer.defaultLayout-footer(v-if="!noFooter")
@@ -120,15 +121,12 @@ export default {
 }
 
 .globalHeader {
-  justify-content: space-between;
   background-color: #036;
   box-sizing: border-box;
   color: #fff;
-  display: flex;
   font-size: 0.8rem;
   height: var(--defaultLayout-headerHeight);
   left: 0;
-  padding: 0 1rem;
   position: fixed;
   top: 0;
   width: 100%;
@@ -140,6 +138,11 @@ export default {
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  .globalHeader-container {
+    justify-content: space-between;
+    display: flex;
   }
 }
 
