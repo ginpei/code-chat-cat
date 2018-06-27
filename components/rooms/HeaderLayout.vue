@@ -1,5 +1,5 @@
 <template lang="pug">
-  HeaderLayout(:processing="processing" :links="headerLinks")
+  HeaderLayout(:processing="processing" :title="room ? room.title : ''" :links="headerLinks")
     slot
 </template>
 
@@ -32,7 +32,12 @@ export default {
       ];
     },
 
+    room () {
+      return this.roomOf(this.roomId);
+    },
+
     ...mapGetters('rooms', [
+      'roomOf',
       'roomUrlOf',
     ]),
   },

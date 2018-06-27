@@ -3,8 +3,8 @@
     header.defaultLayout-header
       div.globalHeader
         div.container.globalHeader-container
-          a.globalHeader-logo(v-if="titleUrl" :href="titleUrl") {{ title || defaultTitle }}
-          span.globalHeader-logo(v-else) {{ title || defaultTitle }}
+          a.globalHeader-logo(v-if="titleUrl" :href="titleUrl") {{ roomTitle }}
+          span.globalHeader-logo(v-else) {{ roomTitle }}
           div.globalHeaderMenu
             div.globalHeaderMenu-group(v-show="!loadingUser" v-for="link in headerLinks")
               span.globalHeaderMenu-title {{ link.title }}
@@ -47,6 +47,10 @@ export default {
   computed: {
     defaultTitle () {
       return 'Code Chat Cat';
+    },
+
+    roomTitle () {
+      return typeof this.title === 'string' ? this.title : this.defaultTitle;
     },
 
     titleUrl () {
