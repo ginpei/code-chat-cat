@@ -173,30 +173,30 @@ export default {
         transition: opacity 0;
       }
     }
-  }
 
-  .globalHeaderMenu-title {
-    padding: 0 0.5em;
-  }
+    .globalHeaderMenu-title {
+      padding: 0 0.5em;
+    }
 
-  .globalHeaderMenu-list {
-    background-color: #036;
-    box-shadow: 0 0 20px #0006;
-    height: 0;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    right: -1px;
-    top: calc(1.4em - 1px);
-    transition: opacity 200ms;
-    min-width: 5em;
-    z-index: -1;
-  }
+    .globalHeaderMenu-list {
+      background-color: #036;
+      box-shadow: 0 0 20px #0006;
+      height: 0;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      right: -1px;
+      top: calc(1.4em - 1px);
+      transition: opacity 200ms;
+      min-width: 5em;
+      z-index: -1;
+    }
 
-  .globalHeaderMenu-item {
-    display: block;
-    padding: 0.4em 1em;
-    white-space: nowrap;
+    .globalHeaderMenu-item {
+      display: block;
+      padding: 0.4em 1em;
+      white-space: nowrap;
+    }
   }
 }
 
