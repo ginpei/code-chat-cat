@@ -203,6 +203,16 @@ export default {
 
 .defaultLayout-body {
   min-height: calc(100vh - var(--defaultLayout-headerHeight) - var(--defaultLayout-footerHeight));
+
+  & > .container > h1:first-child {
+    margin-top: 0;
+  }
+
+  h1,
+  h2,
+  h3 {
+    margin-top: 1em;
+  }
 }
 
 .defaultLayout-footer {
