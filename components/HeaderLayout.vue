@@ -151,6 +151,7 @@ export default {
 }
 
 .globalHeaderMenu {
+  align-items: flex-start;
   cursor: default;
   display: flex;
 
