@@ -2,7 +2,7 @@
   div.defaultLayout
     header.defaultLayout-header
       div.globalHeader
-        div.container.globalHeader-container
+        div.globalHeader-container(:class="{ container: container !== false }")
           a.globalHeader-logo(v-if="titleUrl" :href="titleUrl") {{ roomTitle }}
           span.globalHeader-logo(v-else) {{ roomTitle }}
           div.globalHeaderMenu
@@ -30,6 +30,7 @@ export default {
     'processing',
     'title',
     'titleLink',
+    'container',
     'noFooter',
     'links'
   ],
@@ -147,6 +148,7 @@ export default {
   .globalHeader-container {
     justify-content: space-between;
     display: flex;
+    padding: 0 1rem;
   }
 }
 

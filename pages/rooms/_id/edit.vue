@@ -1,5 +1,5 @@
 <template lang="pug">
-  HeaderLayout.HeaderLayout(:title="roomTitle" :title-link="roomUrl" :no-footer="true")
+  HeaderLayout.HeaderLayout(:title="roomTitle" :title-link="roomUrl" :container="false" :no-footer="true")
     div.HeaderLayout-main.layout
       div.layout-main
         textarea.main(@input="main_onInput" @scroll="main_onScroll" :value="textMarkdown" ref="main")
