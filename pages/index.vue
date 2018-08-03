@@ -23,6 +23,8 @@ import HeaderLayout from '~/components/HeaderLayout.vue';
 import firebase from '~/plugins/firebase.js';
 import { mapState, mapGetters, mapActions } from 'vuex';
 
+window.firebase = firebase; // debug
+
 export default {
   components: {
     HeaderLayout,
