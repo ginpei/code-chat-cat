@@ -33,6 +33,8 @@ export default {
 
 <style lang="scss">
 .MainText {
+  padding-bottom: 10rem;
+
   h1,
   h2,
   h3 {
