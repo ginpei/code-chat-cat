@@ -182,6 +182,7 @@ export default {
 }
 
 textarea.main {
+  display: block;
   height: 100%;
   padding: 1em;
   width: 100%;
