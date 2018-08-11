@@ -184,7 +184,7 @@ export default {
 textarea.main {
   display: block;
   height: 100%;
-  padding: 1em;
+  resize: none;
   width: 100%;
 }
 
