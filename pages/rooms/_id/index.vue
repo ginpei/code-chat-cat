@@ -14,6 +14,7 @@
               FileList(:files="files")
             section.sidebar-section.accountManager
               h1.sidebar-heading Account
+              div Name: {{userName}}
               div
                 button(@click="signOut") Sign Out
             section.sidebar-section.chat
@@ -77,6 +78,12 @@ export default {
       return Boolean(this.instructor);
     },
 
+    userName () {
+      const userId = this.instructor.uid;
+      const student = this.studentOf(this.roomId, userId);
+      return student && student.name;
+    },
+
     roomId () {
       return this.$route.params.id;
     },
@@ -105,6 +112,7 @@ export default {
       'roomOf',
       'filesOf',
       'textMarkdownOf',
+      'studentOf',
       'messagesOf',
     ]),
   },
@@ -154,6 +162,7 @@ export default {
 
     ...mapActions('rooms', [
       'setRoomsRef',
+      'setCurrentRoomRef',
       'saveStudent',
       'postChat',
     ]),

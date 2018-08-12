@@ -53,6 +53,12 @@ export const getters = {
     return room && room.textMarkdown;
   },
 
+  studentOf: (_, getters) => (roomId, studentId) => {
+    const room = getters['roomOf'](roomId);
+    const student = room && room.students[studentId];
+    return student;
+  },
+
   messagesOf: (_, getters) => (id) => {
     const sort = (m1, m2) => m1.createdAt < m2.createdAt;
     return getters.anyOf(id, 'messages', sort);
