@@ -215,7 +215,7 @@ export const actions = {
   },
 
   saveMember: async ({ getters }, { roomId, userId, name }) => {
-    if (!roomId || !userId || !name) {
+    if (!roomId || !userId) {
       console.warn(roomId, userId, name);
       throw new Error('Valid room ID and file info are required');
     }

@@ -16,7 +16,7 @@
               h1.sidebar-heading Account
               div Name: {{userName}}
               div
-                button(@click="signOut") Sign Out
+                button(@click="rename") Change
             section.sidebar-section.chat
               h1.sidebar-heading Chat
               Chat(@Chat-submit="chat_onSubmit" :messages="messages")
@@ -148,9 +148,14 @@ export default {
       this.saveMember(payload);
     },
 
-    async signOut () {
-      this.loadingCurrentUser = true;
-      await firebase.auth().signOut();
+    rename () {
+      const payload = {
+        roomId: this.roomId,
+        userId: this.currentUserId,
+        name: '',
+      };
+      console.log('# payload', payload);
+      this.saveMember(payload);
     },
 
     signIn_onSubmit ({ nameInput }) {
