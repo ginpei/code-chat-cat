@@ -1,7 +1,7 @@
 <template lang="pug">
   ul.FileList
     li.fileItem(v-for="file in files")
-      a.fileItem-link(:href="file.url") {{ file.name }}
+      a.fileItem-link(:href="file.url") 📓 {{ file.name }}
       button.fileItem-remove(@click="remove_onClick(file)" v-if="editable") ✘
 </template>
 
@@ -34,6 +34,7 @@ export default {
 .fileItem {
   display: grid;
   grid-template: "filename edit" / auto 1.5em;
+  word-break: break-all;
 
   .fileItem-link {
     display: block;
