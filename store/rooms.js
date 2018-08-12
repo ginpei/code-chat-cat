@@ -60,7 +60,7 @@ export const getters = {
   },
 
   messagesOf: (_, getters) => (id) => {
-    const sort = (m1, m2) => m1.createdAt < m2.createdAt;
+    const sort = (m1, m2) => m2.createdAt - m1.createdAt;
     return getters.anyOf(id, 'messages', sort);
   },
 
