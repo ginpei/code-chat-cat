@@ -140,7 +140,7 @@ export default {
       const files = Array.from(event.dataTransfer.files);
       files.forEach((file) => {
         console.log(`${file.name} (${file.type})`, file);
-        this.$store.dispatch('uploadFile', { roomId: this.roomId, file });
+        this.$store.dispatch('rooms/uploadFile', { roomId: this.roomId, file });
       });
     },
 
