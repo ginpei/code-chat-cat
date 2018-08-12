@@ -57,29 +57,29 @@ export default {
       error({ statusCode: 404, message: 'Room not found' })
     }
 
-    const instructor = firebase.auth().currentUser;
+    const currentUser = firebase.auth().currentUser;
 
-    return { room, instructor };
+    return { room, currentUser };
   },
 
   data () {
     return {
-      loadingInstructor: true,
+      loadingCurrentUser: true,
     };
   },
 
   computed: {
     initializing () {
       // return true;
-      return this.loadingInstructor;
+      return this.loadingCurrentUser;
     },
 
     signedIn () {
-      return Boolean(this.instructor);
+      return Boolean(this.currentUser);
     },
 
     userName () {
-      const userId = this.instructor.uid;
+      const userId = this.currentUser.uid;
       const student = this.studentOf(this.roomId, userId);
       return student && student.name;
     },
@@ -120,27 +120,27 @@ export default {
   created () {
     this.setRoomsRef(firebase.database().ref('rooms'));
     firebase.auth().onAuthStateChanged((user) => {
-      this.instructor = user;
-      if (this.loadingInstructor) {
-        this.loadingInstructor = false;
+      this.currentUser = user;
+      if (this.loadingCurrentUser) {
+        this.loadingCurrentUser = false;
       }
     });
   },
 
   methods: {
     async signIn ({ name }) {
-      this.loadingInstructor = true;
+      this.loadingCurrentUser = true;
       await firebase.auth().signInAnonymously();
       const payload = {
         roomId: this.roomId,
-        studentId: this.instructor.uid,
+        studentId: this.currentUser.uid,
         name: name,
       };
       this.saveStudent(payload);
     },
 
     async signOut () {
-      this.loadingInstructor = true;
+      this.loadingCurrentUser = true;
       await firebase.auth().signOut();
     },
 
@@ -154,7 +154,7 @@ export default {
     chat_onSubmit ({ message }) {
       const payload = {
         roomId: this.roomId,
-        studentId: this.instructor.uid,
+        studentId: this.currentUser.uid,
         message,
       };
       this.postChat(payload);
