@@ -1,5 +1,5 @@
 <template lang="pug">
-  HeaderLayout.HeaderLayout(:title="roomTitle" :title-link="roomUrl" :container="false" :no-footer="true")
+  HeaderLayout.HeaderLayout( :roomId="roomId" :container="false" :no-footer="true")
     div.HeaderLayout-main.layout
       div.layout-main
         textarea.main(@input="main_onInput" @scroll="main_onScroll" :value="textMarkdown" ref="main")
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import HeaderLayout from '~/components/HeaderLayout.vue';
+import HeaderLayout from '~/components/rooms/HeaderLayout.vue';
 import Textbook from '~/components/rooms/Textbook.vue';
 import FileList from '~/components/rooms/FileList.vue';
 import firebase from '~/plugins/firebase.js';

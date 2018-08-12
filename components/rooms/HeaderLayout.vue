@@ -1,5 +1,5 @@
 <template lang="pug">
-  HeaderLayout(:processing="processing" :title="room ? room.title : ''" :links="headerLinks")
+  HeaderLayout(:processing="processing" :title="room ? room.title : ''" :links="headerLinks" :container="container" :no-footer="noFooter")
     slot
 </template>
 
@@ -16,6 +16,8 @@ export default {
   props: [
     'processing',
     'roomId',
+    'container',
+    'noFooter',
   ],
 
   computed: {
