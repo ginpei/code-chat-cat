@@ -57,9 +57,12 @@ export default {
       error({ statusCode: 404, message: 'Room not found' })
     }
 
-    const currentUser = firebase.auth().currentUser;
+    const user = firebase.auth().currentUser;
 
-    return { room, currentUser };
+    return {
+      currentUserId: user.uid,
+      room,
+    };
   },
 
   data () {
@@ -75,13 +78,15 @@ export default {
     },
 
     signedIn () {
-      return Boolean(this.currentUser);
+      return Boolean(this.userName);
+    },
+
+    currentUser () {
+      return this.userOf(this.roomId, this.currentUserId);
     },
 
     userName () {
-      const userId = this.currentUser.uid;
-      const user = this.userOf(this.roomId, userId);
-      return user && user.name;
+      return this.currentUser && this.currentUser.name;
     },
 
     roomId () {
@@ -119,24 +124,28 @@ export default {
 
   created () {
     this.setRoomsRef(firebase.database().ref('rooms'));
-    firebase.auth().onAuthStateChanged((user) => {
-      this.currentUser = user;
-      if (this.loadingCurrentUser) {
-        this.loadingCurrentUser = false;
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (!user) {
+        user = await firebase.auth().signInAnonymously();
       }
+      this.currentUserId = user.uid;
+
+      if (!this.currentUser) {
+        await this.createMember({ roomId: this.roomId, userId: user.uid });
+      }
+
+      this.loadingCurrentUser = false;
     });
   },
 
   methods: {
     async signIn ({ name }) {
-      this.loadingCurrentUser = true;
-      await firebase.auth().signInAnonymously();
       const payload = {
         roomId: this.roomId,
-        userId: this.currentUser.uid,
+        userId: this.currentUserId,
         name: name,
       };
-      this.saveUser(payload);
+      this.saveMember(payload);
     },
 
     async signOut () {
@@ -154,7 +163,7 @@ export default {
     chat_onSubmit ({ message }) {
       const payload = {
         roomId: this.roomId,
-        userId: this.currentUser.uid,
+        userId: this.currentUserId,
         message,
       };
       this.postChat(payload);
@@ -163,7 +172,8 @@ export default {
     ...mapActions('rooms', [
       'setRoomsRef',
       'setCurrentRoomRef',
-      'saveUser',
+      'createMember',
+      'saveMember',
       'postChat',
     ]),
   },

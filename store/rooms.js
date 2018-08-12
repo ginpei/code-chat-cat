@@ -19,8 +19,8 @@ export const getters = {
   roomOf: (state) => (id) => state.rooms.find(v => v['.key'] === id),
   roomsOfInstructor: (state) => (uid) => state.rooms.filter(v => v.userId === uid),
   roomRefOf: () => (id) => roomsRef.child(id),
-  usersRefOf: () => (id) => roomsRef.child(id).child('students'),
-  userRefOf: (_, getters) => (roomId, userId) => getters['usersRefOf'](roomId).child(userId),
+  membersRefOf: () => (id) => roomsRef.child(id).child('members'),
+  memberRefOf: (_, getters) => (roomId, userId) => getters['membersRefOf'](roomId).child(userId),
   messagesRefOf: () => (id) => roomsRef.child(id).child('messages'),
   roomStorageRefOf: () => (id) => roomsStorageRef.child(id),
 
@@ -55,7 +55,7 @@ export const getters = {
 
   userOf: (_, getters) => (roomId, userId) => {
     const room = getters['roomOf'](roomId);
-    const user = room && room.students[userId];
+    const user = room && room.members && room.members[userId];
     return user;
   },
 
@@ -203,14 +203,25 @@ export const actions = {
     await infoRef.remove();
   },
 
-  saveUser: async ({ getters }, { roomId, userId, name }) => {
+  createMember: async ({ getters }, { roomId, userId }) => {
+    if (!roomId || !userId) {
+      console.warn(roomId);
+      throw new Error('Valid room ID and user info are required');
+    }
+
+    const roomRef = getters['roomRefOf'](roomId);
+    const ref = roomRef.child('members').child(userId);
+    ref.set({ createdAt: Date.now() });
+  },
+
+  saveMember: async ({ getters }, { roomId, userId, name }) => {
     if (!roomId || !userId || !name) {
       console.warn(roomId, userId, name);
       throw new Error('Valid room ID and file info are required');
     }
 
-    const ref = getters['userRefOf'](roomId, userId);
-    await ref.set({ name });
+    const ref = getters['memberRefOf'](roomId, userId);
+    await ref.update({ name });
   },
 
   postChat: async ({ getters }, { roomId, userId, message }) => {
@@ -219,7 +230,7 @@ export const actions = {
     }
 
     const messagesRef = getters['messagesRefOf'](roomId);
-    const userRef = getters['userRefOf'](roomId, userId);
+    const userRef = getters['memberRefOf'](roomId, userId);
     const { name } = (await userRef.once('value')).val();
 
     messagesRef.push({
