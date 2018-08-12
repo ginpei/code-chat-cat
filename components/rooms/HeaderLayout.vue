@@ -26,7 +26,7 @@ export default {
           items: [
             { title: 'Home', href: this.roomUrlOf(this.roomId) },
             { title: 'Manage', href: this.roomUrlOf(this.roomId, 'manage') },
-            { title: 'Edit', href: this.roomUrlOf(this.roomId, 'edit') },
+            { title: 'Edit Textbook', href: this.roomUrlOf(this.roomId, 'textbook') },
           ],
         },
       ];

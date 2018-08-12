@@ -12,7 +12,7 @@
           span.xTable-td
             a(:href="roomUrl") {{ roomUrl }}
             br
-            a(:href="`${roomUrl}edit`") Edit
+            a(:href="`${roomUrl}textbook`") Edit Textbook
             = ', '
             a(:href="`${roomUrl}manage`") Manage
         label.xTable-row
