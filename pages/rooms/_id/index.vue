@@ -80,8 +80,8 @@ export default {
 
     userName () {
       const userId = this.currentUser.uid;
-      const student = this.studentOf(this.roomId, userId);
-      return student && student.name;
+      const user = this.userOf(this.roomId, userId);
+      return user && user.name;
     },
 
     roomId () {
@@ -112,7 +112,7 @@ export default {
       'roomOf',
       'filesOf',
       'textMarkdownOf',
-      'studentOf',
+      'userOf',
       'messagesOf',
     ]),
   },
@@ -133,10 +133,10 @@ export default {
       await firebase.auth().signInAnonymously();
       const payload = {
         roomId: this.roomId,
-        studentId: this.currentUser.uid,
+        userId: this.currentUser.uid,
         name: name,
       };
-      this.saveStudent(payload);
+      this.saveUser(payload);
     },
 
     async signOut () {
@@ -154,7 +154,7 @@ export default {
     chat_onSubmit ({ message }) {
       const payload = {
         roomId: this.roomId,
-        studentId: this.currentUser.uid,
+        userId: this.currentUser.uid,
         message,
       };
       this.postChat(payload);
@@ -163,7 +163,7 @@ export default {
     ...mapActions('rooms', [
       'setRoomsRef',
       'setCurrentRoomRef',
-      'saveStudent',
+      'saveUser',
       'postChat',
     ]),
   },

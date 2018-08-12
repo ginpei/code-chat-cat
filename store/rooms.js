@@ -19,8 +19,8 @@ export const getters = {
   roomOf: (state) => (id) => state.rooms.find(v => v['.key'] === id),
   roomsOfInstructor: (state) => (uid) => state.rooms.filter(v => v.userId === uid),
   roomRefOf: () => (id) => roomsRef.child(id),
-  studentsRefOf: () => (id) => roomsRef.child(id).child('students'),
-  studentRefOf: (_, getters) => (roomId, studentId) => getters['studentsRefOf'](roomId).child(studentId),
+  usersRefOf: () => (id) => roomsRef.child(id).child('students'),
+  userRefOf: (_, getters) => (roomId, userId) => getters['usersRefOf'](roomId).child(userId),
   messagesRefOf: () => (id) => roomsRef.child(id).child('messages'),
   roomStorageRefOf: () => (id) => roomsStorageRef.child(id),
 
@@ -53,10 +53,10 @@ export const getters = {
     return room && room.textMarkdown;
   },
 
-  studentOf: (_, getters) => (roomId, studentId) => {
+  userOf: (_, getters) => (roomId, userId) => {
     const room = getters['roomOf'](roomId);
-    const student = room && room.students[studentId];
-    return student;
+    const user = room && room.students[userId];
+    return user;
   },
 
   messagesOf: (_, getters) => (id) => {
@@ -203,27 +203,27 @@ export const actions = {
     await infoRef.remove();
   },
 
-  saveStudent: async ({ getters }, { roomId, studentId, name }) => {
-    if (!roomId || !studentId || !name) {
-      console.warn(roomId, studentId, name);
+  saveUser: async ({ getters }, { roomId, userId, name }) => {
+    if (!roomId || !userId || !name) {
+      console.warn(roomId, userId, name);
       throw new Error('Valid room ID and file info are required');
     }
 
-    const studentRef = getters['studentRefOf'](roomId, studentId);
-    await studentRef.set({ name });
+    const ref = getters['userRefOf'](roomId, userId);
+    await ref.set({ name });
   },
 
-  postChat: async ({ getters }, { roomId, studentId, message }) => {
-    if (!roomId || !studentId || !message) {
+  postChat: async ({ getters }, { roomId, userId, message }) => {
+    if (!roomId || !userId || !message) {
       throw new Error('Valid info are required');
     }
 
     const messagesRef = getters['messagesRefOf'](roomId);
-    const studentRef = getters['studentRefOf'](roomId, studentId);
-    const { name } = (await studentRef.once('value')).val();
+    const userRef = getters['userRefOf'](roomId, userId);
+    const { name } = (await userRef.once('value')).val();
 
     messagesRef.push({
-      studentId,
+      userId,
       name,
       body: message,
       createdAt: Date.now(),
