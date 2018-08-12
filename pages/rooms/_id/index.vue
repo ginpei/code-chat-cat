@@ -226,7 +226,6 @@ export default {
   }
 }
 
-.fileManager {
-  min-height: 200px;
-}
+// .fileManager {
+// }
 </style>

@@ -15,6 +15,10 @@
             :data-fileDraggingOver="fileDraggingOver"
           )
             h1.sidebar-heading Files
+            p
+              input(ref="upload" @change="upload_onChange" type="file" multiple)
+              br
+              | or drop here
             FileList(@FileList-delete="FileList_delete" :files="files" :editable="true")
 </template>
 
@@ -127,6 +131,16 @@ export default {
       this.synchronizeScrolling(this.$refs.sub, this.$refs.main);
     },
 
+    upload_onChange (event) {
+      console.log('# event', event);
+      const files = Array.from(this.$refs.upload.files);
+      files.forEach((file) => {
+        console.log(`${file.name} (${file.type})`, file);
+        this.$store.dispatch('rooms/uploadFile', { roomId: this.roomId, file });
+      });
+      this.$refs.upload.value = '';
+    },
+
     fileManager_onDragOver () {
       this.fileDraggingOver = true;
     },
@@ -199,7 +213,6 @@ textarea.main {
 }
 
 .fileManager {
-  min-height: 200px;
   padding: 0 1rem;
 
   &[data-fileDraggingOver] {
