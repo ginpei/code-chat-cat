@@ -14,7 +14,6 @@
               FileList(:files="files")
             section.sidebar-section.accountManager
               h1.sidebar-heading Account
-              div Name: {{userName}}
               div
                 button(@click="signOut") Sign Out
             section.sidebar-section.chat
@@ -78,11 +77,6 @@ export default {
       return Boolean(this.instructor);
     },
 
-    userName () {
-      const u = this.currentUser;
-      return u ? (u.name || '(No name)') : '';
-    },
-
     roomId () {
       return this.$route.params.id;
     },
@@ -113,22 +107,15 @@ export default {
       'textMarkdownOf',
       'messagesOf',
     ]),
-
-    ...mapGetters('users', [
-      'currentUser',
-    ]),
   },
 
   created () {
     this.setRoomsRef(firebase.database().ref('rooms'));
-    this.setUsersRef(firebase.database().ref('users'));
     firebase.auth().onAuthStateChanged((user) => {
       this.instructor = user;
       if (this.loadingInstructor) {
         this.loadingInstructor = false;
       }
-
-      this.updateCurrentUser(user.uid);
     });
   },
 
@@ -169,11 +156,6 @@ export default {
       'setRoomsRef',
       'saveStudent',
       'postChat',
-    ]),
-
-    ...mapActions('users', [
-      'setUsersRef',
-      'updateCurrentUser',
     ]),
   },
 }
