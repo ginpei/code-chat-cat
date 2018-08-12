@@ -50,7 +50,7 @@ export default {
 
 <style lang="scss" scoped>
 .ChatMessageItem {
-  margin: 1rem;
+  margin-bottom: 1rem;
 
   .ChatMessageItem-name {
     font-weight: bold;

@@ -16,8 +16,9 @@
               h1.sidebar-heading Account
               div
                 button(@click="signOut") Sign Out
-        div.classBoard-chat
-          Chat(@Chat-submit="chat_onSubmit" :messages="messages")
+            section.sidebar-section.chat
+              h1.sidebar-heading Chat
+              Chat(@Chat-submit="chat_onSubmit" :messages="messages")
 </template>
 
 <script>
@@ -177,10 +178,12 @@ export default {
 }
 
 .classBoard {
+  --sidebar-width: 20em;
+
   display: grid;
   grid-template:
     "sidebar textbook chat" auto
-    / 10rem calc(100% - 30rem) 20rem;
+    / var(--sidebar-width) calc(100% - var(--sidebar-width));
   height: 100%;
 
   .classBoard-textbook {

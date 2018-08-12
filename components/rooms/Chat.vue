@@ -69,7 +69,6 @@ export default {
     "note submit" auto
     / auto 6rem;
   grid-gap: 0.5rem;
-  padding: 1rem;
   box-sizing: border-box;
 
   .form-inputWrapper {
@@ -90,29 +89,6 @@ export default {
 
   .form-submit {
     grid-area: submit;
-  }
-}
-
-// .timeline {
-//   // nothing particularly?
-// }
-
-.timelineItem {
-  margin: 1rem;
-
-  .timelineItem-name {
-    font-weight: bold;
-    margin-right: 0.5em;
-
-    &::after {
-      content: ":";
-    }
-  }
-
-  .timelineItem-dateTime {
-    color: #999;
-    font-size: 0.8em;
-    margin-left: 0.5em;
   }
 }
 </style>
