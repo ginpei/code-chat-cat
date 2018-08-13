@@ -55,5 +55,10 @@ export default {
     overflow: auto;
     padding: 1em;
   }
+
+  img {
+    max-height: calc(90vh - var(--defaultLayout-headerHeight));
+    max-width: 100%;
+  }
 }
 </style>
