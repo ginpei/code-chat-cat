@@ -2,7 +2,9 @@
   ul.FileList
     li.fileItem(v-for="file in files")
       a.fileItem-link(:href="file.url") 📓 {{ file.name }}
-      button.fileItem-remove(@click="remove_onClick(file)" v-if="editable") ✘
+      span.fileItem-edit
+        button.fileItem-copy(@click="copy_onClick(file)" v-if="editable" title="Copy link") ∞
+        button.fileItem-remove(@click="remove_onClick(file)" v-if="editable" title="Delete") ✘
 </template>
 
 <script>
@@ -14,6 +16,10 @@ export default {
   ],
 
   methods: {
+    copy_onClick (file) {
+      this.$emit('FileList-copy', file);
+    },
+
     remove_onClick (file) {
       const message = `${file.name}\n\nAre you sure you want to delete this file?`;
       const ok = confirm(message);
@@ -46,14 +52,18 @@ export default {
     }
   }
 
-  .fileItem-remove {
-    background-color: transparent;
-    border-style: none;
+  .fileItem-edit {
     visibility: hidden;
   }
 
+  .fileItem-copy,
+  .fileItem-remove {
+    background-color: transparent;
+    border-style: none;
+  }
+
   &:hover {
-    .fileItem-remove {
+    .fileItem-edit {
       visibility: visible;
     }
   }

@@ -19,7 +19,8 @@
               input(ref="upload" @change="upload_onChange" type="file" multiple)
               br
               | or drop here
-            FileList(@FileList-delete="FileList_delete" :files="files" :editable="true")
+            FileList(@FileList-copy="FileList_copy" @FileList-delete="FileList_delete"
+              :files="files" :editable="true")
 </template>
 
 <script>
@@ -28,6 +29,7 @@ import Textbook from '~/components/rooms/Textbook.vue';
 import FileList from '~/components/rooms/FileList.vue';
 import firebase from '~/plugins/firebase.js';
 import { mapState, mapGetters, mapActions } from 'vuex';
+import util from '~/plugins/util.js';
 
 const storageRef = firebase.storage().ref();
 
@@ -156,6 +158,10 @@ export default {
         console.log(`${file.name} (${file.type})`, file);
         this.$store.dispatch('rooms/uploadFile', { roomId: this.roomId, file });
       });
+    },
+
+    FileList_copy (file) {
+      util.copyFileLink(file);
     },
 
     FileList_delete (file) {
