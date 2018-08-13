@@ -2,10 +2,7 @@
   HeaderLayout.HeaderLayout( :roomId="roomId" :container="false" :no-footer="true")
     div.HeaderLayout-main.layout
       div.layout-main
-        textarea.main(@input="main_onInput" @scroll="main_onScroll" :value="textMarkdown" ref="main")
-      div.layout-sub
-        div.content(@scroll="sub_onScroll" ref="sub")
-          Textbook.content-body(:markdown="textMarkdown")
+        TextbookEditor(@input="main_onInput" :textMarkdown="textMarkdown")
       div.layout-sidebar
         div.sidebar
           section.sidebar-section.fileManager(
@@ -26,6 +23,7 @@
 <script>
 import HeaderLayout from '~/components/rooms/HeaderLayout.vue';
 import Textbook from '~/components/rooms/Textbook.vue';
+import TextbookEditor from '~/components/rooms/TextbookEditor.vue';
 import FileList from '~/components/rooms/FileList.vue';
 import firebase from '~/plugins/firebase.js';
 import { mapState, mapGetters, mapActions } from 'vuex';
@@ -37,6 +35,7 @@ export default {
   components: {
     HeaderLayout,
     Textbook,
+    TextbookEditor,
     FileList,
   },
 
@@ -120,8 +119,8 @@ export default {
       elTo.scrollTop = top;
     },
 
-    main_onInput () {
-      const value = this.$refs.main.value;
+    main_onInput ({ value }) {
+      console.log('# value', value);
       this.setTextMarkdown({ value });
     },
 
@@ -180,12 +179,11 @@ export default {
 
 .layout {
   --sidebar-width: 20rem;
-  --textbook-width: calc((100% - var(--sidebar-width)) / 2);
 
   display: grid;
   grid-template:
-    "sidebar main sub" 100%
-    / var(--sidebar-width) var(--textbook-width) var(--textbook-width);
+    "sidebar main" 100%
+    / var(--sidebar-width) calc((100% - var(--sidebar-width)));
   height: 100vh;
 
   .layout-main {
