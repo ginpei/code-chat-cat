@@ -179,10 +179,13 @@ export default {
 }
 
 .layout {
+  --sidebar-width: 20rem;
+  --textbook-width: calc((100% - var(--sidebar-width)) / 2);
+
   display: grid;
   grid-template:
     "sidebar main sub" 100%
-    / 10rem calc((100% - 10rem) / 2) calc((100% - 10rem) / 2);
+    / var(--sidebar-width) var(--textbook-width) var(--textbook-width);
   height: 100vh;
 
   .layout-main {
