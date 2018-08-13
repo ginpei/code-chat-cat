@@ -2,10 +2,10 @@
   div.signIn
     form.signIn-box(@submit.prevent="signIn_onSubmit")
       h1.signIn-heading Welcome!
-      p.signIn-message Input your name and sign in to the class.
+      p.signIn-message Input your name and enter the class room.
       div.signIn-form
         input.signIn-input(v-model="nameInput" placeholder="Alice")
-        button.signIn-signIn Sign In
+        button.signIn-signIn Enter room
 </template>
 
 <script>
