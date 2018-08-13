@@ -2,7 +2,15 @@
   HeaderLayout.HeaderLayout( :roomId="roomId" :container="false" :no-footer="true")
     div.HeaderLayout-main.layout
       div.layout-main
-        TextbookEditor(@input="main_onInput" :textMarkdown="textMarkdown")
+        div.editor
+          div.editor-tabs
+            EditorTabItem(
+              v-for="book in books"
+              @EditorTabItem-select="tabItem_onSelect(book)"
+              @EditorTabItem-close="tabItem_onClose(book)"
+              :label="book.name" :permanent="book.permanent" :active="isActiveBook(book)")
+          div.editor-editor
+            TextbookEditor(@input="main_onInput" :textMarkdown="textMarkdown")
       div.layout-sidebar
         div.sidebar
           section.sidebar-section.fileManager(
@@ -25,6 +33,7 @@ import HeaderLayout from '~/components/rooms/HeaderLayout.vue';
 import Textbook from '~/components/rooms/Textbook.vue';
 import TextbookEditor from '~/components/rooms/TextbookEditor.vue';
 import FileList from '~/components/rooms/FileList.vue';
+import EditorTabItem from '~/components/rooms/EditorTabItem.vue';
 import firebase from '~/plugins/firebase.js';
 import { mapState, mapGetters, mapActions } from 'vuex';
 import util from '~/plugins/util.js';
@@ -35,6 +44,7 @@ export default {
   components: {
     HeaderLayout,
     Textbook,
+    EditorTabItem,
     TextbookEditor,
     FileList,
   },
@@ -61,6 +71,12 @@ export default {
     return {
       elBeingScrolled: null,
       fileDraggingOver: false,
+      books: [
+        { id: 'dummyfile1', name: 'Textbook', permanent: true },
+        { id: 'dummyfile2', name: 'Preparation 1', },
+        { id: 'dummyfile3', name: 'Preparation 2', },
+      ],
+      editingBook: 'dummyfile1',
     }
   },
 
@@ -117,6 +133,18 @@ export default {
       const scrollProgress = elFrom.scrollTop / (elFrom.scrollHeight - elFrom.clientHeight);
       const top = (elTo.scrollHeight - elTo.clientHeight) * scrollProgress;
       elTo.scrollTop = top;
+    },
+
+    isActiveBook (book) {
+      return book.id === this.editingBook;
+    },
+
+    tabItem_onSelect (book) {
+      console.log(`# select`, book.name);
+    },
+
+    tabItem_onClose (book) {
+      console.log(`# close`, book.name);
     },
 
     main_onInput ({ value }) {
@@ -187,13 +215,7 @@ export default {
   height: 100vh;
 
   .layout-main {
-    box-shadow: 0.2rem 0.2rem 0.2rem #0003 inset;
     grid-area: main;
-  }
-
-  .layout-sub {
-    box-shadow: 0.2rem 0.2rem 0.2rem #0003 inset;
-    grid-area: sub;
   }
 
   .layout-sidebar {
@@ -226,6 +248,29 @@ textarea.main {
 .fileManager {
   &[data-fileDraggingOver] {
     background-color: khaki;
+  }
+}
+
+.editor {
+  display: grid;
+  grid-template:
+    "tabs" 2em
+    "editor" calc(100% - 2em)
+    / 100%;
+  height: 100%;
+
+  .editor-tabs {
+    background-color: lightgray;
+    grid-area: tabs;
+    line-height: 2em;
+  }
+
+  .editor-editor {
+    grid-area: editor;
+  }
+
+  .editor-tabs {
+    padding: 0 0.2em;
   }
 }
 </style>
