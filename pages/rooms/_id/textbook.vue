@@ -221,9 +221,11 @@ textarea.main {
   }
 }
 
-.fileManager {
+.sidebar-section {
   padding: 0 1rem;
+}
 
+.fileManager {
   &[data-fileDraggingOver] {
     background-color: khaki;
   }
