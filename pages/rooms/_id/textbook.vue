@@ -165,7 +165,7 @@ export default {
     },
 
     FileList_delete (file) {
-        this.$store.dispatch('deleteFile', { roomId: this.roomId, file });
+      this.$store.dispatch('deleteFile', { roomId: this.roomId, file });
     },
   }
 }
