@@ -10,9 +10,13 @@
 
 <script>
 export default {
+  props: [
+    'defaultName'
+  ],
+
   data () {
     return {
-      nameInput: '',
+      nameInput: this.defaultName || '',
     };
   },
 

@@ -1,7 +1,7 @@
 <template lang="pug">
   HeaderLayout.HeaderLayout(:processing="initializing" :title="roomTitle" :title-link="roomUrl" :container="false" :no-footer="true")
     div.HeaderLayout-main(v-if="!signedIn")
-      SignIn(@SignIn_submit="signIn_onSubmit")
+      SignIn(:defaultName="authName" @SignIn_submit="signIn_onSubmit")
     div.HeaderLayout-main(v-if="signedIn")
       div.classBoard
         div.classBoard-textbook
@@ -87,6 +87,11 @@ export default {
 
     userName () {
       return this.currentUser && this.currentUser.name;
+    },
+
+    authName () {
+      const user = firebase.auth().currentUser;
+      return user && user.displayName;
     },
 
     roomId () {
