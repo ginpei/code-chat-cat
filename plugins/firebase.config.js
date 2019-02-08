@@ -1,7 +1,7 @@
 export default {
-  apiKey: 'AIzaSyCchW1XVLnIfG_wre1PKync7ZVfUylGRV4',
-  authDomain: 'hello-nuxt-firebase.firebaseapp.com',
-  databaseURL: 'https://hello-nuxt-firebase.firebaseio.com/',
-  projectId: 'hello-nuxt-firebase',
-  storageBucket: 'gs://hello-nuxt-firebase.appspot.com/',
+  apiKey: 'AIzaSyDu7McDrMD0wS2PSPoZzfHoujr0lD4VAUk',
+  authDomain: 'code-chat-cat.firebaseapp.com',
+  databaseURL: 'https://code-chat-cat.firebaseio.com/',
+  projectId: 'code-chat-cat',
+  storageBucket: 'gs://code-chat-cat.appspot.com',
 };
