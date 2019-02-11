@@ -1,11 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+
+const AppName = styled.h1`
+  text-align: center;
+`;
 
 function HomePage (props: any) {
   return (
     <div>
-      <h1>Hello Home World!</h1>
+      <AppName>Hello Home World!</AppName>
       { props.loggedIn ? (
         <p>
           Welcome back, {props.currentUser.name}!
