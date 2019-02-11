@@ -15,6 +15,8 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.4",
     "redux": "^4.0.1",
+    "tslint": "^5.12.1",
+    "tslint-react": "^3.6.0",
     "typescript": "3.3.3"
   },
   "scripts": {

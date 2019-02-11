@@ -1,9 +1,11 @@
+// tslint:disable:jsx-no-lambda
+
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { CurrentUserActionTypes } from '../reducers/currentUser';
 
-function LoginPage(props: any) {
+function LoginPage (props: any) {
   return (
     <div>
       <h1>Login</h1>
@@ -17,7 +19,7 @@ function LoginPage(props: any) {
       </p>
     </div>
   );
-};
+}
 
 const mapStateToProps = (state: any) => ({
   currentUser: state.currentUser,

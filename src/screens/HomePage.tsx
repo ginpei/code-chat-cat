@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-function HomePage(props: any) {
+function HomePage (props: any) {
   return (
     <div>
       <h1>Hello Home World!</h1>
@@ -16,7 +16,7 @@ function HomePage(props: any) {
       )}
     </div>
   );
-};
+}
 
 const mapStateToProps = (state: any) => ({
   currentUser: state.currentUser,

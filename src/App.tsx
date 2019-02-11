@@ -1,17 +1,17 @@
+import { createBrowserHistory } from 'history';
 import React, { Component } from 'react';
-import { Router, Switch, Route } from 'react-router';
+import { Provider } from 'react-redux';
+import { Route, Router, Switch } from 'react-router';
+import { createStore } from 'redux';
+import rootReducer from './reducers';
 import HomePage from './screens/HomePage';
 import LoginPage from './screens/LoginPage';
-import { createBrowserHistory } from 'history';
-import { Provider } from 'react-redux';
-import rootReducer from './reducers';
-import { createStore } from 'redux';
 
 class App extends Component {
   protected store = createStore(rootReducer);
   protected appHistory = createBrowserHistory();
-  
-  render() {
+
+  public render () {
     return (
       <Provider store={this.store}>
         <Router history={this.appHistory}>
