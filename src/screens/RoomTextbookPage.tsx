@@ -25,10 +25,12 @@ const EditorContainer = styled.div`
 const EditorInput = styled.textarea`
   background-color: #eee;
   border-style: none;
+  overflow-y: scroll;
   padding: 0.4rem;
   resize: none;
 `;
 const EditorOutput = styled.article`
+  overflow-y: scroll;
   padding: 0.4rem;
 `;
 
