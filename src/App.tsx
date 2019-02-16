@@ -7,6 +7,7 @@ import * as currentUser from './currentUser';
 import rootReducer from './reducers';
 import HomePage from './screens/HomePage';
 import LoginPage from './screens/LoginPage';
+import RoomTextbookPage from './screens/RoomTextbookPage';
 
 // tslint:disable-next-line:no-empty-interface
 interface IAppProps {
@@ -40,6 +41,7 @@ class App extends Component<IAppProps, IAppState> {
             <Switch>
               <Route exact={true} path="/" component={HomePage}/>
               <Route exact={true} path="/login" component={LoginPage}/>
+              <Route exact={true} path="/rooms/:id/" component={RoomTextbookPage}/>
             </Switch>
           </div>
         </Router>
