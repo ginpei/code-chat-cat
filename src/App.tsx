@@ -3,15 +3,36 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router';
 import { createStore } from 'redux';
+import * as currentUser from './currentUser';
 import rootReducer from './reducers';
 import HomePage from './screens/HomePage';
 import LoginPage from './screens/LoginPage';
 
-class App extends Component {
+// tslint:disable-next-line:no-empty-interface
+interface IAppProps {
+}
+interface IAppState {
+  ready: boolean;
+}
+
+class App extends Component<IAppProps, IAppState> {
   protected store = createStore(rootReducer);
   protected appHistory = createBrowserHistory();
 
+  constructor (props: IAppProps) {
+    super(props);
+    this.state = {
+      ready: false,
+    };
+  }
+
   public render () {
+    if (!this.state.ready) {
+      return (
+        <div>...</div>
+      );
+    }
+
     return (
       <Provider store={this.store}>
         <Router history={this.appHistory}>
@@ -24,6 +45,13 @@ class App extends Component {
         </Router>
       </Provider>
     );
+  }
+
+  public async componentDidMount () {
+    await currentUser.initialize(this.store);
+    this.setState({
+      ready: true,
+    });
   }
 }
 

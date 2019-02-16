@@ -3,17 +3,22 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+interface IHomePageProps {
+  loggedIn: boolean;
+  userName: string;
+}
+
 const AppName = styled.h1`
   text-align: center;
 `;
 
-function HomePage (props: any) {
+function HomePage (props: IHomePageProps) {
   return (
     <div>
       <AppName>Hello Home World!</AppName>
-      { props.loggedIn ? (
+      {props.loggedIn ? (
         <p>
-          Welcome back, {props.currentUser.name}!
+          Welcome back, {props.userName}!
           <Link to="/login">Log out...</Link>
         </p>
       ) : (
@@ -24,8 +29,8 @@ function HomePage (props: any) {
 }
 
 const mapStateToProps = (state: any) => ({
-  currentUser: state.currentUser,
-  loggedIn: Boolean(state.currentUser),
+  loggedIn: state.currentUser.loggedIn,
+  userName: state.currentUser.name,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
