@@ -1,11 +1,13 @@
 import firebase from '../middleware/firebase';
 
 export interface ICurrentUser {
+  firebaseUser: firebase.User | null;
   loggedIn: boolean;
   name: string;
   working: boolean;
 }
 const defaultCurrentUser: ICurrentUser = {
+  firebaseUser: null,
   loggedIn: false,
   name: '',
   working: false,
@@ -31,6 +33,7 @@ function setUser (state: ICurrentUser, action: ICurrentUserSetUserAction) {
   const { user } = action;
   return {
     ...state,
+    firebaseUser: user,
     loggedIn: Boolean(action.user),
     name: user && (user.displayName || user.email) || '',
   };
