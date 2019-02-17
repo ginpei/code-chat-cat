@@ -4,6 +4,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as currentUser from '../currentUser';
+import { Dispatch, IState } from '../reducers';
+import { CurrentUserActionTypes } from '../reducers/currentUser';
 
 interface ILoginPageProps {
   currentUser: any;
@@ -48,14 +50,14 @@ class LoginPage extends React.Component<ILoginPageProps> {
   }
 }
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: IState) => ({
   currentUser: state.currentUser,
   working: state.currentUser.working,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({
+const mapDispatchToProps = (dispatch: Dispatch) => ({
   setWorking: (working: boolean) => dispatch({
-    type: 'currentUser/setWorking', // TODO use enum
+    type: CurrentUserActionTypes.setWorking,
     working,
   }),
 });

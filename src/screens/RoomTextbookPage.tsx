@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 import Markdown from '../components/Markdown';
+import { Dispatch, IState } from '../reducers';
 
 const headerHeight = 12 * 1.6;
 
@@ -68,12 +69,12 @@ function RoomTextbookPage (props: IRoomTextbookPageProps) {
   );
 }
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: IState) => ({
   loggedIn: state.currentUser.loggedIn,
   userName: state.currentUser.name,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({});
+const mapDispatchToProps = (dispatch: Dispatch) => ({});
 
 export default connect(
   mapStateToProps,

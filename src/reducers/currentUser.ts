@@ -18,7 +18,7 @@ export enum CurrentUserActionTypes {
   setWorking = 'currentUser/setWorking',
 }
 
-type CurrentUserAction =
+export type CurrentUserAction =
   ICurrentUserSetUserAction |
   ICurrentUserSetWorkingAction;
 

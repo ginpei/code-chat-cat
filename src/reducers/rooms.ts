@@ -14,7 +14,7 @@ export enum RoomsActionTypes {
   setRooms = 'rooms/setRooms',
 }
 
-type RoomsAction =
+export type RoomsAction =
   IRoomsSetRoomsAction;
 
 // --------------------------
