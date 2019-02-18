@@ -23,10 +23,16 @@ export default class Markdown extends React.Component<IMarkdownProps> {
 
       return '';
     },
+    html: true,
+    linkify: true,
   });
 
   protected get content () {
     return this.mdit.render(this.props.content);
+  }
+
+  constructor (props: IMarkdownProps) {
+    super(props);
   }
 
   public render () {
