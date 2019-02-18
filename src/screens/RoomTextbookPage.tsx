@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import Markdown from '../components/Markdown';
+import syncScroll from '../functions/syncScroll';
 import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
 import { observeRoom, updateRoom } from '../rooms';
@@ -64,7 +65,10 @@ interface IRoomTextbookPageState {
 }
 
 class RoomTextbookPage extends React.Component<IRoomTextbookPageProps, IRoomTextbookPageState> {
+  protected refInput = createRef<HTMLTextAreaElement>();
+  protected refOutput = createRef<HTMLElement>();
   protected unobserve: (() => void) | null = null;
+  protected unsubscribeSyncScroll: (() => void) | null = null;
 
   protected get roomId () {
     return this.props.match.params.id;
@@ -114,8 +118,15 @@ class RoomTextbookPage extends React.Component<IRoomTextbookPageProps, IRoomText
           <AppName>{roomName}</AppName>
         </Header>
         <EditorContainer>
-          <EditorInput onChange={this.onContentInput} value={content} disabled={!room}/>
-          <EditorOutput>
+          <EditorInput
+            ref={this.refInput}
+            onChange={this.onContentInput}
+            value={content}
+            disabled={!room}
+          />
+          <EditorOutput
+            ref={this.refOutput}
+          >
             <Markdown content={content} />
           </EditorOutput>
         </EditorContainer>
@@ -141,6 +152,23 @@ class RoomTextbookPage extends React.Component<IRoomTextbookPageProps, IRoomText
     if (this.unobserve) {
       this.unobserve();
     }
+
+    if (this.unsubscribeSyncScroll) {
+      this.unsubscribeSyncScroll();
+    }
+  }
+
+  public componentDidUpdate () {
+    const elInput = this.refInput.current;
+    const elOutput = this.refOutput.current;
+    if (!elInput || !elOutput) {
+      return;
+    }
+
+    if (this.unsubscribeSyncScroll) {
+      this.unsubscribeSyncScroll();
+    }
+    this.unsubscribeSyncScroll = syncScroll([elInput, elOutput]);
   }
 
   public onContentInput (event: React.ChangeEvent<HTMLTextAreaElement>) {
