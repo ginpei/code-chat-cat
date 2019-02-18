@@ -1,3 +1,4 @@
+import 'highlight.js/styles/atom-one-dark.css';
 import React, { createRef } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
