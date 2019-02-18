@@ -12,10 +12,7 @@ export default class Markdown extends React.Component<IMarkdownProps> {
       if (language && hljs.getLanguage(language)) {
         try {
           const highlighted = hljs.highlight(language, text).value;
-          const html = `<pre><code class="hljs ${language}">`
-           + highlighted
-           + '</code></pre>';
-          return html;
+          return highlighted;
         } catch (error) {
           console.error(error);
         }
@@ -24,6 +21,7 @@ export default class Markdown extends React.Component<IMarkdownProps> {
       return '';
     },
     html: true,
+    langPrefix: 'hljs ',
     linkify: true,
   });
 
