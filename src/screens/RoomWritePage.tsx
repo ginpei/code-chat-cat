@@ -129,10 +129,11 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
   public componentDidMount () {
     this.unobserve = observeRoom(this.roomId, (updatedRoom) => {
       this.setState({
-        content: updatedRoom ? updatedRoom.textbookContent : '',
         pageStatus: PageStatus.ready,
         room: updatedRoom,
       });
+
+      this.updateContent(updatedRoom ? updatedRoom.textbookContent : '');
     });
 
     this.setState({
@@ -177,6 +178,17 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
       content: newContent,
     });
     updateRoom({ ...room, textbookContent: newContent });
+  }
+
+  protected updateContent (content: string) {
+    // Just update current content to the value from server.
+    // This won't reflect remote modification to your screen.
+
+    if (this.state.content === '') {
+      this.setState({
+        content,
+      });
+    }
   }
 }
 
