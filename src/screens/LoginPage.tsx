@@ -3,6 +3,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Header from '../components/Header';
 import * as currentUser from '../currentUser';
 import { Dispatch, IState } from '../reducers';
 import { CurrentUserActionTypes } from '../reducers/currentUser';
@@ -24,6 +25,7 @@ class LoginPage extends React.Component<ILoginPageProps> {
   public render () {
     return (
       <div>
+        <Header/>
         <h1>Login</h1>
         <p><Link to="/">Home</Link></p>
         <p>name [{this.props.currentUser.name}]</p>

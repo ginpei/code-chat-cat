@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import Header from '../components/Header';
 import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
 import { loadRooms } from '../rooms';
@@ -50,6 +51,7 @@ function HomePage (props: IHomePageProps) {
 
   return (
     <div>
+      <Header/>
       <AppName>Hello Home World!</AppName>
       {props.loggedIn ? (
         <>

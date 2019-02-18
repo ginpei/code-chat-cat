@@ -2,25 +2,13 @@ import React, { createRef } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import styled, { css } from 'styled-components';
+import Header, { headerHeight } from '../components/Header';
 import Markdown from '../components/Markdown';
 import syncScroll from '../functions/syncScroll';
 import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
 import { observeRoom, updateRoom } from '../rooms';
 
-const headerHeight = 12 * 1.6;
-
-const Header = styled.header`
-  background-color: #036;
-  color: #fff;
-  font-size: 12px;
-  height: 1.6em;
-  line-height: 1.6em;
-  padding: 0 1rem;
-`;
-const AppName = styled.div`
-  font-weight: bold;
-`;
 const EditorContainer = styled.div`
   display: grid;
   grid-template: "input output" 100% / 1fr 1fr;
@@ -115,9 +103,10 @@ class RoomTextbookPage extends React.Component<IRoomTextbookPageProps, IRoomText
 
     return (
       <div>
-        <Header>
-          <AppName>{roomName}</AppName>
-        </Header>
+        <Header
+          title={roomName}
+          titleHref={`/rooms/${this.roomId}`}
+        />
         {room && (
           <EditorContainer>
             <EditorInput
