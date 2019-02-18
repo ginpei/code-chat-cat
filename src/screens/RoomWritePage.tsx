@@ -1,22 +1,33 @@
 import React, { createRef } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Header, { headerHeight } from '../components/Header';
 import Markdown from '../components/Markdown';
+import syncScroll from '../functions/syncScroll';
 import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
-import { observeRoom } from '../rooms';
+import { observeRoom, updateRoom } from '../rooms';
 
-const TextbookContainer = styled.div`
+const EditorContainer = styled.div`
+  display: grid;
+  grid-template: "input output" 100% / 1fr 1fr;
   height: calc(100vh - ${headerHeight}px);
-  overflow-y: scroll;
 `;
-const TextbookContent = styled.article`
+const EditorInput = styled.textarea`
+  background-color: ivory;
+  border-style: none;
+  overflow-y: scroll;
+  padding: 1rem;
+  resize: none;
+
+  ${(props) => props.disabled && css`
+    box-shadow: 0 0 50vmin #0003 inset;
+  `}
+`;
+const EditorOutput = styled.article`
   background-color: snow;
-  box-shadow: 0 0 10px #0003;
-  margin: auto;
-  max-width: 800px;
+  overflow-y: scroll;
   padding: 1rem;
 `;
 
@@ -26,23 +37,23 @@ enum PageStatus {
   ready,
 }
 
-interface IRoomTextbookPageParams {
+interface IRoomWritePageParams {
   id: string;
 }
-interface IRoomTextbookPageProps
-  extends RouteComponentProps<IRoomTextbookPageParams> {
+interface IRoomWritePageProps
+  extends RouteComponentProps<IRoomWritePageParams> {
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
   setRooms: (rooms: IRoom[]) => void;
   userName: string;
 }
-interface IRoomTextbookPageState {
+interface IRoomWritePageState {
   content: string;
   pageStatus: PageStatus;
   room: IRoom | null;
 }
 
-class RoomTextbookPage extends React.Component<IRoomTextbookPageProps, IRoomTextbookPageState> {
+class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageState> {
   protected refInput = createRef<HTMLTextAreaElement>();
   protected refOutput = createRef<HTMLElement>();
   protected unobserve: (() => void) | null = null;
@@ -52,13 +63,15 @@ class RoomTextbookPage extends React.Component<IRoomTextbookPageProps, IRoomText
     return this.props.match.params.id;
   }
 
-  constructor (props: IRoomTextbookPageProps) {
+  constructor (props: IRoomWritePageProps) {
     super(props);
     this.state = {
       content: '',
       pageStatus: PageStatus.initial,
       room: null,
     };
+
+    this.onContentInput = this.onContentInput.bind(this);
   }
 
   public render () {
@@ -95,11 +108,18 @@ class RoomTextbookPage extends React.Component<IRoomTextbookPageProps, IRoomText
           titleHref={`/rooms/${this.roomId}`}
         />
         {room && (
-          <TextbookContainer>
-            <TextbookContent>
+          <EditorContainer>
+            <EditorInput
+              ref={this.refInput}
+              onChange={this.onContentInput}
+              value={content}
+            />
+            <EditorOutput
+              ref={this.refOutput}
+            >
               <Markdown content={content} />
-            </TextbookContent>
-          </TextbookContainer>
+            </EditorOutput>
+          </EditorContainer>
         )}
       </div>
     );
@@ -128,6 +148,35 @@ class RoomTextbookPage extends React.Component<IRoomTextbookPageProps, IRoomText
       this.unsubscribeSyncScroll();
     }
   }
+
+  public componentDidUpdate () {
+    if (this.unsubscribeSyncScroll) {
+      this.unsubscribeSyncScroll();
+    }
+
+    const els = [
+      this.refInput.current!,
+      this.refOutput.current!,
+    ];
+    if (!els.every((v) => Boolean(v))) {
+      return;
+    }
+
+    this.unsubscribeSyncScroll = syncScroll(els);
+  }
+
+  public onContentInput (event: React.ChangeEvent<HTMLTextAreaElement>) {
+    const { room } = this.state;
+    if (!room) {
+      return;
+    }
+
+    const newContent = event.currentTarget.value;
+    this.setState({
+      content: newContent,
+    });
+    updateRoom({ ...room, textbookContent: newContent });
+  }
 }
 
 const mapStateToProps = (state: IState) => ({
@@ -146,4 +195,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(RoomTextbookPage);
+)(RoomWritePage);
