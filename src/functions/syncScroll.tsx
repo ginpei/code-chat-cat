@@ -1,10 +1,10 @@
 export default function syncScroll (els: Element[]) {
   let scrolling = false;
-  const handler = createHandler(els);
+  const handleScrolling = createHandler(els);
   const listener = async (event: Event) => {
     if (!scrolling) {
       scrolling = true;
-      await handler(event);
+      await handleScrolling(event);
       scrolling = false;
     }
   };
