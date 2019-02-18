@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Markdown from '../components/Markdown';
 import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
@@ -31,6 +31,10 @@ const EditorInput = styled.textarea`
   overflow-y: scroll;
   padding: 1rem;
   resize: none;
+
+  ${(props) => props.disabled && css`
+    box-shadow: 0 0 50vmin #0003 inset;
+  `}
 `;
 const EditorOutput = styled.article`
   overflow-y: scroll;
