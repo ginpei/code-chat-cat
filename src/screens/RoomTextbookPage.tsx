@@ -159,16 +159,19 @@ class RoomTextbookPage extends React.Component<IRoomTextbookPageProps, IRoomText
   }
 
   public componentDidUpdate () {
-    const elInput = this.refInput.current;
-    const elOutput = this.refOutput.current;
-    if (!elInput || !elOutput) {
-      return;
-    }
-
     if (this.unsubscribeSyncScroll) {
       this.unsubscribeSyncScroll();
     }
-    this.unsubscribeSyncScroll = syncScroll([elInput, elOutput]);
+
+    const els = [
+      this.refInput.current!,
+      this.refOutput.current!,
+    ];
+    if (!els.every((v) => Boolean(v))) {
+      return;
+    }
+
+    this.unsubscribeSyncScroll = syncScroll(els);
   }
 
   public onContentInput (event: React.ChangeEvent<HTMLTextAreaElement>) {
