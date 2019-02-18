@@ -34,7 +34,7 @@ export default class Header extends React.Component<IHeaderProps> {
     return (
       <Container>
         <Title>
-          {this.props.title ? (
+          {this.props.title !== undefined ? (
             this.props.titleHref ? (
               <HeaderLink to={this.props.titleHref}>
                 {this.props.title}
