@@ -27,7 +27,7 @@ const EditorContainer = styled.div`
   height: calc(100vh - ${headerHeight}px);
 `;
 const EditorInput = styled.textarea`
-  background-color: #f0f0f0;
+  background-color: ivory;
   border-style: none;
   overflow-y: scroll;
   padding: 1rem;
@@ -38,6 +38,7 @@ const EditorInput = styled.textarea`
   `}
 `;
 const EditorOutput = styled.article`
+  background-color: snow;
   overflow-y: scroll;
   padding: 1rem;
 `;
@@ -117,19 +118,20 @@ class RoomTextbookPage extends React.Component<IRoomTextbookPageProps, IRoomText
         <Header>
           <AppName>{roomName}</AppName>
         </Header>
-        <EditorContainer>
-          <EditorInput
-            ref={this.refInput}
-            onChange={this.onContentInput}
-            value={content}
-            disabled={!room}
-          />
-          <EditorOutput
-            ref={this.refOutput}
-          >
-            <Markdown content={content} />
-          </EditorOutput>
-        </EditorContainer>
+        {room && (
+          <EditorContainer>
+            <EditorInput
+              ref={this.refInput}
+              onChange={this.onContentInput}
+              value={content}
+            />
+            <EditorOutput
+              ref={this.refOutput}
+            >
+              <Markdown content={content} />
+            </EditorOutput>
+          </EditorContainer>
+        )}
       </div>
     );
   }
