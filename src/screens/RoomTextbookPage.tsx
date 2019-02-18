@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
@@ -53,63 +53,104 @@ interface IRoomTextbookPageProps
   setRooms: (rooms: IRoom[]) => void;
   userName: string;
 }
+interface IRoomTextbookPageState {
+  content: string;
+  pageStatus: PageStatus;
+  room: IRoom | null;
+}
 
-function RoomTextbookPage (props: IRoomTextbookPageProps) {
-  if (!props.firebaseUser) {
+class RoomTextbookPage extends React.Component<IRoomTextbookPageProps, IRoomTextbookPageState> {
+  protected unobserve: (() => void) | null = null;
+
+  protected get roomId () {
+    return this.props.match.params.id;
+  }
+
+  constructor (props: IRoomTextbookPageProps) {
+    super(props);
+    this.state = {
+      content: '',
+      pageStatus: PageStatus.initial,
+      room: null,
+    };
+
+    this.onContentInput = this.onContentInput.bind(this);
+  }
+
+  public render () {
+    if (!this.props.firebaseUser) {
+      return (
+        <div>
+          <p>401</p>
+        </div>
+      );
+    }
+
+    const { content, pageStatus, room } = this.state;
+
+    if (pageStatus === PageStatus.initial) {
+      return (
+        <div title="Initializing room">...</div>
+      );
+    }
+
+    if (pageStatus === PageStatus.ready && !room) {
+      return (
+        <div>
+          <p>404</p>
+        </div>
+      );
+    }
+
+    const roomName = room ? room.name : '';
+
     return (
       <div>
-        <p>401</p>
+        <Header>
+          <AppName>{roomName}</AppName>
+        </Header>
+        <EditorContainer>
+          <EditorInput onChange={this.onContentInput} value={content} disabled={!room}/>
+          <EditorOutput>
+            <Markdown content={content} />
+          </EditorOutput>
+        </EditorContainer>
       </div>
     );
   }
 
-  const roomId = props.match.params.id;
-  const [pageStatus, setPageStatus] = useState(PageStatus.initial);
-  const [room, setRoom] = useState<IRoom | null>(null);
-
-  if (pageStatus === PageStatus.initial) {
-    // TODO unobserve when unmount
-    const unobserve = observeRoom(roomId, (updatedRoom) => {
-      setRoom(updatedRoom);
-      setPageStatus(PageStatus.ready);
+  public componentDidMount () {
+    this.unobserve = observeRoom(this.roomId, (updatedRoom) => {
+      this.setState({
+        content: updatedRoom ? updatedRoom.textbookContent : '',
+        pageStatus: PageStatus.ready,
+        room: updatedRoom,
+      });
     });
 
-    setPageStatus(PageStatus.loading);
-    return (
-      <div title="Initializing room">...</div>
-    );
+    this.setState({
+      pageStatus: PageStatus.loading,
+    });
   }
 
-  if (pageStatus === PageStatus.ready && !room) {
-    return (
-      <div>
-        <p>404</p>
-      </div>
-    );
+  public componentWillUnmount () {
+    if (this.unobserve) {
+      this.unobserve();
+    }
   }
 
-  const onChangeInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (!room) { return; }
-    const textbookContent = event.currentTarget.value;
-    updateRoom({ ...room, textbookContent });
-  };
+  public onContentInput (event: React.ChangeEvent<HTMLTextAreaElement>) {
+    const { room } = this.state;
+    if (!room) {
+      return;
+    }
 
-  const roomName = room ? room.name : '';
-  const content = room ? room.textbookContent : '';
-
-  return (
-    <div>
-      <Header>
-        <AppName>{roomName}</AppName>
-      </Header>
-      <EditorContainer>
-        <EditorInput onChange={onChangeInput} value={content} disabled={!content}/>
-        <EditorOutput>
-          <Markdown content={content} />
-        </EditorOutput>
-      </EditorContainer>
-    </div>
-  );
+    const newContent = event.currentTarget.value;
+    this.setState({
+      content: newContent,
+    });
+    updateRoom({ ...room, textbookContent: newContent });
+  }
 }
 
 const mapStateToProps = (state: IState) => ({
