@@ -26,7 +26,25 @@ class LoginPage extends React.Component<ILoginPageProps> {
   public render () {
     return (
       <div>
-        <Header/>
+        <Header
+          menus={[
+            // TODO replace these dummy values
+            {
+              links: [
+                { title: 'Twitter', href: '/' },
+                { title: 'Facebook', href: '/' },
+              ],
+              name: 'SNS',
+            },
+            {
+              links: [
+                { title: 'About', href: '/' },
+                { title: 'Blog', href: '/' },
+              ],
+              name: 'Ginpei',
+            },
+          ]}
+        />
         <Container>
           <h1>Login</h1>
           <p><Link to="/">Home</Link></p>

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Container from './Container';
+import HeaderMenu, { IHeaderMenu } from './HeaderMenu';
 
 export const headerHeight = 12 * 1.6;
 
@@ -11,6 +12,10 @@ const OuterContainer = styled.header`
   font-size: 12px;
   height: 1.6em;
   line-height: 1.6em;
+`;
+const ItemsContainer = styled.div`
+  justify-content: space-between;
+  display: flex;
 `;
 const Title = styled.div`
   font-weight: bold;
@@ -40,6 +45,7 @@ function InnerContainer (props: any) {
 }
 
 interface IHeaderProps {
+  menus?: IHeaderMenu[];
   title?: string;
   titleHref?: string;
   fullscreen?: boolean;
@@ -54,19 +60,22 @@ export default class Header extends React.Component<IHeaderProps> {
     return (
       <OuterContainer>
         <InnerContainer fullscreen={this.props.fullscreen}>
-          <Title>
-            {this.props.title !== undefined ? (
-              this.props.titleHref ? (
-                <HeaderLink to={this.props.titleHref}>
-                  {this.props.title}
-                </HeaderLink>
+          <ItemsContainer>
+            <Title>
+              {this.props.title !== undefined ? (
+                this.props.titleHref ? (
+                  <HeaderLink to={this.props.titleHref}>
+                    {this.props.title}
+                  </HeaderLink>
+                ) : (
+                  <span>{this.props.title}</span>
+                )
               ) : (
-                <span>{this.props.title}</span>
-              )
-            ) : (
-              <HeaderLink to="/">Code Chat Cat</HeaderLink>
-            )}
-          </Title>
+                <HeaderLink to="/">Code Chat Cat</HeaderLink>
+              )}
+            </Title>
+            <HeaderMenu menus={this.props.menus}/>
+          </ItemsContainer>
         </InnerContainer>
       </OuterContainer>
     );
