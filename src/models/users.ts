@@ -1,5 +1,6 @@
 import { Store } from 'redux';
 import firebase from '../middleware/firebase';
+import { Action, IState } from '../reducers';
 import { CurrentUserActionTypes } from '../reducers/currentUser';
 
 const usersRef = firebase.firestore().collection('/users');
@@ -9,7 +10,7 @@ interface IUser {
   name: string;
 }
 
-export function initializeCurrentUser (store: Store) {
+export function initializeCurrentUser (store: Store<IState, Action>) {
   return new Promise<firebase.User | null>((resolve, reject) => {
     firebase.auth().onAuthStateChanged(
       (user) => {

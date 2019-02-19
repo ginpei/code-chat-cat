@@ -4,7 +4,7 @@ import { Route, Router, Switch } from 'react-router';
 import { createStore } from 'redux';
 import { appHistory } from './misc';
 import * as users from './models/users';
-import rootReducer from './reducers';
+import rootReducer, { Action, IState } from './reducers';
 import HomePage from './screens/HomePage';
 import LoginPage from './screens/LoginPage';
 import LogoutPage from './screens/LogoutPage';
@@ -20,7 +20,7 @@ interface IAppState {
 }
 
 class App extends Component<IAppProps, IAppState> {
-  protected store = createStore(rootReducer);
+  protected store = createStore<IState, Action, {}, {}>(rootReducer);
 
   constructor (props: IAppProps) {
     super(props);
