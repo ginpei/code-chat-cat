@@ -3,13 +3,14 @@ import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router';
 import { createStore } from 'redux';
 import { appHistory } from './misc';
-import * as currentUser from './models/currentUser';
+import * as users from './models/users';
 import rootReducer from './reducers';
 import HomePage from './screens/HomePage';
 import LoginPage from './screens/LoginPage';
 import LogoutPage from './screens/LogoutPage';
 import RoomTextbookPage from './screens/RoomTextbookPage';
 import RoomWritePage from './screens/RoomWritePage';
+import SettingsPage from './screens/SettingsPage';
 
 // tslint:disable-next-line:no-empty-interface
 interface IAppProps {
@@ -45,6 +46,7 @@ class App extends Component<IAppProps, IAppState> {
               <Route exact={true} path="/logout" component={LogoutPage}/>
               <Route exact={true} path="/rooms/:id/" component={RoomTextbookPage}/>
               <Route exact={true} path="/rooms/:id/write" component={RoomWritePage}/>
+              <Route exact={true} path="/settings" component={SettingsPage}/>
             </Switch>
           </div>
         </Router>
@@ -53,7 +55,7 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public async componentDidMount () {
-    await currentUser.initialize(this.store);
+    await users.initializeCurrentUser(this.store);
     this.setState({
       ready: true,
     });

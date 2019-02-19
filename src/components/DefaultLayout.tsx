@@ -19,6 +19,7 @@ export default function DefaultLayout (props: any) {
             links: [
               { title: 'Login', href: '/login' },
               { title: 'Logout', href: '/logout' },
+              { title: 'Settings', href: '/settings' },
             ],
             name: 'Account',
         },

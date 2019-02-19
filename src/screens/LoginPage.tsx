@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DefaultLayout from '../components/DefaultLayout';
-import * as currentUser from '../models/currentUser';
+import * as users from '../models/users';
 import { Dispatch, IState } from '../reducers';
 import { CurrentUserActionTypes } from '../reducers/currentUser';
 
@@ -50,7 +50,7 @@ class LoginPage extends React.Component<ILoginPageProps> {
 
   public async logIn () {
     this.props.setWorking(true);
-    await currentUser.logIn();
+    await users.logIn();
     this.props.setWorking(false);
   }
 }

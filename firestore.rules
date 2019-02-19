@@ -4,5 +4,8 @@ service cloud.firestore {
       allow read: if resource.data.active || resource.data.userId == request.auth.uid;
       allow write: if resource.data.userId == request.auth.uid;
     }
+    match /users/{userId} {
+      allow read, write: if userId == request.auth.uid;
+    }
   }
 }
