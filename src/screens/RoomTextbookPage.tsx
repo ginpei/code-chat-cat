@@ -2,6 +2,7 @@ import React, { createRef } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
+import Container from '../components/Container';
 import Header, { headerHeight } from '../components/Header';
 import Markdown from '../components/Markdown';
 import { Dispatch, IState } from '../reducers';
@@ -12,12 +13,11 @@ const TextbookContainer = styled.div`
   height: calc(100vh - ${headerHeight}px);
   overflow-y: scroll;
 `;
-const TextbookContent = styled.article`
+const TextbookContent = styled(Container)`
   background-color: snow;
   box-shadow: 0 0 10px #0003;
-  margin: auto;
-  max-width: 800px;
-  padding: 1rem;
+  min-height: 100%;
+  padding: 0.01px 1rem;
 `;
 
 enum PageStatus {
