@@ -81,11 +81,16 @@ export default class HeaderMenu extends React.Component<IHeaderMenuProps> {
     return (
       <MenuContainer>
         {this.props.menus!.map((menu) => (
-          <MenuGroup>
+          <MenuGroup key={menu.name}>
             <MenuTitle>{menu.name}</MenuTitle>
             <MenuItemList className="HeaderMenu-MenuItemList">
               {menu.links.map((link) => (
-                <MenuItem to={link.href}>{link.title}</MenuItem>
+                <MenuItem
+                  key={link.title}
+                  to={link.href}
+                >
+                  {link.title}
+                </MenuItem>
               ))}
             </MenuItemList>
           </MenuGroup>
