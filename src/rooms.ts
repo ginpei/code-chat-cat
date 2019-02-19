@@ -2,8 +2,10 @@ import { Store } from 'redux';
 import firebase from './middleware/firebase';
 import { IRoom, RoomsActionTypes } from './reducers/rooms';
 
-export async function loadRooms (user: firebase.User): Promise<IRoom[]> {
-  const snapshot = await firebase.firestore().collection('/rooms').get();
+export async function loadActiveRooms (user: firebase.User): Promise<IRoom[]> {
+  const snapshot = await firebase.firestore().collection('/rooms')
+    .where('active', '==', true)
+    .get();
   return snapshot.docs.map((ds) => {
     const data = ds.data();
     return {
@@ -36,11 +38,14 @@ export async function updateRoom (room: IRoom): Promise<void> {
   return firebase.firestore().collection('/rooms').doc(room.id).update(data);
 }
 
-export function observeRoom (id: string, observer: (room: IRoom | null) => void): () => void {
+type RoomObserver = (error: Error | null, room?: IRoom | null) => void;
+export function observeRoom (id: string, observer: RoomObserver): () => void {
   const ref = firebase.firestore().collection('/rooms').doc(id);
   return ref.onSnapshot((snapshot) => {
     const room = snapshotToRoom(snapshot);
-    observer(room);
+    observer(null, room);
+  }, (error) => {
+    observer(error);
   });
 }
 

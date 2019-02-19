@@ -50,6 +50,7 @@ interface IRoomWritePageProps
 }
 interface IRoomWritePageState {
   content: string;
+  errorMessage: string;
   pageStatus: PageStatus;
   room: IRoom | null;
 }
@@ -68,6 +69,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     super(props);
     this.state = {
       content: '',
+      errorMessage: '',
       pageStatus: PageStatus.initial,
       room: null,
     };
@@ -76,6 +78,15 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
   }
 
   public render () {
+    // TODO error view
+    if (this.state.errorMessage) {
+      return (
+        <div>
+          <p>{this.state.errorMessage}</p>
+        </div>
+      );
+    }
+
     if (!this.props.firebaseUser) {
       return (
         <div>
@@ -127,10 +138,18 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
   }
 
   public componentDidMount () {
-    this.unobserve = observeRoom(this.roomId, (updatedRoom) => {
+    this.unobserve = observeRoom(this.roomId, (error, updatedRoom) => {
+      if (error) {
+        this.setState({
+          errorMessage: error.message,
+        });
+        console.error(error);
+        return;
+      }
+
       this.setState({
         pageStatus: PageStatus.ready,
-        room: updatedRoom,
+        room: updatedRoom || null,
       });
 
       this.updateContent(updatedRoom ? updatedRoom.textbookContent : '');
@@ -167,7 +186,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     this.unsubscribeSyncScroll = syncScroll(els);
   }
 
-  public onContentInput (event: React.ChangeEvent<HTMLTextAreaElement>) {
+  public async onContentInput (event: React.ChangeEvent<HTMLTextAreaElement>) {
     const { room } = this.state;
     if (!room) {
       return;
@@ -177,7 +196,14 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     this.setState({
       content: newContent,
     });
-    updateRoom({ ...room, textbookContent: newContent });
+    try {
+      await updateRoom({ ...room, textbookContent: newContent });
+    } catch (error) {
+      this.setState({
+        errorMessage: error.message,
+      });
+      console.error(error);
+    }
   }
 
   protected updateContent (content: string) {

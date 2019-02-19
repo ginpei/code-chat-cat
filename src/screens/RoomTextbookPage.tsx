@@ -6,7 +6,7 @@ import Header, { headerHeight } from '../components/Header';
 import Markdown from '../components/Markdown';
 import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
-import { observeRoom } from '../rooms';
+import { observeRoom, updateRoom } from '../rooms';
 
 const TextbookContainer = styled.div`
   height: calc(100vh - ${headerHeight}px);
@@ -38,6 +38,7 @@ interface IRoomTextbookPageProps
 }
 interface IRoomTextbookPageState {
   content: string;
+  errorMessage: string;
   pageStatus: PageStatus;
   room: IRoom | null;
 }
@@ -56,12 +57,22 @@ class RoomTextbookPage extends React.Component<IRoomTextbookPageProps, IRoomText
     super(props);
     this.state = {
       content: '',
+      errorMessage: '',
       pageStatus: PageStatus.initial,
       room: null,
     };
   }
 
   public render () {
+    // TODO error view
+    if (this.state.errorMessage) {
+      return (
+        <div>
+          <p>{this.state.errorMessage}</p>
+        </div>
+      );
+    }
+
     if (!this.props.firebaseUser) {
       return (
         <div>
@@ -106,11 +117,20 @@ class RoomTextbookPage extends React.Component<IRoomTextbookPageProps, IRoomText
   }
 
   public componentDidMount () {
-    this.unobserve = observeRoom(this.roomId, (updatedRoom) => {
+    this.unobserve = observeRoom(this.roomId, (error, updatedRoom) => {
+      if (error) {
+        this.setState({
+          errorMessage: error.message,
+        });
+        console.error(error);
+        return;
+      }
+
       this.setState({
         content: updatedRoom ? updatedRoom.textbookContent : '',
+        errorMessage: '',
         pageStatus: PageStatus.ready,
-        room: updatedRoom,
+        room: updatedRoom || null,
       });
     });
 

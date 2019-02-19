@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Header from '../components/Header';
 import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
-import { loadRooms } from '../rooms';
+import { loadActiveRooms } from '../rooms';
 
 interface IHomePageProps {
   firebaseUser: firebase.User | null;
@@ -30,7 +30,7 @@ function HomePage (props: IHomePageProps) {
   });
 
   if (props.firebaseUser && !state.ready) {
-    loadRooms(props.firebaseUser)
+    loadActiveRooms(props.firebaseUser)
       .then((rooms) => {
         props.setRooms(rooms);
         setState({
