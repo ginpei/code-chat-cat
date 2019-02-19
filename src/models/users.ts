@@ -1,25 +1,59 @@
 import { Store } from 'redux';
 import firebase from '../middleware/firebase';
 import { Action, IState } from '../reducers';
-import { CurrentUserActionTypes } from '../reducers/currentUser';
+import { CurrentUserActionTypes, IUserProfile } from '../reducers/currentUser';
 
 const usersRef = firebase.firestore().collection('/users');
 
-interface IUser {
-  id: string; // aka uid
-  name: string;
+export async function initializeCurrentUser (store: Store<IState, Action>) {
+  const unsubscribeAuth = firebase.auth().onAuthStateChanged(
+    (user) => store.dispatch({
+      type: CurrentUserActionTypes.setFirebaseUser,
+      user,
+    }),
+    (error) => console.error('TODO', error), // TODO
+  );
+
+  let lastUserId = '';
+  let unsubscribeDatabase: () => void = () => undefined;
+  const unsubscribeStore = store.subscribe(() => {
+    const state: IState = store.getState();
+    const { firebaseUser } = state.currentUser;
+    const uid = firebaseUser ? firebaseUser.uid : '';
+    if (uid !== lastUserId) {
+      unsubscribeDatabase();
+      lastUserId = uid;
+
+      if (uid) {
+        unsubscribeDatabase = usersRef.doc(uid).onSnapshot((snapshot) => {
+          const profile = snapshotToUser(snapshot);
+          store.dispatch({
+            profile,
+            type: CurrentUserActionTypes.setProfile,
+          });
+
+          getReady(store);
+        });
+      }
+    } else {
+      getReady(store);
+    }
+  });
+
+  return () => {
+    unsubscribeAuth();
+    unsubscribeStore();
+    unsubscribeDatabase();
+  };
 }
 
-export function initializeCurrentUser (store: Store<IState, Action>) {
-  return new Promise<firebase.User | null>((resolve, reject) => {
-    firebase.auth().onAuthStateChanged(
-      (user) => {
-        store.dispatch({ type: CurrentUserActionTypes.setUser, user });
-        resolve(user);
-      },
-      (error) => reject(error),
-    );
-  });
+function getReady (store: Store<IState, Action>) {
+  if (!store.getState().currentUser.ready) {
+    store.dispatch({
+      ready: true,
+      type: CurrentUserActionTypes.setReady,
+    });
+  }
 }
 
 export function logIn () {
@@ -32,7 +66,7 @@ export function logOut () {
   return firebase.auth().signOut();
 }
 
-export async function loadUser (userId: string): Promise<IUser | null> {
+export async function loadUser (userId: string): Promise<IUserProfile | null> {
   const snapshot = await usersRef.doc(userId).get();
   if (!snapshot.exists) {
     return null;
@@ -41,21 +75,23 @@ export async function loadUser (userId: string): Promise<IUser | null> {
 }
 
 export function initializeUser (firebaseUser: firebase.User) {
-  const user: IUser = {
+  const user: IUserProfile = {
     id: '',
     name: firebaseUser.displayName || firebaseUser.email || 'Anonymous',
   };
   return saveUser(user);
 }
 
-export function saveUser (user: IUser) {
+export function saveUser (user: IUserProfile) {
+  // store will be updated too when snapshot is updated
+
   const data = userToData(user);
   return usersRef.doc(user.id).set(data);
 }
 
 function snapshotToUser (
   snapshot: firebase.firestore.DocumentSnapshot,
-): IUser | null {
+): IUserProfile | null {
   const data = snapshot.data();
   if (!data) {
     return null;
@@ -67,7 +103,7 @@ function snapshotToUser (
   };
 }
 
-function userToData (user: IUser) {
+function userToData (user: IUserProfile) {
   return {
     name: user.name,
   };

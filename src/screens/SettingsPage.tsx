@@ -1,17 +1,17 @@
-// tslint:disable:jsx-no-lambda
-
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DefaultLayout from '../components/DefaultLayout';
 import * as users from '../models/users';
 import { Dispatch, IState } from '../reducers';
-import { CurrentUserActionTypes, ICurrentUser } from '../reducers/currentUser';
+import { ICurrentUser, IUserProfile } from '../reducers/currentUser';
 
 interface ISettingsPageProps {
   currentUser: ICurrentUser;
+  userProfile: IUserProfile | null;
 }
 interface ISettingsPageState {
+  ready: boolean;
   savingProfile: boolean;
   userName: string;
 }
@@ -20,8 +20,9 @@ class SettingsPage extends React.Component<ISettingsPageProps, ISettingsPageStat
   constructor (props: ISettingsPageProps) {
     super(props);
     this.state = {
+      ready: false,
       savingProfile: false,
-      userName: this.props.currentUser.name,
+      userName: '',
     };
     this.onProfileSubmit = this.onProfileSubmit.bind(this);
     this.onUserNameChange = this.onUserNameChange.bind(this);
@@ -80,6 +81,21 @@ class SettingsPage extends React.Component<ISettingsPageProps, ISettingsPageStat
     );
   }
 
+  public componentDidMount () {
+    const wait = () => {
+      if (this.props.currentUser.ready && !this.state.ready) {
+        const profile = this.props.userProfile;
+        this.setState({
+          ready: true,
+          userName: profile ? profile.name : '',
+        });
+      } else {
+        setTimeout(() => wait, 100);
+      }
+    };
+    wait();
+  }
+
   public async onProfileSubmit (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     this.setState({
@@ -104,6 +120,7 @@ class SettingsPage extends React.Component<ISettingsPageProps, ISettingsPageStat
 
 const mapStateToProps = (state: IState) => ({
   currentUser: state.currentUser,
+  userProfile: state.currentUser.profile,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

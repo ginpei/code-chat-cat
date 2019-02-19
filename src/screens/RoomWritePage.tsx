@@ -46,7 +46,6 @@ interface IRoomWritePageProps
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
   setRooms: (rooms: IRoom[]) => void;
-  userName: string;
 }
 interface IRoomWritePageState {
   content: string;
@@ -222,7 +221,6 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
 const mapStateToProps = (state: IState) => ({
   firebaseUser: state.currentUser.firebaseUser,
   loggedIn: state.currentUser.loggedIn,
-  userName: state.currentUser.name,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

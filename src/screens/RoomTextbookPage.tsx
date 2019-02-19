@@ -34,7 +34,6 @@ interface IRoomTextbookPageProps
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
   setRooms: (rooms: IRoom[]) => void;
-  userName: string;
 }
 interface IRoomTextbookPageState {
   content: string;
@@ -154,7 +153,6 @@ class RoomTextbookPage extends React.Component<IRoomTextbookPageProps, IRoomText
 const mapStateToProps = (state: IState) => ({
   firebaseUser: state.currentUser.firebaseUser,
   loggedIn: state.currentUser.loggedIn,
-  userName: state.currentUser.name,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

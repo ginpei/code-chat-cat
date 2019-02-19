@@ -12,7 +12,7 @@ import RoomTextbookPage from './screens/RoomTextbookPage';
 import RoomWritePage from './screens/RoomWritePage';
 import SettingsPage from './screens/SettingsPage';
 
-// tslint:disable-next-line:no-empty-interface
+// tslint:disable:no-empty-interface
 interface IAppProps {
 }
 interface IAppState {
@@ -54,10 +54,16 @@ class App extends Component<IAppProps, IAppState> {
     );
   }
 
-  public async componentDidMount () {
-    await users.initializeCurrentUser(this.store);
-    this.setState({
-      ready: true,
+  public componentDidMount () {
+    const { store } = this;
+    const unsubscribe = users.initializeCurrentUser(store);
+
+    const un = store.subscribe(() => {
+      const { ready } = store.getState().currentUser;
+      this.setState({ ready });
+      if (ready) {
+        un();
+      }
     });
   }
 }

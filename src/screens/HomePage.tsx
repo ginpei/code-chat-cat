@@ -7,6 +7,7 @@ import Container from '../components/Container';
 import Header from '../components/Header';
 import { loadActiveRooms, loadOwnRooms } from '../models/rooms';
 import { Dispatch, IState } from '../reducers';
+import { IUserProfile } from '../reducers/currentUser';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
 
 const LogoImageContainer = styled.div`
@@ -28,7 +29,7 @@ const LogoImageSection = () => (
 interface IHomePageProps {
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
-  userName: string;
+  userProfile: IUserProfile | null;
 }
 
 interface IHomePageState {
@@ -91,7 +92,7 @@ function HomePage (props: IHomePageProps) {
         {props.loggedIn ? (
           <>
             <p>
-              Welcome back, {props.userName}!
+              Welcome back, {props.userProfile!.name}!
               <Link to="/logout">Log out</Link>
             </p>
             <p>Your rooms</p>
@@ -116,7 +117,7 @@ function HomePage (props: IHomePageProps) {
 const mapStateToProps = (state: IState) => ({
   firebaseUser: state.currentUser.firebaseUser,
   loggedIn: state.currentUser.loggedIn,
-  userName: state.currentUser.name,
+  userProfile: state.currentUser.profile,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
