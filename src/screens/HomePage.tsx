@@ -2,21 +2,34 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import logoImageSrc from '../assets/logo-512.png';
 import Container from '../components/Container';
 import Header from '../components/Header';
 import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
 import { loadActiveRooms, loadOwnRooms } from '../rooms';
 
+const LogoImageContainer = styled.div`
+  text-align: center;
+`;
+const LogoImage = styled.img`
+  &:hover {
+    transform: scale(1.01);
+  }
+`;
+
+const LogoImageSection = () => (
+  <LogoImageContainer>
+    <h1>Code Chat Cat</h1>
+    <LogoImage src={logoImageSrc} width="256" height="256"/>
+  </LogoImageContainer>
+);
+
 interface IHomePageProps {
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
   userName: string;
 }
-
-const AppName = styled.h1`
-  text-align: center;
-`;
 
 interface IHomePageState {
   ownRooms: IRoom[];
@@ -49,6 +62,8 @@ function HomePage (props: IHomePageProps) {
       .catch((error) => console.error(error));
     return (
       <div>
+        <Header/>
+        <LogoImageSection/>
         <p>Loading...</p>
       </div>
     );
@@ -56,9 +71,11 @@ function HomePage (props: IHomePageProps) {
 
   return (
     <div>
-      <Header/>
+      <Header
+        title=""
+      />
       <Container>
-        <AppName>Hello Home World!</AppName>
+        <LogoImageSection/>
         <p>Active rooms</p>
         <ul>
           {state.rooms.map((room) => (
