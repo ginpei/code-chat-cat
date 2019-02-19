@@ -19,6 +19,7 @@ export type RoomsAction =
 
 // --------------------------
 // set rooms
+// maybe this is not needed?
 
 interface IRoomsSetRoomsAction {
   type: RoomsActionTypes.setRooms;

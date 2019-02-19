@@ -8,6 +8,13 @@ export async function loadActiveRooms (): Promise<IRoom[]> {
   return snapshot.docs.map((v) => snapshotToRoom(v)!);
 }
 
+export async function loadOwnRooms (userId: string): Promise<IRoom[]> {
+  const snapshot = await firebase.firestore().collection('/rooms')
+    .where('userId', '==', userId)
+    .get();
+  return snapshot.docs.map((v) => snapshotToRoom(v)!);
+}
+
 export async function updateRoom (room: IRoom): Promise<void> {
   const data = {
     name: room.name,

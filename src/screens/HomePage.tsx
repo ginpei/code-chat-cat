@@ -5,12 +5,11 @@ import styled from 'styled-components';
 import Header from '../components/Header';
 import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
-import { loadActiveRooms } from '../rooms';
+import { loadActiveRooms, loadOwnRooms } from '../rooms';
 
 interface IHomePageProps {
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
-  setRooms: (rooms: IRoom[]) => void;
   userName: string;
 }
 
@@ -19,29 +18,34 @@ const AppName = styled.h1`
 `;
 
 interface IHomePageState {
+  ownRooms: IRoom[];
   ready: boolean;
   rooms: IRoom[];
 }
 
 function HomePage (props: IHomePageProps) {
   const [state, setState] = useState<IHomePageState>({
-    ready: !props.firebaseUser,
+    ownRooms: [],
+    ready: false,
     rooms: [],
   });
 
-  if (props.firebaseUser && !state.ready) {
-    loadActiveRooms()
-      .then((rooms) => {
-        props.setRooms(rooms);
+  if (!state.ready) {
+    Promise.all([
+      loadActiveRooms(),
+      props.firebaseUser
+        ? loadOwnRooms(props.firebaseUser.uid)
+        : Promise.resolve([]),
+    ])
+      .then(([activeRooms, ownRooms]) => {
         setState({
           ...state,
+          ownRooms,
           ready: true,
-          rooms,
+          rooms: activeRooms,
         });
       })
-      .catch((error) => {
-        console.error(error);
-      });
+      .catch((error) => console.error(error));
     return (
       <div>
         <p>Loading...</p>
@@ -53,16 +57,27 @@ function HomePage (props: IHomePageProps) {
     <div>
       <Header/>
       <AppName>Hello Home World!</AppName>
+      <p>Active rooms</p>
+      <ul>
+        {state.rooms.map((room) => (
+          <li key={room.id}>
+            <Link to={`/rooms/${room.id}`}>{room.name || '(no name)'}</Link>
+          </li>
+        ))}
+      </ul>
       {props.loggedIn ? (
         <>
           <p>
             Welcome back, {props.userName}!
             <Link to="/login">Log out...</Link>
           </p>
+          <p>Your rooms</p>
           <ul>
-            {state.rooms.map((room) => (
+            {state.ownRooms.map((room) => (
               <li key={room.id}>
                 <Link to={`/rooms/${room.id}`}>{room.name || '(no name)'}</Link>
+                {' / '}
+                [<Link to={`/rooms/${room.id}/write`}>Write</Link>]
               </li>
             ))}
           </ul>
@@ -81,10 +96,6 @@ const mapStateToProps = (state: IState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  setRooms: (rooms: IRoom[]) => dispatch({
-    rooms,
-    type: RoomsActionTypes.setRooms,
-  }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
