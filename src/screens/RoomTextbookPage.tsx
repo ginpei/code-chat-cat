@@ -102,6 +102,7 @@ class RoomTextbookPage extends React.Component<IRoomTextbookPageProps, IRoomText
     return (
       <div>
         <Header
+          fullscreen={true}
           title={roomName}
           titleHref={`/rooms/${this.roomId}`}
         />

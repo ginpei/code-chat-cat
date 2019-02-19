@@ -116,6 +116,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     return (
       <div>
         <Header
+          fullscreen={true}
           title={roomName}
           titleHref={`/rooms/${this.roomId}`}
         />

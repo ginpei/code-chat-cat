@@ -23,17 +23,37 @@ const HeaderLink = styled(Link)`
     text-decoration: underline;
   }
 `;
+const FullscreenContainer = styled.div`
+  padding: 0 1rem;
+`;
+
+function InnerContainer (props: any) {
+  if (props.fullscreen) {
+    return (
+      <FullscreenContainer>{props.children}</FullscreenContainer>
+    );
+  }
+
+  return (
+    <Container>{props.children}</Container>
+  );
+}
 
 interface IHeaderProps {
   title?: string;
   titleHref?: string;
+  fullscreen?: boolean;
 }
 
 export default class Header extends React.Component<IHeaderProps> {
+  public static defaultProps: Partial<IHeaderProps> = {
+    fullscreen: false,
+  };
+
   public render () {
     return (
       <OuterContainer>
-        <Container>
+        <InnerContainer fullscreen={this.props.fullscreen}>
           <Title>
             {this.props.title !== undefined ? (
               this.props.titleHref ? (
@@ -47,7 +67,7 @@ export default class Header extends React.Component<IHeaderProps> {
               <HeaderLink to="/">Code Chat Cat</HeaderLink>
             )}
           </Title>
-        </Container>
+        </InnerContainer>
       </OuterContainer>
     );
   }
