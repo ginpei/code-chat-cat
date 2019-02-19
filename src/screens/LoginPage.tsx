@@ -3,9 +3,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Container from '../components/Container';
 import DefaultLayout from '../components/DefaultLayout';
-import Header from '../components/Header';
 import * as currentUser from '../currentUser';
 import { appHistory } from '../misc';
 import { Dispatch, IState } from '../reducers';
