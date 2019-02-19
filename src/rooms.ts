@@ -5,14 +5,7 @@ export async function loadActiveRooms (): Promise<IRoom[]> {
   const snapshot = await firebase.firestore().collection('/rooms')
     .where('active', '==', true)
     .get();
-  return snapshot.docs.map((ds) => {
-    const data = ds.data();
-    return {
-      id: ds.id,
-      name: data.name,
-      textbookContent: data.textbookContent,
-    };
-  });
+  return snapshot.docs.map((v) => snapshotToRoom(v)!);
 }
 
 export async function updateRoom (room: IRoom): Promise<void> {
