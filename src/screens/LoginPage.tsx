@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DefaultLayout from '../components/DefaultLayout';
 import * as currentUser from '../currentUser';
-import { appHistory } from '../misc';
 import { Dispatch, IState } from '../reducers';
 import { CurrentUserActionTypes } from '../reducers/currentUser';
 
@@ -23,6 +22,17 @@ class LoginPage extends React.Component<ILoginPageProps> {
   }
 
   public render () {
+    if (this.props.currentUser.loggedIn) {
+      return (
+        <DefaultLayout>
+          <h1>Logged in ✓</h1>
+          <p>
+            <Link to="/">Back to Home</Link>
+          </p>
+        </DefaultLayout>
+      );
+    }
+
     return (
       <DefaultLayout>
         <h1>Login</h1>
@@ -41,7 +51,6 @@ class LoginPage extends React.Component<ILoginPageProps> {
   public async logIn () {
     this.props.setWorking(true);
     await currentUser.logIn();
-    appHistory.push('/');
     this.props.setWorking(false);
   }
 }

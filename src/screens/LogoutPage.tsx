@@ -1,18 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import DefaultLayout from '../components/DefaultLayout';
 import * as currentUser from '../currentUser';
-import { appHistory } from '../misc';
 
 export default function LogoutPage () {
-  Promise.all([
-    currentUser.logOut(),
-    new Promise((f) => setTimeout(f, 300)),
-  ])
-    .then(() => appHistory.push('/'));
+  const [done, setDone] = useState(false);
+
+  currentUser.logOut()
+    .then(() => setDone(true));
 
   return (
     <DefaultLayout>
-      <p>Logging out...</p>
+      {done ? (
+        <>
+          <h1>Logged out ✓</h1>
+          <p><Link to="/">Back to Home</Link></p>
+        </>
+      ) : (
+        <p>Logging out...</p>
+      )}
     </DefaultLayout>
   );
 }
