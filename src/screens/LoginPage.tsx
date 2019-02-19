@@ -4,6 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Container from '../components/Container';
+import DefaultLayout from '../components/DefaultLayout';
 import Header from '../components/Header';
 import * as currentUser from '../currentUser';
 import { appHistory } from '../misc';
@@ -25,38 +26,17 @@ class LoginPage extends React.Component<ILoginPageProps> {
 
   public render () {
     return (
-      <div>
-        <Header
-          menus={[
-            // TODO replace these dummy values
-            {
-              links: [
-                { title: 'Twitter', href: '/' },
-                { title: 'Facebook', href: '/' },
-              ],
-              name: 'SNS',
-            },
-            {
-              links: [
-                { title: 'About', href: '/' },
-                { title: 'Blog', href: '/' },
-              ],
-              name: 'Ginpei',
-            },
-          ]}
-        />
-        <Container>
-          <h1>Login</h1>
-          <p><Link to="/">Home</Link></p>
-          <p>name [{this.props.currentUser.name}]</p>
-          <p>
-            { this.props.currentUser.loggedIn
-              ? <Link to="/logout">Log out</Link>
-              : <button onClick={this.logIn} disabled={this.props.working} >Log in</button>
-            }
-          </p>
-        </Container>
-      </div>
+      <DefaultLayout>
+        <h1>Login</h1>
+        <p><Link to="/">Home</Link></p>
+        <p>name [{this.props.currentUser.name}]</p>
+        <p>
+          { this.props.currentUser.loggedIn
+            ? <Link to="/logout">Log out</Link>
+            : <button onClick={this.logIn} disabled={this.props.working} >Log in</button>
+          }
+        </p>
+      </DefaultLayout>
     );
   }
 

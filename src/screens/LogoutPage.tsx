@@ -1,6 +1,5 @@
 import React from 'react';
-import Container from '../components/Container';
-import Header from '../components/Header';
+import DefaultLayout from '../components/DefaultLayout';
 import * as currentUser from '../currentUser';
 import { appHistory } from '../misc';
 
@@ -12,11 +11,8 @@ export default function LogoutPage () {
     .then(() => appHistory.push('/'));
 
   return (
-    <div>
-      <Header/>
-      <Container>
-        <p>Logging out...</p>
-      </Container>
-    </div>
+    <DefaultLayout>
+      <p>Logging out...</p>
+    </DefaultLayout>
   );
 }
