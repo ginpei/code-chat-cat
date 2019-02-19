@@ -1,8 +1,7 @@
-import { Store } from 'redux';
 import firebase from './middleware/firebase';
-import { IRoom, RoomsActionTypes } from './reducers/rooms';
+import { IRoom } from './reducers/rooms';
 
-export async function loadActiveRooms (user: firebase.User): Promise<IRoom[]> {
+export async function loadActiveRooms (): Promise<IRoom[]> {
   const snapshot = await firebase.firestore().collection('/rooms')
     .where('active', '==', true)
     .get();
@@ -14,20 +13,6 @@ export async function loadActiveRooms (user: firebase.User): Promise<IRoom[]> {
       textbookContent: data.textbookContent,
     };
   });
-}
-
-export async function loadRoom (user: firebase.User, roomId: string): Promise<IRoom | null> {
-  const snapshot = await firebase.firestore().collection('/rooms').doc(roomId).get();
-  const data = snapshot.data();
-  if (!data) {
-    return null;
-  }
-
-  return {
-    id: roomId,
-    name: data.name,
-    textbookContent: data.textbookContent,
-  };
 }
 
 export async function updateRoom (room: IRoom): Promise<void> {

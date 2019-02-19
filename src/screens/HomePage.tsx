@@ -30,7 +30,7 @@ function HomePage (props: IHomePageProps) {
   });
 
   if (props.firebaseUser && !state.ready) {
-    loadActiveRooms(props.firebaseUser)
+    loadActiveRooms()
       .then((rooms) => {
         props.setRooms(rooms);
         setState({
