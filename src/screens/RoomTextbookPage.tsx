@@ -7,7 +7,7 @@ import Header, { headerHeight } from '../components/Header';
 import Markdown from '../components/Markdown';
 import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
-import { observeRoom, updateRoom } from '../rooms';
+import { observeRoom } from '../rooms';
 
 const TextbookContainer = styled.div`
   height: calc(100vh - ${headerHeight}px);
