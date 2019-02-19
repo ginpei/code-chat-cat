@@ -1,6 +1,6 @@
 import { Store } from 'redux';
-import firebase from './middleware/firebase';
-import { CurrentUserActionTypes } from './reducers/currentUser';
+import firebase from '../middleware/firebase';
+import { CurrentUserActionTypes } from '../reducers/currentUser';
 
 export function initialize (store: Store) {
   return new Promise<firebase.User | null>((resolve, reject) => {

@@ -5,9 +5,9 @@ import styled from 'styled-components';
 import logoImageSrc from '../assets/logo-512.png';
 import Container from '../components/Container';
 import Header from '../components/Header';
+import { loadActiveRooms, loadOwnRooms } from '../models/rooms';
 import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
-import { loadActiveRooms, loadOwnRooms } from '../rooms';
 
 const LogoImageContainer = styled.div`
   text-align: center;

@@ -1,5 +1,5 @@
-import firebase from './middleware/firebase';
-import { IRoom } from './reducers/rooms';
+import firebase from '../middleware/firebase';
+import { IRoom } from '../reducers/rooms';
 
 export async function loadActiveRooms (): Promise<IRoom[]> {
   const snapshot = await firebase.firestore().collection('/rooms')

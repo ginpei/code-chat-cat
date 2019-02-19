@@ -5,9 +5,9 @@ import styled from 'styled-components';
 import Container from '../components/Container';
 import Header, { headerHeight } from '../components/Header';
 import Markdown from '../components/Markdown';
+import { observeRoom } from '../models/rooms';
 import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
-import { observeRoom } from '../rooms';
 
 const TextbookContainer = styled.div`
   height: calc(100vh - ${headerHeight}px);

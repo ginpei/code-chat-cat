@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import DefaultLayout from '../components/DefaultLayout';
-import * as currentUser from '../currentUser';
+import * as currentUser from '../models/currentUser';
 
 export default function LogoutPage () {
   const [done, setDone] = useState(false);

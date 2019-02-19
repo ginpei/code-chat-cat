@@ -6,9 +6,9 @@ import styled, { css } from 'styled-components';
 import Header, { headerHeight } from '../components/Header';
 import Markdown from '../components/Markdown';
 import syncScroll from '../functions/syncScroll';
+import { observeRoom, updateRoom } from '../models/rooms';
 import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
-import { observeRoom, updateRoom } from '../rooms';
 
 const EditorContainer = styled.div`
   display: grid;
