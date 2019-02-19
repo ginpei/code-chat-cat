@@ -1,16 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import Container from './Container';
 
 export const headerHeight = 12 * 1.6;
 
-const Container = styled.header`
+const OuterContainer = styled.header`
   background-color: #036;
   color: #fff;
   font-size: 12px;
   height: 1.6em;
   line-height: 1.6em;
-  padding: 0 1rem;
 `;
 const Title = styled.div`
   font-weight: bold;
@@ -32,21 +32,23 @@ interface IHeaderProps {
 export default class Header extends React.Component<IHeaderProps> {
   public render () {
     return (
-      <Container>
-        <Title>
-          {this.props.title !== undefined ? (
-            this.props.titleHref ? (
-              <HeaderLink to={this.props.titleHref}>
-                {this.props.title}
-              </HeaderLink>
+      <OuterContainer>
+        <Container>
+          <Title>
+            {this.props.title !== undefined ? (
+              this.props.titleHref ? (
+                <HeaderLink to={this.props.titleHref}>
+                  {this.props.title}
+                </HeaderLink>
+              ) : (
+                <span>{this.props.title}</span>
+              )
             ) : (
-              <span>{this.props.title}</span>
-            )
-          ) : (
-            <HeaderLink to="/">Code Chat Cat</HeaderLink>
-          )}
-        </Title>
-      </Container>
+              <HeaderLink to="/">Code Chat Cat</HeaderLink>
+            )}
+          </Title>
+        </Container>
+      </OuterContainer>
     );
   }
 }

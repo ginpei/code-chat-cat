@@ -3,6 +3,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Container from '../components/Container';
 import Header from '../components/Header';
 import * as currentUser from '../currentUser';
 import { Dispatch, IState } from '../reducers';
@@ -26,15 +27,17 @@ class LoginPage extends React.Component<ILoginPageProps> {
     return (
       <div>
         <Header/>
-        <h1>Login</h1>
-        <p><Link to="/">Home</Link></p>
-        <p>name [{this.props.currentUser.name}]</p>
-        <p>
-          { this.props.currentUser.loggedIn
-            ? <button onClick={this.logOut} disabled={this.props.working} >Log out</button>
-            : <button onClick={this.logIn} disabled={this.props.working} >Log in</button>
-          }
-        </p>
+        <Container>
+          <h1>Login</h1>
+          <p><Link to="/">Home</Link></p>
+          <p>name [{this.props.currentUser.name}]</p>
+          <p>
+            { this.props.currentUser.loggedIn
+              ? <button onClick={this.logOut} disabled={this.props.working} >Log out</button>
+              : <button onClick={this.logIn} disabled={this.props.working} >Log in</button>
+            }
+          </p>
+        </Container>
       </div>
     );
   }

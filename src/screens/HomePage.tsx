@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import Container from '../components/Container';
 import Header from '../components/Header';
 import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
@@ -56,35 +57,37 @@ function HomePage (props: IHomePageProps) {
   return (
     <div>
       <Header/>
-      <AppName>Hello Home World!</AppName>
-      <p>Active rooms</p>
-      <ul>
-        {state.rooms.map((room) => (
-          <li key={room.id}>
-            <Link to={`/rooms/${room.id}`}>{room.name || '(no name)'}</Link>
-          </li>
-        ))}
-      </ul>
-      {props.loggedIn ? (
-        <>
-          <p>
-            Welcome back, {props.userName}!
-            <Link to="/login">Log out...</Link>
-          </p>
-          <p>Your rooms</p>
-          <ul>
-            {state.ownRooms.map((room) => (
-              <li key={room.id}>
-                <Link to={`/rooms/${room.id}`}>{room.name || '(no name)'}</Link>
-                {' / '}
-                [<Link to={`/rooms/${room.id}/write`}>Write</Link>]
-              </li>
-            ))}
-          </ul>
-        </>
-      ) : (
-        <p><Link to="/login">Login</Link></p>
-      )}
+      <Container>
+        <AppName>Hello Home World!</AppName>
+        <p>Active rooms</p>
+        <ul>
+          {state.rooms.map((room) => (
+            <li key={room.id}>
+              <Link to={`/rooms/${room.id}`}>{room.name || '(no name)'}</Link>
+            </li>
+          ))}
+        </ul>
+        {props.loggedIn ? (
+          <>
+            <p>
+              Welcome back, {props.userName}!
+              <Link to="/login">Log out...</Link>
+            </p>
+            <p>Your rooms</p>
+            <ul>
+              {state.ownRooms.map((room) => (
+                <li key={room.id}>
+                  <Link to={`/rooms/${room.id}`}>{room.name || '(no name)'}</Link>
+                  {' / '}
+                  [<Link to={`/rooms/${room.id}/write`}>Write</Link>]
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <p><Link to="/login">Login</Link></p>
+        )}
+      </Container>
     </div>
   );
 }
