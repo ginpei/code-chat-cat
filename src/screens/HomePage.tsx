@@ -62,9 +62,13 @@ function HomePage (props: IHomePageProps) {
       .catch((error) => console.error(error));
     return (
       <div>
-        <Header/>
+        <Header
+          title=""
+        />
         <LogoImageSection/>
-        <p>Loading...</p>
+        <Container>
+          <p>Loading...</p>
+        </Container>
       </div>
     );
   }
