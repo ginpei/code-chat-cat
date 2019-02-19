@@ -34,7 +34,9 @@ const MenuGroup = styled.div`
 const MenuTitle = styled.span`
   padding: 0 0.5em;
 `;
-const MenuItemList = styled.div`
+const MenuItemList = styled.div.attrs({
+  className: 'HeaderMenu-MenuItemList',
+})`
   background-color: #036;
   box-shadow: 0 0 20px #0006;
   height: 0;
@@ -83,7 +85,7 @@ export default class HeaderMenu extends React.Component<IHeaderMenuProps> {
         {this.props.menus!.map((menu) => (
           <MenuGroup key={menu.name}>
             <MenuTitle>{menu.name}</MenuTitle>
-            <MenuItemList className="HeaderMenu-MenuItemList">
+            <MenuItemList>
               {menu.links.map((link) => (
                 <MenuItem
                   key={link.title}
