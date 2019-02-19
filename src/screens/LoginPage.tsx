@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import Container from '../components/Container';
 import Header from '../components/Header';
 import * as currentUser from '../currentUser';
+import { appHistory } from '../misc';
 import { Dispatch, IState } from '../reducers';
 import { CurrentUserActionTypes } from '../reducers/currentUser';
 
@@ -20,7 +21,6 @@ class LoginPage extends React.Component<ILoginPageProps> {
     super(props);
 
     this.logIn = this.logIn.bind(this);
-    this.logOut = this.logOut.bind(this);
   }
 
   public render () {
@@ -51,7 +51,7 @@ class LoginPage extends React.Component<ILoginPageProps> {
           <p>name [{this.props.currentUser.name}]</p>
           <p>
             { this.props.currentUser.loggedIn
-              ? <button onClick={this.logOut} disabled={this.props.working} >Log out</button>
+              ? <Link to="/logout">Log out</Link>
               : <button onClick={this.logIn} disabled={this.props.working} >Log in</button>
             }
           </p>
@@ -63,12 +63,7 @@ class LoginPage extends React.Component<ILoginPageProps> {
   public async logIn () {
     this.props.setWorking(true);
     await currentUser.logIn();
-    this.props.setWorking(false);
-  }
-
-  public async logOut () {
-    this.props.setWorking(true);
-    await currentUser.logOut();
+    appHistory.push('/');
     this.props.setWorking(false);
   }
 }

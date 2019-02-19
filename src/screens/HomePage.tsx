@@ -92,7 +92,7 @@ function HomePage (props: IHomePageProps) {
           <>
             <p>
               Welcome back, {props.userName}!
-              <Link to="/login">Log out...</Link>
+              <Link to="/logout">Log out</Link>
             </p>
             <p>Your rooms</p>
             <ul>

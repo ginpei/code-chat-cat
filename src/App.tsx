@@ -1,12 +1,13 @@
-import { createBrowserHistory } from 'history';
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router';
 import { createStore } from 'redux';
 import * as currentUser from './currentUser';
+import { appHistory } from './misc';
 import rootReducer from './reducers';
 import HomePage from './screens/HomePage';
 import LoginPage from './screens/LoginPage';
+import LogoutPage from './screens/LogoutPage';
 import RoomTextbookPage from './screens/RoomTextbookPage';
 import RoomWritePage from './screens/RoomWritePage';
 
@@ -19,7 +20,6 @@ interface IAppState {
 
 class App extends Component<IAppProps, IAppState> {
   protected store = createStore(rootReducer);
-  protected appHistory = createBrowserHistory();
 
   constructor (props: IAppProps) {
     super(props);
@@ -37,11 +37,12 @@ class App extends Component<IAppProps, IAppState> {
 
     return (
       <Provider store={this.store}>
-        <Router history={this.appHistory}>
+        <Router history={appHistory}>
           <div className="App">
             <Switch>
               <Route exact={true} path="/" component={HomePage}/>
               <Route exact={true} path="/login" component={LoginPage}/>
+              <Route exact={true} path="/logout" component={LogoutPage}/>
               <Route exact={true} path="/rooms/:id/" component={RoomTextbookPage}/>
               <Route exact={true} path="/rooms/:id/write" component={RoomWritePage}/>
             </Switch>
