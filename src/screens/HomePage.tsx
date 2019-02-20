@@ -99,9 +99,9 @@ function HomePage (props: IHomePageProps) {
             <ul>
               {state.ownRooms.map((room) => (
                 <li key={room.id}>
-                  <Link to={`/rooms/${room.id}`}>{room.name || '(no name)'}</Link>
+                  <Link to={`/rooms/${room.id}/settings`}>{room.name || '(no name)'}</Link>
                   {' / '}
-                  [<Link to={`/rooms/${room.id}/write`}>Write</Link>]
+                  [<Link to={`/rooms/${room.id}`}>Textbook</Link>]
                 </li>
               ))}
             </ul>
