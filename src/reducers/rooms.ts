@@ -1,8 +1,9 @@
 export interface IRoom {
   active: boolean;
-  name: string;
   id: string;
+  name: string;
   textbookContent: string;
+  userId: string;
 }
 export interface IRooms {
   rooms: IRoom[];

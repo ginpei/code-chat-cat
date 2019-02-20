@@ -18,22 +18,21 @@ export async function loadOwnRooms (userId: string): Promise<IRoom[]> {
 }
 
 type ConnectRoomCallback = (room: IRoom | null) => void;
+type ConnectRoomErrorCallback = (error: Error) => void;
 export function connectRoom (
   id: string,
   callback: ConnectRoomCallback,
+  onError?: ConnectRoomErrorCallback,
 ): () => void {
   return roomsRef.doc(id).onSnapshot((snapshot) => {
     const room = snapshotToRoom(snapshot);
     callback(room);
-  });
+  }, onError);
 }
 
 export async function updateRoom (room: IRoom): Promise<void> {
-  const data = {
-    name: room.name,
-    textbookContent: room.textbookContent,
-  };
-  return roomsRef.doc(room.id).update(data);
+  const record = roomToRecord(room);
+  return roomsRef.doc(room.id).update(record);
 }
 
 type RoomObserver = (error: Error | null, room?: IRoom | null) => void;
@@ -58,5 +57,15 @@ function snapshotToRoom (snapshot: firebase.firestore.DocumentSnapshot): IRoom |
     id: snapshot.id,
     name: data.name,
     textbookContent: data.textbookContent,
+    userId: data.userId,
+  };
+}
+
+function roomToRecord (room: IRoom) {
+  return {
+    active: room.active,
+    name: room.name,
+    textbookContent: room.textbookContent,
+    userId: room.userId,
   };
 }
