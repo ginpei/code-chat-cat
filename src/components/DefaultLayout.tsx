@@ -7,7 +7,7 @@ import { IUserProfile } from '../reducers/currentUser';
 import { IHeaderMenu } from './HeaderMenu';
 
 interface IDefaultLayoutProps {
-  children: any;
+  children: React.ReactNode;
   userProfile: IUserProfile | null;
 }
 
