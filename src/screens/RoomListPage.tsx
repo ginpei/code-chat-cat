@@ -37,6 +37,9 @@ class RoomListPage extends React.Component<IRoomListPageProps, IRoomListPageStat
     return (
       <DefaultLayout>
         <h1>Room list</h1>
+        <p>
+          <Link to="/rooms/new">Create new room</Link>
+        </p>
         {rooms.length < 1 ? (
           <p>No rooms found.</p>
         ) : (

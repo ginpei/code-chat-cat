@@ -1,9 +1,11 @@
-export interface IRoom {
+export interface IRoomRecord {
   active: boolean;
-  id: string;
   name: string;
   textbookContent: string;
   userId: string;
+}
+export interface IRoom extends IRoomRecord {
+  id: string;
 }
 export interface IRooms {
   rooms: IRoom[];

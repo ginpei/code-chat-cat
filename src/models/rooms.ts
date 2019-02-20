@@ -1,5 +1,5 @@
 import firebase from '../middleware/firebase';
-import { IRoom } from '../reducers/rooms';
+import { IRoom, IRoomRecord } from '../reducers/rooms';
 
 const roomsRef = firebase.firestore().collection('/rooms');
 
@@ -43,6 +43,31 @@ export function connectUserRooms (
   }, onError);
 }
 
+export function createRoom (
+  roomData: { name: string; userId: string; },
+) {
+  return new Promise<IRoom>(async (resolve, reject) => {
+    try {
+      const record: IRoomRecord = {
+        active: false,
+        name: roomData.name,
+        textbookContent: `# ${roomData.name}`,
+        userId: roomData.userId,
+      };
+      const docRef = await roomsRef.add(record);
+
+      const snapshot = await docRef.get();
+      const room = snapshotToRoom(snapshot);
+      if (!room) {
+        throw new Error('Failed to get room');
+      }
+      resolve(room);
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
 export async function updateRoom (room: IRoom): Promise<void> {
   const record = roomToRecord(room);
   return roomsRef.doc(room.id).update(record);
@@ -74,7 +99,7 @@ function snapshotToRoom (snapshot: firebase.firestore.DocumentSnapshot): IRoom |
   };
 }
 
-function roomToRecord (room: IRoom) {
+function roomToRecord (room: IRoom): IRoomRecord {
   return {
     active: room.active,
     name: room.name,
