@@ -1,4 +1,5 @@
 export interface IRoom {
+  active: boolean;
   name: string;
   id: string;
   textbookContent: string;

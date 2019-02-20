@@ -8,6 +8,7 @@ import rootReducer, { Action, IState } from './reducers';
 import HomePage from './screens/HomePage';
 import LoginPage from './screens/LoginPage';
 import LogoutPage from './screens/LogoutPage';
+import RoomSettingsPage from './screens/RoomSettingsPage';
 import RoomTextbookPage from './screens/RoomTextbookPage';
 import RoomWritePage from './screens/RoomWritePage';
 import SettingsPage from './screens/SettingsPage';
@@ -46,6 +47,7 @@ class App extends Component<IAppProps, IAppState> {
               <Route exact={true} path="/logout" component={LogoutPage}/>
               <Route exact={true} path="/rooms/:id/" component={RoomTextbookPage}/>
               <Route exact={true} path="/rooms/:id/write" component={RoomWritePage}/>
+              <Route exact={true} path="/rooms/:id/settings" component={RoomSettingsPage}/>
               <Route exact={true} path="/settings" component={SettingsPage}/>
             </Switch>
           </div>
