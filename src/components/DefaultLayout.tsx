@@ -7,12 +7,11 @@ import { IUserProfile } from '../reducers/currentUser';
 import { IHeaderMenu } from './HeaderMenu';
 
 interface IDefaultLayoutProps {
+  children: any;
   userProfile: IUserProfile | null;
 }
 
-const DefaultLayout: React.StatelessComponent<
-  IDefaultLayoutProps
-> = (props) => {
+function DefaultLayout (props: IDefaultLayoutProps) {
   const menus = props.userProfile
     ? getLoggedInMenu(props.userProfile.name)
     : getAnonymousMenu();
@@ -23,7 +22,7 @@ const DefaultLayout: React.StatelessComponent<
       <Container>{props.children}</Container>
     </div>
   );
-};
+}
 
 function getLoggedInMenu (userName: string): IHeaderMenu[] {
   return [
