@@ -28,6 +28,13 @@ function getLoggedInMenu (userName: string): IHeaderMenu[] {
   return [
     {
       links: [
+        { title: 'List', href: '/rooms' },
+        { title: 'Create new', href: '/rooms/new' },
+      ],
+      name: 'Rooms',
+    },
+    {
+      links: [
         { title: 'Settings', href: '/settings' },
         { title: 'Log out', href: '/logout' },
       ],
