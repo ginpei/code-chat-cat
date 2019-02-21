@@ -4,6 +4,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 import Container from '../components/Container';
 import Header, { headerHeight } from '../components/Header';
+import LoadingView from '../components/LoadingView';
 import Markdown from '../components/Markdown';
 import { observeRoom } from '../models/rooms';
 import { Dispatch, IState } from '../reducers';
@@ -84,7 +85,7 @@ class RoomTextbookPage extends React.Component<IRoomTextbookPageProps, IRoomText
 
     if (pageStatus === PageStatus.initial) {
       return (
-        <div title="Initializing room">...</div>
+        <LoadingView/>
       );
     }
 

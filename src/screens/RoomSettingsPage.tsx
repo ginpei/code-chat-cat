@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import DefaultLayout from '../components/DefaultLayout';
+import LoadingView from '../components/LoadingView';
 import { connectRoom, updateRoom } from '../models/rooms';
 import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
@@ -59,7 +60,9 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
 
     if (!this.state.ready) {
       return (
-        <div>...</div>
+        <DefaultLayout>
+          <LoadingView/>
+        </DefaultLayout>
       );
     }
 

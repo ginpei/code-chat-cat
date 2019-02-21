@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DefaultLayout from '../components/DefaultLayout';
+import LoadingView from '../components/LoadingView';
 import { connectUserRooms } from '../models/rooms';
 import { IState } from '../reducers';
 import { IRoom } from '../reducers/rooms';
@@ -28,7 +29,7 @@ class RoomListPage extends React.Component<IRoomListPageProps, IRoomListPageStat
   public render () {
     if (!this.state.ready) {
       return (
-        <div>...</div>
+        <LoadingView/>
       );
     }
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router';
 import { createStore } from 'redux';
+import LoadingView from './components/LoadingView';
 import { appHistory } from './misc';
 import * as users from './models/users';
 import rootReducer, { Action, IState } from './reducers';
@@ -36,7 +37,7 @@ class App extends Component<IAppProps, IAppState> {
   public render () {
     if (!this.state.ready) {
       return (
-        <div>...</div>
+        <LoadingView/>
       );
     }
 

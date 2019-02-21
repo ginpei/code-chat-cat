@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import logoImageSrc from '../assets/logo-512.png';
 import Container from '../components/Container';
 import Header from '../components/Header';
+import LoadingView from '../components/LoadingView';
 import { loadActiveRooms, loadOwnRooms } from '../models/rooms';
 import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
@@ -67,9 +68,7 @@ function HomePage (props: IHomePageProps) {
           title=""
         />
         <LogoImageSection/>
-        <Container>
-          <p>Loading...</p>
-        </Container>
+        <LoadingView/>
       </div>
     );
   }

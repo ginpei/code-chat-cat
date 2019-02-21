@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import Header, { headerHeight } from '../components/Header';
+import LoadingView from '../components/LoadingView';
 import Markdown from '../components/Markdown';
 import syncScroll from '../functions/syncScroll';
 import { observeRoom, updateRoom } from '../models/rooms';
@@ -98,7 +99,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
 
     if (pageStatus === PageStatus.initial) {
       return (
-        <div title="Initializing room">...</div>
+        <LoadingView/>
       );
     }
 
