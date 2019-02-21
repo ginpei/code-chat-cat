@@ -73,6 +73,10 @@ export async function updateRoom (room: IRoom): Promise<void> {
   return roomsRef.doc(room.id).update(record);
 }
 
+export async function deleteRoom (room: IRoom) {
+  return roomsRef.doc(room.id).delete();
+}
+
 type RoomObserver = (error: Error | null, room?: IRoom | null) => void;
 export function observeRoom (id: string, observer: RoomObserver): () => void {
   const ref = roomsRef.doc(id);

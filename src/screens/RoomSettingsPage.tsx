@@ -1,11 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
+import styled from 'styled-components';
 import DefaultLayout from '../components/DefaultLayout';
 import LoadingView from '../components/LoadingView';
-import { connectRoom, updateRoom } from '../models/rooms';
+import { appHistory } from '../misc';
+import { connectRoom, deleteRoom, updateRoom } from '../models/rooms';
 import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
+
+const DangerZone = styled.div`
+  border: solid 1px tomato;
+  padding: 1rem;
+`;
 
 interface IRoomSettingsPageParams {
   id: string;
@@ -44,6 +51,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     this.onRoomNameChange = this.onRoomNameChange.bind(this);
     this.onRoomActiveChange = this.onRoomActiveChange.bind(this);
     this.onRoomSubmit = this.onRoomSubmit.bind(this);
+    this.onRoomDeleteClick = this.onRoomDeleteClick.bind(this);
   }
 
   public render () {
@@ -137,6 +145,14 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
             </button>
           </p>
         </form>
+        <h2>Danger zone</h2>
+        <DangerZone>
+          <button
+            onClick={this.onRoomDeleteClick}
+          >
+            Delete
+          </button>
+        </DangerZone>
       </DefaultLayout>
     );
   }
@@ -206,6 +222,24 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
         roomSaving: false,
       });
     }
+  }
+
+  public async onRoomDeleteClick (event: React.MouseEvent<HTMLButtonElement>) {
+    const ok = confirm('Are you sure you want to delete this room?');
+    if (!ok) {
+      return;
+    }
+
+    // disconnect not to show 404
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+
+    this.setState({
+      ready: false,
+    });
+    await deleteRoom(this.state.room!);
+    appHistory.push('/rooms');
   }
 }
 
