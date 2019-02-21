@@ -18,9 +18,7 @@ interface IDefaultLayoutProps {
 }
 
 function DefaultLayout (props: IDefaultLayoutProps) {
-  const menus = props.userProfile
-    ? getLoggedInMenu(props.userProfile.name)
-    : getAnonymousMenu();
+  const menus = getDefaultHeaderMenu(props.userProfile);
 
   return (
     <div>
@@ -31,7 +29,15 @@ function DefaultLayout (props: IDefaultLayoutProps) {
   );
 }
 
-function getLoggedInMenu (userName: string): IHeaderMenu[] {
+export function getDefaultHeaderMenu (profile: IUserProfile | null) {
+  if (profile) {
+    return getLoggedInMenu(profile);
+  } else {
+    return getAnonymousMenu();
+  }
+}
+
+function getLoggedInMenu (profile: IUserProfile): IHeaderMenu[] {
   return [
     {
       links: [
@@ -45,7 +51,7 @@ function getLoggedInMenu (userName: string): IHeaderMenu[] {
         { title: 'Settings', href: '/settings' },
         { title: 'Log out', href: '/logout' },
       ],
-      name: userName,
+      name: profile.name,
     },
   ];
 }

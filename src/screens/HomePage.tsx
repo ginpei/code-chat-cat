@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import logoImageSrc from '../assets/logo-512.png';
 import Container from '../components/Container';
+import { getDefaultHeaderMenu } from '../components/DefaultLayout';
+import Footer from '../components/Footer';
 import Header from '../components/Header';
 import LoadingView from '../components/LoadingView';
 import { loadActiveRooms, loadOwnRooms } from '../models/rooms';
@@ -73,9 +75,12 @@ function HomePage (props: IHomePageProps) {
     );
   }
 
+  const menus = getDefaultHeaderMenu(props.userProfile);
+
   return (
     <div>
       <Header
+        menus={menus}
         title=""
       />
       <Container>
@@ -109,6 +114,7 @@ function HomePage (props: IHomePageProps) {
           <p><Link to="/login">Login</Link></p>
         )}
       </Container>
+      <Footer/>
     </div>
   );
 }
