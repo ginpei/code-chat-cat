@@ -1,10 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import Container from '../components/Container';
-import Header from '../components/Header';
+import Footer from '../components/Footer';
+import Header, { headerHeight } from '../components/Header';
 import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
 import { IHeaderMenu } from './HeaderMenu';
+
+const MainContainer = styled(Container)`
+  min-height: calc(100vh - ${headerHeight}px - 10rem);
+`;
 
 interface IDefaultLayoutProps {
   children: React.ReactNode;
@@ -19,7 +25,8 @@ function DefaultLayout (props: IDefaultLayoutProps) {
   return (
     <div>
       <Header menus={menus} />
-      <Container>{props.children}</Container>
+      <MainContainer>{props.children}</MainContainer>
+      <Footer/>
     </div>
   );
 }
