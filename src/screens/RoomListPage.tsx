@@ -7,6 +7,20 @@ import { connectUserRooms } from '../models/rooms';
 import { IState } from '../reducers';
 import { IRoom } from '../reducers/rooms';
 
+function RoomItem ({ room }: { room: IRoom }) {
+  const { active, name } = room;
+  return (
+    <tr>
+      <td>
+        {active && <span title="Active">✅</span>}
+      </td>
+      <td><Link to={`/rooms/${room.id}/settings`}>💬 {name}</Link></td>
+      <td><Link to={`/rooms/${room.id}/`}>📖 View</Link></td>
+      <td><Link to={`/rooms/${room.id}/write`}>📝 Write</Link></td>
+    </tr>
+  );
+}
+
 interface IRoomListPageProps {
   userId: string;
 }
@@ -41,16 +55,20 @@ class RoomListPage extends React.Component<IRoomListPageProps, IRoomListPageStat
         <p>
           <Link to="/rooms/new">Create new room</Link>
         </p>
+        <p>✅ Active room</p>
         {rooms.length < 1 ? (
           <p>No rooms found.</p>
         ) : (
-          <ul>
-            {rooms.map((room) => (
-              <li key={room.id}>
-                <Link to={`/rooms/${room.id}/settings`}>{room.name}</Link>
-              </li>
-            ))}
-          </ul>
+          <table>
+            <tbody>
+              {rooms.map((room) => (
+                <RoomItem
+                  key={room.id}
+                  room={room}
+                />
+              ))}
+            </tbody>
+          </table>
         )}
       </DefaultLayout>
     );
