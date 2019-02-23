@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import currentUser, { CurrentUserAction, ICurrentUser } from './currentUser';
-import rooms, { IRooms, RoomsAction } from './rooms';
+import rooms, { IRoomState, RoomsAction } from './rooms';
 
 export interface IState {
   currentUser: ICurrentUser;
-  rooms: IRooms;
+  rooms: IRoomState;
 }
 
 export type Action = CurrentUserAction | RoomsAction;

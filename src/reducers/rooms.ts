@@ -7,42 +7,43 @@ export interface IRoomRecord extends IRecord {
   userId: string;
 }
 export type IRoom = ClientRecord<IRoomRecord>;
-export interface IRooms {
-  rooms: IRoom[];
+export interface IRoomState {
+  userRooms: IRoom[];
 }
-const defaultRooms: IRooms = {
-  rooms: [],
+const defaultRooms: IRoomState = {
+  userRooms: [],
 };
 
 export enum RoomsActionTypes {
-  setRooms = 'rooms/setRooms',
+  setUserRooms = 'rooms/setUserRooms',
 }
 
-export type RoomsAction =
-  IRoomsSetRoomsAction;
+export type RoomsAction = IRoomsSetUserRoomsAction;
 
 // --------------------------
-// set rooms
-// maybe this is not needed?
+// set user's rooms
 
-interface IRoomsSetRoomsAction {
-  type: RoomsActionTypes.setRooms;
+interface IRoomsSetUserRoomsAction {
+  type: RoomsActionTypes.setUserRooms;
   rooms: IRoom[];
 }
-function setRooms (state: IRooms, action: IRoomsSetRoomsAction) {
+function setUserRooms (
+  state: IRoomState,
+  action: IRoomsSetUserRoomsAction,
+): IRoomState {
   return {
     ...state,
-    rooms: action.rooms,
+    userRooms: action.rooms,
   };
 }
 
 // --------------------------
 // Reducer
 
-export default (state: IRooms = defaultRooms, action: RoomsAction) => {
+export default (state: IRoomState = defaultRooms, action: RoomsAction) => {
   switch (action.type) {
-    case RoomsActionTypes.setRooms:
-      return setRooms(state, action);
+    case RoomsActionTypes.setUserRooms:
+      return setUserRooms(state, action);
     default:
       return state;
   }
