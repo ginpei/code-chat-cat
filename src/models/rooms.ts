@@ -1,8 +1,56 @@
 import firebase from '../middleware/firebase';
-import { IRoom, IRoomRecord } from '../reducers/rooms';
+import { Store } from '../reducers';
+import { IRoom, IRoomRecord, RoomsActionTypes } from '../reducers/rooms';
 import migrateRoom, { roomVersion } from './rooms.migration';
 
 const roomsRef = firebase.firestore().collection('/rooms');
+
+let unsubscribeUserRooms: (() => void) | null = null;
+export function connectUserRooms2 (store: Store) {
+  if (unsubscribeUserRooms) {
+    return unsubscribeUserRooms;
+  }
+  unsubscribeUserRooms = null;
+
+  let userId: string = '';
+  let unsubscribeUserRoomsSnapshot: () => void = () => undefined;
+  const unsubscribeStore = store.subscribe(() => {
+    const state = store.getState();
+    const newUserId = state.currentUser.uid;
+    if (newUserId === userId) {
+      return;
+    }
+    unsubscribeUserRoomsSnapshot();
+    userId = newUserId;
+
+    if (!userId) {
+      return;
+    }
+
+    const userRoomsRef = roomsRef.where('userId', '==', userId);
+    unsubscribeUserRoomsSnapshot = userRoomsRef.onSnapshot({
+      error: (error) => {
+        console.error('Error on user rooms connection', error);
+      },
+      next: (snapshot) => {
+        const rooms = snapshot.docs
+          .map((v) => snapshotToRoom(v))
+          .filter((v) => v) as IRoom[];
+        store.dispatch({
+          rooms,
+          type: RoomsActionTypes.setUserRooms,
+        });
+      },
+    });
+  });
+
+  unsubscribeUserRooms = () => {
+    unsubscribeUserRooms = null;
+    unsubscribeStore();
+    unsubscribeUserRoomsSnapshot();
+  };
+  return unsubscribeUserRooms;
+}
 
 export async function loadActiveRooms (): Promise<IRoom[]> {
   const snapshot = await roomsRef

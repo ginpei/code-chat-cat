@@ -33,6 +33,7 @@ interface IHomePageProps {
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
   userProfile: IUserProfile | null;
+  userRooms: IRoom[];
 }
 
 interface IHomePageState {
@@ -109,6 +110,16 @@ function HomePage (props: IHomePageProps) {
                 </li>
               ))}
             </ul>
+            <p>↓ redux</p>
+            <ul>
+              {props.userRooms.map((room) => (
+                <li key={room.id}>
+                  <Link to={`/rooms/${room.id}/settings`}>{room.name || '(no name)'}</Link>
+                  {' / '}
+                  [<Link to={`/rooms/${room.id}`}>Textbook</Link>]
+                </li>
+              ))}
+            </ul>
           </>
         ) : (
           <p><Link to="/login">Login</Link></p>
@@ -123,6 +134,7 @@ const mapStateToProps = (state: IState) => ({
   firebaseUser: state.currentUser.firebaseUser,
   loggedIn: state.currentUser.loggedIn,
   userProfile: state.currentUser.profile,
+  userRooms: state.rooms.userRooms,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

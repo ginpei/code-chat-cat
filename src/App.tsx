@@ -4,6 +4,7 @@ import { Route, Router, Switch } from 'react-router';
 import { createStore } from 'redux';
 import LoadingView from './components/LoadingView';
 import { appHistory } from './misc';
+import { connectUserRooms2 } from './models/rooms';
 import * as users from './models/users';
 import rootReducer, { Action, IState } from './reducers';
 import HomePage from './screens/HomePage';
@@ -27,12 +28,14 @@ interface IAppState {
 class App extends Component<IAppProps, IAppState> {
   protected store = createStore<IState, Action, {}, {}>(rootReducer);
   protected unsubscribe: (() => void) | null = null;
+  protected unsubscribeUserRooms: () => void;
 
   constructor (props: IAppProps) {
     super(props);
     this.state = {
       ready: false,
     };
+    this.unsubscribeUserRooms = () => undefined;
   }
 
   public render () {
@@ -67,6 +70,7 @@ class App extends Component<IAppProps, IAppState> {
   public async componentDidMount () {
     const { store } = this;
     this.unsubscribe = await users.initializeCurrentUser(store);
+    this.unsubscribeUserRooms = await connectUserRooms2(store);
 
     const un = store.subscribe(() => {
       const { ready } = store.getState().currentUser;
@@ -81,6 +85,7 @@ class App extends Component<IAppProps, IAppState> {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
+    this.unsubscribeUserRooms();
   }
 }
 
