@@ -1,12 +1,12 @@
-export interface IRoomRecord {
+import { ClientRecord, IRecord } from '../misc';
+
+export interface IRoomRecord extends IRecord {
   active: boolean;
   name: string;
   textbookContent: string;
   userId: string;
 }
-export interface IRoom extends IRoomRecord {
-  id: string;
-}
+export type IRoom = ClientRecord<IRoomRecord>;
 export interface IRooms {
   rooms: IRoom[];
 }

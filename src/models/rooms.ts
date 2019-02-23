@@ -1,5 +1,6 @@
 import firebase from '../middleware/firebase';
 import { IRoom, IRoomRecord } from '../reducers/rooms';
+import migrateRoom, { roomVersion } from './rooms.migration';
 
 const roomsRef = firebase.firestore().collection('/rooms');
 
@@ -50,8 +51,11 @@ export function createRoom (
     try {
       const record: IRoomRecord = {
         active: false,
+        createdAt: firebase.firestore.Timestamp.now(),
+        modelVersion: roomVersion,
         name: roomData.name,
         textbookContent: `# ${roomData.name}`,
+        updatedAt: firebase.firestore.Timestamp.now(),
         userId: roomData.userId,
       };
       const docRef = await roomsRef.add(record);
@@ -70,6 +74,8 @@ export function createRoom (
 
 export async function updateRoom (room: IRoom): Promise<void> {
   const record = roomToRecord(room);
+  record.createdAt = record.createdAt || firebase.firestore.Timestamp.now();
+  record.updatedAt = firebase.firestore.Timestamp.now();
   return roomsRef.doc(room.id).update(record);
 }
 
@@ -94,20 +100,27 @@ function snapshotToRoom (snapshot: firebase.firestore.DocumentSnapshot): IRoom |
     return null;
   }
 
+  const migratedData = migrateRoom(data);
+
   return {
-    active: data.active,
+    active: migratedData.active,
+    createdAt: migratedData.createdAt,
     id: snapshot.id,
-    name: data.name,
-    textbookContent: data.textbookContent,
-    userId: data.userId,
+    name: migratedData.name,
+    textbookContent: migratedData.textbookContent,
+    updatedAt: migratedData.updatedAt,
+    userId: migratedData.userId,
   };
 }
 
 function roomToRecord (room: IRoom): IRoomRecord {
   return {
     active: room.active,
+    createdAt: room.createdAt,
+    modelVersion: roomVersion,
     name: room.name,
     textbookContent: room.textbookContent,
+    updatedAt: room.updatedAt,
     userId: room.userId,
   };
 }

@@ -17,6 +17,7 @@ function RoomItem ({ room }: { room: IRoom }) {
       <td><Link to={`/rooms/${room.id}/settings`}>💬 {name}</Link></td>
       <td><Link to={`/rooms/${room.id}/`}>📖 View</Link></td>
       <td><Link to={`/rooms/${room.id}/write`}>📝 Write</Link></td>
+      <td>{String(room.updatedAt && room.updatedAt.toDate())}</td>
     </tr>
   );
 }
