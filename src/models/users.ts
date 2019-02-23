@@ -1,12 +1,11 @@
-import { Store } from 'redux';
 import firebase from '../middleware/firebase';
-import { Action, IState } from '../reducers';
+import { IState, Store } from '../reducers';
 import { CurrentUserActionTypes, IUserProfile, IUserProfileRecord } from '../reducers/currentUser';
 import migrateUser, { userVersion } from './users.migration';
 
 const usersRef = firebase.firestore().collection('/users');
 
-export async function initializeCurrentUser (store: Store<IState, Action>) {
+export async function initializeCurrentUser (store: Store) {
   const unsubscribeAuth = firebase.auth().onAuthStateChanged(
     (user) => store.dispatch({
       type: CurrentUserActionTypes.setFirebaseUser,
@@ -48,7 +47,7 @@ export async function initializeCurrentUser (store: Store<IState, Action>) {
   };
 }
 
-function getReady (store: Store<IState, Action>) {
+function getReady (store: Store) {
   if (!store.getState().currentUser.ready) {
     store.dispatch({
       ready: true,
