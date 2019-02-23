@@ -28,6 +28,7 @@ export default function migrate (migrations: Migrations, record: any) {
     }
 
     if (!isRecord(record)) {
+      console.warn(record);
       throw new Error('Invalid record data');
     }
 
