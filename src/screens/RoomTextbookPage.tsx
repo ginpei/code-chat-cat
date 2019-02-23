@@ -8,7 +8,7 @@ import LoadingView from '../components/LoadingView';
 import Markdown from '../components/Markdown';
 import { observeRoom } from '../models/rooms';
 import { Dispatch, IState } from '../reducers';
-import { IRoom, RoomsActionTypes } from '../reducers/rooms';
+import { IRoom } from '../reducers/rooms';
 
 const TextbookContainer = styled.div`
   height: calc(100vh - ${headerHeight}px);
@@ -34,7 +34,6 @@ interface IRoomTextbookPageProps
   extends RouteComponentProps<IRoomTextbookPageParams> {
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
-  setRooms: (rooms: IRoom[]) => void;
 }
 interface IRoomTextbookPageState {
   content: string;
@@ -157,10 +156,6 @@ const mapStateToProps = (state: IState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  setRooms: (rooms: IRoom[]) => dispatch({
-    rooms,
-    type: RoomsActionTypes.setRooms,
-  }),
 });
 
 export default connect(

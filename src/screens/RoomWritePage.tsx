@@ -9,7 +9,7 @@ import Markdown from '../components/Markdown';
 import syncScroll from '../functions/syncScroll';
 import { observeRoom, updateRoom } from '../models/rooms';
 import { Dispatch, IState } from '../reducers';
-import { IRoom, RoomsActionTypes } from '../reducers/rooms';
+import { IRoom } from '../reducers/rooms';
 
 const EditorContainer = styled.div`
   display: grid;
@@ -46,7 +46,6 @@ interface IRoomWritePageProps
   extends RouteComponentProps<IRoomWritePageParams> {
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
-  setRooms: (rooms: IRoom[]) => void;
 }
 interface IRoomWritePageState {
   content: string;
@@ -225,10 +224,6 @@ const mapStateToProps = (state: IState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  setRooms: (rooms: IRoom[]) => dispatch({
-    rooms,
-    type: RoomsActionTypes.setRooms,
-  }),
 });
 
 export default connect(

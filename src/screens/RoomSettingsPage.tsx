@@ -7,7 +7,7 @@ import LoadingView from '../components/LoadingView';
 import { appHistory } from '../misc';
 import { connectRoom, deleteRoom, updateRoom } from '../models/rooms';
 import { Dispatch, IState } from '../reducers';
-import { IRoom, RoomsActionTypes } from '../reducers/rooms';
+import { IRoom } from '../reducers/rooms';
 
 const DangerZone = styled.div`
   border: solid 1px tomato;
@@ -249,10 +249,6 @@ const mapStateToProps = (state: IState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  setRooms: (rooms: IRoom[]) => dispatch({
-    rooms,
-    type: RoomsActionTypes.setRooms,
-  }),
 });
 
 export default connect(
