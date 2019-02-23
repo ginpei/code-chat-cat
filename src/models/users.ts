@@ -1,7 +1,8 @@
 import { Store } from 'redux';
 import firebase from '../middleware/firebase';
 import { Action, IState } from '../reducers';
-import { CurrentUserActionTypes, IUserProfile } from '../reducers/currentUser';
+import { CurrentUserActionTypes, IUserProfile, IUserProfileRecord } from '../reducers/currentUser';
+import migrateUser, { userVersion } from './users.migration';
 
 const usersRef = firebase.firestore().collection('/users');
 
@@ -76,8 +77,10 @@ export async function loadUser (userId: string): Promise<IUserProfile | null> {
 
 export function initializeUser (firebaseUser: firebase.User) {
   const user: IUserProfile = {
+    createdAt: firebase.firestore.Timestamp.now(),
     id: '',
     name: firebaseUser.displayName || firebaseUser.email || 'Anonymous',
+    updatedAt: firebase.firestore.Timestamp.now(),
   };
   return saveUser(user);
 }
@@ -97,14 +100,19 @@ function snapshotToUser (
     return null;
   }
 
+  const migratedData = migrateUser(data);
+
   return {
+    createdAt: migratedData.createdAt,
     id: snapshot.id,
-    name: data.name,
+    name: migratedData.name,
+    updatedAt: migratedData.updatedAt,
   };
 }
 
-function userToData (user: IUserProfile) {
+function userToData (user: IUserProfile): IUserProfileRecord {
   return {
-    name: user.name,
+    ...user,
+    modelVersion: userVersion,
   };
 }

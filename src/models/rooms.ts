@@ -115,12 +115,7 @@ function snapshotToRoom (snapshot: firebase.firestore.DocumentSnapshot): IRoom |
 
 function roomToRecord (room: IRoom): IRoomRecord {
   return {
-    active: room.active,
-    createdAt: room.createdAt,
+    ...room,
     modelVersion: roomVersion,
-    name: room.name,
-    textbookContent: room.textbookContent,
-    updatedAt: room.updatedAt,
-    userId: room.userId,
   };
 }

@@ -1,4 +1,5 @@
 import firebase from '../middleware/firebase';
+import { ClientRecord, IRecord } from '../misc';
 
 export interface ICurrentUser {
   firebaseUser: firebase.User | null;
@@ -17,10 +18,11 @@ const defaultCurrentUser: ICurrentUser = {
   working: false,
 };
 
-export interface IUserProfile {
+export interface IUserProfileRecord extends IRecord {
   id: string; // aka uid
   name: string;
 }
+export type IUserProfile = ClientRecord<IUserProfileRecord>;
 
 export enum CurrentUserActionTypes {
   setFirebaseUser = 'currentUser/setFirebaseUser',

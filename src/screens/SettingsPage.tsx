@@ -103,7 +103,7 @@ class SettingsPage extends React.Component<ISettingsPageProps, ISettingsPageStat
     });
 
     await users.saveUser({
-      id: this.props.currentUser.firebaseUser!.uid,
+      ...this.props.currentUser.profile!,
       name: this.state.userName,
     });
     this.setState({
