@@ -1,7 +1,10 @@
 import firebase from 'firebase';
 import { createBrowserHistory } from 'history';
+import { createStore } from 'redux';
+import rootReducer, { Action, IState } from './reducers';
 
 export const appHistory = createBrowserHistory();
+export const store = createStore<IState, Action, {}, {}>(rootReducer);
 
 export interface IRecord {
   createdAt: firebase.firestore.Timestamp;

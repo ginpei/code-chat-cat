@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router';
-import { createStore } from 'redux';
 import LoadingView from './components/LoadingView';
-import { appHistory } from './misc';
+import { appHistory, store } from './misc';
 import { connectUserRooms } from './models/rooms';
 import * as users from './models/users';
-import rootReducer, { Action, IState } from './reducers';
 import HomePage from './screens/HomePage';
 import LoginPage from './screens/LoginPage';
 import LogoutPage from './screens/LogoutPage';
@@ -26,7 +24,6 @@ interface IAppState {
 }
 
 class App extends Component<IAppProps, IAppState> {
-  protected store = createStore<IState, Action, {}, {}>(rootReducer);
   protected unsubscribeCurrentUser: () => void;
   protected unsubscribeUserRooms: () => void;
 
@@ -47,7 +44,7 @@ class App extends Component<IAppProps, IAppState> {
     }
 
     return (
-      <Provider store={this.store}>
+      <Provider store={store}>
         <Router history={appHistory}>
           <div className="App">
             <Switch>
@@ -69,7 +66,6 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public async componentDidMount () {
-    const { store } = this;
     this.unsubscribeCurrentUser = await users.initializeCurrentUser(store);
     this.unsubscribeUserRooms = await connectUserRooms(store);
 

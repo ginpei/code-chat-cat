@@ -69,6 +69,43 @@ export function connectUserRooms (store: Store) {
   return unsubscribeUserRooms;
 }
 
+let unsubscribeActiveRooms: (() => void) | null = null;
+export function connectActiveRooms (store: Store, callback?: () => void) {
+  if (unsubscribeActiveRooms) {
+    return unsubscribeActiveRooms;
+  }
+  unsubscribeActiveRooms = null;
+  let calledBack = false;
+
+  let unsubscribeSnapshot: () => void = () => undefined;
+  const userRoomsRef = roomsRef.where('active', '==', true);
+  unsubscribeSnapshot = userRoomsRef.onSnapshot({
+    error: (error) => {
+      console.error('Error on user rooms connection', error);
+    },
+    next: (snapshot) => {
+      const rooms = snapshot.docs
+        .map((v) => snapshotToRoom(v))
+        .filter((v) => v) as IRoom[];
+      store.dispatch({
+        rooms,
+        type: RoomsActionTypes.setActiveRooms,
+      });
+
+      if (callback && !calledBack) {
+        callback();
+        calledBack = true;
+      }
+    },
+  });
+
+  unsubscribeUserRooms = () => {
+    unsubscribeUserRooms = null;
+    unsubscribeSnapshot();
+  };
+  return unsubscribeUserRooms;
+}
+
 export async function loadActiveRooms (): Promise<IRoom[]> {
   const snapshot = await roomsRef
     .where('active', '==', true)

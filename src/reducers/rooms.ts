@@ -9,10 +9,12 @@ export interface IRoomRecord extends IRecord {
 }
 export type IRoom = ClientRecord<IRoomRecord>;
 export interface IRoomState {
+  activeRooms: IRoom[];
   ready: boolean;
   userRooms: IRoom[];
 }
 const defaultRooms: IRoomState = {
+  activeRooms: [],
   ready: false,
   userRooms: [],
 };
@@ -22,11 +24,13 @@ const defaultRooms: IRoomState = {
 
 export enum RoomsActionTypes {
   setReady = 'rooms/setReady',
+  setActiveRooms = 'rooms/setActiveRooms',
   setUserRooms = 'rooms/setUserRooms',
   saveRoom = 'rooms/saveRoom',
 }
 
-export type RoomsAction = IRoomsSetReadyAction | IRoomsSetUserRoomsAction | IRoomsSaveRoomAction;
+export type RoomsAction = IRoomsSetReadyAction | IRoomsSetActiveRoomsAction |
+  IRoomsSetUserRoomsAction | IRoomsSaveRoomAction;
 
 // --------------------------
 // set ready or not
@@ -42,6 +46,23 @@ function setReady (
   return {
     ...state,
     ready: action.ready,
+  };
+}
+
+// --------------------------
+// set currently active rooms
+
+interface IRoomsSetActiveRoomsAction {
+  type: RoomsActionTypes.setActiveRooms;
+  rooms: IRoom[];
+}
+function setActiveRooms (
+  state: IRoomState,
+  action: IRoomsSetActiveRoomsAction,
+): IRoomState {
+  return {
+    ...state,
+    activeRooms: action.rooms,
   };
 }
 
@@ -97,6 +118,8 @@ export default (state: IRoomState = defaultRooms, action: RoomsAction) => {
   switch (action.type) {
     case RoomsActionTypes.setReady:
       return setReady(state, action);
+    case RoomsActionTypes.setActiveRooms:
+      return setActiveRooms(state, action);
     case RoomsActionTypes.setUserRooms:
       return setUserRooms(state, action);
     case RoomsActionTypes.saveRoom:

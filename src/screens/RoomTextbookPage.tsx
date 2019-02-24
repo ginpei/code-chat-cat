@@ -1,12 +1,14 @@
-import React, { createRef } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 import Container from '../components/Container';
+import DefaultLayout from '../components/DefaultLayout';
 import Header, { headerHeight } from '../components/Header';
 import LoadingView from '../components/LoadingView';
 import Markdown from '../components/Markdown';
-import { observeRoom } from '../models/rooms';
+import { store } from '../misc';
+import { connectActiveRooms } from '../models/rooms';
 import { Dispatch, IState } from '../reducers';
 import { IRoom } from '../reducers/rooms';
 
@@ -21,144 +23,81 @@ const TextbookContent = styled(Container)`
   padding: 0.01px 1rem;
 `;
 
-enum PageStatus {
-  initial,
-  loading,
-  ready,
-}
-
 interface IRoomTextbookPageParams {
   id: string;
 }
 interface IRoomTextbookPageProps
   extends RouteComponentProps<IRoomTextbookPageParams> {
-  firebaseUser: firebase.User | null;
-  loggedIn: boolean;
-}
-interface IRoomTextbookPageState {
-  content: string;
-  errorMessage: string;
-  pageStatus: PageStatus;
-  room: IRoom | null;
+  activeRooms: IRoom[];
+  userRooms: IRoom[];
 }
 
-class RoomTextbookPage extends React.Component<IRoomTextbookPageProps, IRoomTextbookPageState> {
-  protected refInput = createRef<HTMLTextAreaElement>();
-  protected refOutput = createRef<HTMLElement>();
-  protected unobserve: (() => void) | null = null;
-  protected unsubscribeSyncScroll: (() => void) | null = null;
-
+class RoomTextbookPage extends React.Component<IRoomTextbookPageProps> {
   protected get roomId () {
     return this.props.match.params.id;
   }
 
-  constructor (props: IRoomTextbookPageProps) {
-    super(props);
-    this.state = {
-      content: '',
-      errorMessage: '',
-      pageStatus: PageStatus.initial,
-      room: null,
-    };
+  protected get room () {
+    return (
+      this.props.activeRooms.find((v) => v.id === this.roomId) ||
+      this.props.userRooms.find((v) => v.id === this.roomId)
+    );
   }
 
   public render () {
-    // TODO error view
-    if (this.state.errorMessage) {
+    const { room } = this;
+
+    if (!room) {
       return (
-        <div>
-          <p>{this.state.errorMessage}</p>
-        </div>
+        <DefaultLayout>
+          <h1>Room not found</h1>
+        </DefaultLayout>
       );
     }
-
-    if (!this.props.firebaseUser) {
-      return (
-        <div>
-          <p>401</p>
-        </div>
-      );
-    }
-
-    const { content, pageStatus, room } = this.state;
-
-    if (pageStatus === PageStatus.initial) {
-      return (
-        <LoadingView/>
-      );
-    }
-
-    if (pageStatus === PageStatus.ready && !room) {
-      return (
-        <div>
-          <p>404</p>
-        </div>
-      );
-    }
-
-    const roomName = room ? room.name : '';
 
     return (
       <div>
         <Header
           fullscreen={true}
-          title={roomName}
+          title={room.name}
           titleHref={`/rooms/${this.roomId}`}
         />
-        {room && (
-          <TextbookContainer>
-            <TextbookContent>
-              <Markdown content={content} />
-            </TextbookContent>
-          </TextbookContainer>
-        )}
+        <TextbookContainer>
+          <TextbookContent>
+            <Markdown content={room.textbookContent} />
+          </TextbookContent>
+        </TextbookContainer>
       </div>
     );
   }
-
-  public componentDidMount () {
-    this.unobserve = observeRoom(this.roomId, (error, updatedRoom) => {
-      if (error) {
-        this.setState({
-          errorMessage: error.message,
-        });
-        console.error(error);
-        return;
-      }
-
-      this.setState({
-        content: updatedRoom ? updatedRoom.textbookContent : '',
-        errorMessage: '',
-        pageStatus: PageStatus.ready,
-        room: updatedRoom || null,
-      });
-    });
-
-    this.setState({
-      pageStatus: PageStatus.loading,
-    });
-  }
-
-  public componentWillUnmount () {
-    if (this.unobserve) {
-      this.unobserve();
-    }
-
-    if (this.unsubscribeSyncScroll) {
-      this.unsubscribeSyncScroll();
-    }
-  }
 }
 
-const mapStateToProps = (state: IState) => ({
-  firebaseUser: state.currentUser.firebaseUser,
-  loggedIn: state.currentUser.loggedIn,
-});
+function Wrapper (props: IRoomTextbookPageProps) {
+  const [working, setWorking] = useState(false);
+  const [ready, setReady] = useState(false);
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-});
+  if (!working) {
+    // no need to unsubscribe
+    connectActiveRooms(store, () => setReady(true));
+    setWorking(true);
+  }
+
+  if (!ready) {
+    return (
+      <LoadingView/>
+    );
+  }
+
+  return (
+    <RoomTextbookPage {...props} />
+  );
+}
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(RoomTextbookPage);
+  (state: IState) => ({
+    activeRooms: state.rooms.activeRooms,
+    userRooms: state.rooms.userRooms,
+  }),
+  (dispatch: Dispatch) => ({
+  }),
+)(Wrapper);
