@@ -6,7 +6,7 @@ import migrateRoom, { roomVersion } from './rooms.migration';
 const roomsRef = firebase.firestore().collection('/rooms');
 
 let unsubscribeUserRooms: (() => void) | null = null;
-export function connectUserRooms2 (store: Store) {
+export function connectUserRooms (store: Store) {
   if (unsubscribeUserRooms) {
     return unsubscribeUserRooms;
   }

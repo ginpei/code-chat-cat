@@ -4,7 +4,7 @@ import { Route, Router, Switch } from 'react-router';
 import { createStore } from 'redux';
 import LoadingView from './components/LoadingView';
 import { appHistory } from './misc';
-import { connectUserRooms2 } from './models/rooms';
+import { connectUserRooms } from './models/rooms';
 import * as users from './models/users';
 import rootReducer, { Action, IState } from './reducers';
 import HomePage from './screens/HomePage';
@@ -70,7 +70,7 @@ class App extends Component<IAppProps, IAppState> {
   public async componentDidMount () {
     const { store } = this;
     this.unsubscribe = await users.initializeCurrentUser(store);
-    this.unsubscribeUserRooms = await connectUserRooms2(store);
+    this.unsubscribeUserRooms = await connectUserRooms(store);
 
     const un = store.subscribe(() => {
       const userReady = store.getState().currentUser.ready;
