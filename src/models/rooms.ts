@@ -89,19 +89,6 @@ export function connectRoom (
   }, onError);
 }
 
-type ConnectRoomsCallback = (rooms: IRoom[]) => void;
-type ConnectRoomsErrorCallback = (error: Error) => void;
-export function connectUserRooms (
-  userId: string,
-  callback: ConnectRoomsCallback,
-  onError?: ConnectRoomsErrorCallback,
-): () => void {
-  return roomsRef.where('userId', '==', userId).onSnapshot((snapshot) => {
-    const rooms = snapshot.docs.map((docSnapshot) => snapshotToRoom(docSnapshot)!);
-    callback(rooms);
-  }, onError);
-}
-
 export function createRoom (
   roomData: { name: string; userId: string; },
 ) {

@@ -2,8 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DefaultLayout from '../components/DefaultLayout';
-import LoadingView from '../components/LoadingView';
-import { connectUserRooms } from '../models/rooms';
 import { IState } from '../reducers';
 import { IRoom } from '../reducers/rooms';
 
@@ -24,31 +22,12 @@ function RoomItem ({ room }: { room: IRoom }) {
 
 interface IRoomListPageProps {
   userId: string;
-}
-interface IRoomListPageState {
-  ready: boolean;
-  rooms: IRoom[];
+  userRooms: IRoom[];
 }
 
-class RoomListPage extends React.Component<IRoomListPageProps, IRoomListPageState> {
-  protected unsubscribeRooms: (() => void) | null = null;
-
-  constructor (props: IRoomListPageProps) {
-    super(props);
-    this.state = {
-      ready: false,
-      rooms: [],
-    };
-  }
-
+class RoomListPage extends React.Component<IRoomListPageProps> {
   public render () {
-    if (!this.state.ready) {
-      return (
-        <LoadingView/>
-      );
-    }
-
-    const rooms = this.state.rooms;
+    const rooms = this.props.userRooms;
 
     return (
       <DefaultLayout>
@@ -74,29 +53,11 @@ class RoomListPage extends React.Component<IRoomListPageProps, IRoomListPageStat
       </DefaultLayout>
     );
   }
-
-  public componentDidMount () {
-    const userId = this.props.userId;
-    this.unsubscribeRooms = connectUserRooms(userId, (rooms) => {
-      this.setState({ rooms });
-
-      if (!this.state.ready) {
-        this.setState({
-          ready: true,
-        });
-      }
-    });
-  }
-
-  public componentWillUnmount () {
-    if (this.unsubscribeRooms) {
-      this.unsubscribeRooms();
-    }
-  }
 }
 
 const mapStateToProps = (state: IState) => ({
   userId: state.currentUser.uid,
+  userRooms: state.rooms.userRooms,
 });
 
 export default connect(mapStateToProps)(RoomListPage);
