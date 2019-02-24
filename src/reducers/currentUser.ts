@@ -32,10 +32,10 @@ export enum CurrentUserActionTypes {
 }
 
 export type CurrentUserAction =
-  ICurrentUserSetFirebaseUserAction |
-  ICurrentUserSetProfileAction |
-  ICurrentUserSetReadyAction |
-  ICurrentUserSetWorkingAction;
+  | ICurrentUserSetFirebaseUserAction
+  | ICurrentUserSetProfileAction
+  | ICurrentUserSetReadyAction
+  | ICurrentUserSetWorkingAction;
 
 // --------------------------
 // set firebase user
@@ -44,7 +44,10 @@ interface ICurrentUserSetFirebaseUserAction {
   type: CurrentUserActionTypes.setFirebaseUser;
   user: firebase.User | null;
 }
-function setFirebaseUser (state: ICurrentUser, action: ICurrentUserSetFirebaseUserAction): ICurrentUser {
+function setFirebaseUser (
+  state: ICurrentUser,
+  action: ICurrentUserSetFirebaseUserAction,
+): ICurrentUser {
   const { user } = action;
   return {
     ...state,
@@ -62,7 +65,10 @@ interface ICurrentUserSetProfileAction {
   profile: IUserProfile | null;
   type: CurrentUserActionTypes.setProfile;
 }
-function setProfile (state: ICurrentUser, action: ICurrentUserSetProfileAction): ICurrentUser {
+function setProfile (
+  state: ICurrentUser,
+  action: ICurrentUserSetProfileAction,
+): ICurrentUser {
   const { profile } = action;
   return {
     ...state,
@@ -77,7 +83,10 @@ interface ICurrentUserSetReadyAction {
   type: CurrentUserActionTypes.setReady;
   ready: boolean;
 }
-function setReady (state: ICurrentUser, action: ICurrentUserSetReadyAction): ICurrentUser {
+function setReady (
+  state: ICurrentUser,
+  action: ICurrentUserSetReadyAction,
+): ICurrentUser {
   return {
     ...state,
     ready: action.ready,
@@ -91,7 +100,10 @@ interface ICurrentUserSetWorkingAction {
   type: CurrentUserActionTypes.setWorking;
   working: boolean;
 }
-function setWorking (state: ICurrentUser, action: ICurrentUserSetWorkingAction) {
+function setWorking (
+  state: ICurrentUser,
+  action: ICurrentUserSetWorkingAction,
+) {
   return {
     ...state,
     working: action.working,
@@ -101,7 +113,10 @@ function setWorking (state: ICurrentUser, action: ICurrentUserSetWorkingAction) 
 // --------------------------
 // Reducer
 
-export default (state: ICurrentUser = defaultCurrentUser, action: CurrentUserAction) => {
+export default (
+  state: ICurrentUser = defaultCurrentUser,
+  action: CurrentUserAction,
+) => {
   switch (action.type) {
     case CurrentUserActionTypes.setFirebaseUser:
       return setFirebaseUser(state, action);

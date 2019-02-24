@@ -29,8 +29,11 @@ export enum RoomsActionTypes {
   saveRoom = 'rooms/saveRoom',
 }
 
-export type RoomsAction = IRoomsSetReadyAction | IRoomsSetActiveRoomsAction |
-  IRoomsSetUserRoomsAction | IRoomsSaveRoomAction;
+export type RoomsAction =
+  | IRoomsSetReadyAction
+  | IRoomsSetActiveRoomsAction
+  | IRoomsSetUserRoomsAction
+  | IRoomsSaveRoomAction;
 
 // --------------------------
 // set ready or not
@@ -114,7 +117,10 @@ function saveRoom (
 // --------------------------
 // Reducer
 
-export default (state: IRoomState = defaultRooms, action: RoomsAction) => {
+export default (
+  state: IRoomState = defaultRooms,
+  action: RoomsAction,
+) => {
   switch (action.type) {
     case RoomsActionTypes.setReady:
       return setReady(state, action);
