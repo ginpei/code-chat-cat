@@ -43,7 +43,6 @@ interface IRoomWritePageProps
 }
 interface IRoomWritePageState {
   content: string;
-  errorMessage: string;
 }
 
 class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageState> {
@@ -63,22 +62,12 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     super(props);
     this.state = {
       content: '',
-      errorMessage: '',
     };
 
     this.onContentInput = this.onContentInput.bind(this);
   }
 
   public render () {
-    // TODO error view
-    if (this.state.errorMessage) {
-      return (
-        <div>
-          <p>{this.state.errorMessage}</p>
-        </div>
-      );
-    }
-
     if (!this.props.firebaseUser) {
       return (
         <div>
