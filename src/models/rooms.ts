@@ -59,13 +59,6 @@ export async function loadActiveRooms (): Promise<IRoom[]> {
   return snapshot.docs.map((v) => snapshotToRoom(v)!);
 }
 
-export async function loadOwnRooms (userId: string): Promise<IRoom[]> {
-  const snapshot = await roomsRef
-    .where('userId', '==', userId)
-    .get();
-  return snapshot.docs.map((v) => snapshotToRoom(v)!);
-}
-
 type ConnectRoomCallback = (room: IRoom | null) => void;
 type ConnectRoomErrorCallback = (error: Error) => void;
 export function connectRoom (

@@ -8,7 +8,7 @@ import { getDefaultHeaderMenu } from '../components/DefaultLayout';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import LoadingView from '../components/LoadingView';
-import { loadActiveRooms, loadOwnRooms } from '../models/rooms';
+import { loadActiveRooms } from '../models/rooms';
 import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
 import { IRoom } from '../reducers/rooms';
@@ -37,29 +37,21 @@ interface IHomePageProps {
 }
 
 interface IHomePageState {
-  ownRooms: IRoom[];
   ready: boolean;
   rooms: IRoom[];
 }
 
 function HomePage (props: IHomePageProps) {
   const [state, setState] = useState<IHomePageState>({
-    ownRooms: [],
     ready: false,
     rooms: [],
   });
 
   if (!state.ready) {
-    Promise.all([
-      loadActiveRooms(),
-      props.firebaseUser
-        ? loadOwnRooms(props.firebaseUser.uid)
-        : Promise.resolve([]),
-    ])
-      .then(([activeRooms, ownRooms]) => {
+    loadActiveRooms()
+      .then((activeRooms) => {
         setState({
           ...state,
-          ownRooms,
           ready: true,
           rooms: activeRooms,
         });
@@ -101,16 +93,6 @@ function HomePage (props: IHomePageProps) {
               <Link to="/logout">Log out</Link>
             </p>
             <p>Your rooms</p>
-            <ul>
-              {state.ownRooms.map((room) => (
-                <li key={room.id}>
-                  <Link to={`/rooms/${room.id}/settings`}>{room.name || '(no name)'}</Link>
-                  {' / '}
-                  [<Link to={`/rooms/${room.id}`}>Textbook</Link>]
-                </li>
-              ))}
-            </ul>
-            <p>↓ redux</p>
             <ul>
               {props.userRooms.map((room) => (
                 <li key={room.id}>
