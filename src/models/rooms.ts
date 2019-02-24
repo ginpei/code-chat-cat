@@ -99,11 +99,11 @@ export function connectActiveRooms (store: Store, callback?: () => void) {
     },
   });
 
-  unsubscribeUserRooms = () => {
-    unsubscribeUserRooms = null;
+  unsubscribeActiveRooms = () => {
+    unsubscribeActiveRooms = null;
     unsubscribeSnapshot();
   };
-  return unsubscribeUserRooms;
+  return unsubscribeActiveRooms;
 }
 
 export async function loadActiveRooms (): Promise<IRoom[]> {
