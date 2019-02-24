@@ -61,7 +61,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
   constructor (props: IRoomWritePageProps) {
     super(props);
     this.state = {
-      content: '',
+      content: this.room ? this.room.textbookContent : '',
     };
 
     this.onContentInput = this.onContentInput.bind(this);
@@ -112,12 +112,6 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
         )}
       </div>
     );
-  }
-
-  public componentDidMount () {
-    this.setState({
-      content: this.room!.textbookContent,
-    });
   }
 
   public componentWillUnmount () {
