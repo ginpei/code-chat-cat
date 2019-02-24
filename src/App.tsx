@@ -27,7 +27,7 @@ interface IAppState {
 
 class App extends Component<IAppProps, IAppState> {
   protected store = createStore<IState, Action, {}, {}>(rootReducer);
-  protected unsubscribe: (() => void) | null = null;
+  protected unsubscribe: () => void;
   protected unsubscribeUserRooms: () => void;
 
   constructor (props: IAppProps) {
@@ -35,6 +35,7 @@ class App extends Component<IAppProps, IAppState> {
     this.state = {
       ready: false,
     };
+    this.unsubscribe = () => undefined;
     this.unsubscribeUserRooms = () => undefined;
   }
 
@@ -83,9 +84,7 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public componentWillUnmount () {
-    if (this.unsubscribe) {
-      this.unsubscribe();
-    }
+    this.unsubscribe();
     this.unsubscribeUserRooms();
   }
 }
