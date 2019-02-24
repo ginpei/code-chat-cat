@@ -49,10 +49,15 @@ export async function initializeCurrentUser (store: Store) {
 
 function getReady (store: Store) {
   if (!store.getState().currentUser.ready) {
-    store.dispatch({
-      ready: true,
-      type: CurrentUserActionTypes.setReady,
-    });
+    // if not wait, store subscriber won't be called back in App.tsx
+    // when not logged in and hot module replacement happened
+    // (why??)
+    setTimeout(() => {
+      store.dispatch({
+        ready: true,
+        type: CurrentUserActionTypes.setReady,
+      });
+    }, 1);
   }
 }
 

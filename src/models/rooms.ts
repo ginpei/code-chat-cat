@@ -12,7 +12,7 @@ export function connectUserRooms2 (store: Store) {
   }
   unsubscribeUserRooms = null;
 
-  let userId: string = '';
+  let userId: string = '.'; // this ID never exists
   let unsubscribeUserRoomsSnapshot: () => void = () => undefined;
   const unsubscribeStore = store.subscribe(() => {
     const state = store.getState();
@@ -24,8 +24,21 @@ export function connectUserRooms2 (store: Store) {
     userId = newUserId;
 
     if (!userId) {
+      store.dispatch({
+        rooms: [],
+        type: RoomsActionTypes.setUserRooms,
+      });
+      store.dispatch({
+        ready: true,
+        type: RoomsActionTypes.setReady,
+      });
       return;
     }
+
+    store.dispatch({
+      ready: false,
+      type: RoomsActionTypes.setReady,
+    });
 
     const userRoomsRef = roomsRef.where('userId', '==', userId);
     unsubscribeUserRoomsSnapshot = userRoomsRef.onSnapshot({
@@ -39,6 +52,10 @@ export function connectUserRooms2 (store: Store) {
         store.dispatch({
           rooms,
           type: RoomsActionTypes.setUserRooms,
+        });
+        store.dispatch({
+          ready: true,
+          type: RoomsActionTypes.setReady,
         });
       },
     });

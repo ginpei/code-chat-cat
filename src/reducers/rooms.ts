@@ -9,9 +9,11 @@ export interface IRoomRecord extends IRecord {
 }
 export type IRoom = ClientRecord<IRoomRecord>;
 export interface IRoomState {
+  ready: boolean;
   userRooms: IRoom[];
 }
 const defaultRooms: IRoomState = {
+  ready: false,
   userRooms: [],
 };
 
@@ -19,11 +21,29 @@ const defaultRooms: IRoomState = {
 // actions
 
 export enum RoomsActionTypes {
+  setReady = 'rooms/setReady',
   setUserRooms = 'rooms/setUserRooms',
   saveRoom = 'rooms/saveRoom',
 }
 
-export type RoomsAction = IRoomsSetUserRoomsAction | IRoomsSaveRoomAction;
+export type RoomsAction = IRoomsSetReadyAction | IRoomsSetUserRoomsAction | IRoomsSaveRoomAction;
+
+// --------------------------
+// set ready or not
+
+interface IRoomsSetReadyAction {
+  ready: boolean;
+  type: RoomsActionTypes.setReady;
+}
+function setReady (
+  state: IRoomState,
+  action: IRoomsSetReadyAction,
+): IRoomState {
+  return {
+    ...state,
+    ready: action.ready,
+  };
+}
 
 // --------------------------
 // set user's rooms
@@ -75,6 +95,8 @@ function saveRoom (
 
 export default (state: IRoomState = defaultRooms, action: RoomsAction) => {
   switch (action.type) {
+    case RoomsActionTypes.setReady:
+      return setReady(state, action);
     case RoomsActionTypes.setUserRooms:
       return setUserRooms(state, action);
     case RoomsActionTypes.saveRoom:
