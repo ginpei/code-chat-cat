@@ -7,9 +7,9 @@ import Header, { headerHeight } from '../components/Header';
 import LoadingView from '../components/LoadingView';
 import Markdown from '../components/Markdown';
 import syncScroll from '../functions/syncScroll';
-import { observeRoom, updateRoom } from '../models/rooms';
+import { observeRoom } from '../models/rooms';
 import { Dispatch, IState } from '../reducers';
-import { IRoom } from '../reducers/rooms';
+import { IRoom, RoomsActionTypes } from '../reducers/rooms';
 
 const EditorContainer = styled.div`
   display: grid;
@@ -46,6 +46,7 @@ interface IRoomWritePageProps
   extends RouteComponentProps<IRoomWritePageParams> {
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
+  saveRoom: (room: IRoom) => void;
 }
 interface IRoomWritePageState {
   content: string;
@@ -196,14 +197,8 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     this.setState({
       content: newContent,
     });
-    try {
-      await updateRoom({ ...room, textbookContent: newContent });
-    } catch (error) {
-      this.setState({
-        errorMessage: error.message,
-      });
-      console.error(error);
-    }
+
+    this.props.saveRoom({ ...this.state.room!, textbookContent: newContent });
   }
 
   protected updateContent (content: string) {
@@ -224,6 +219,7 @@ const mapStateToProps = (state: IState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
+  saveRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.saveRoom }),
 });
 
 export default connect(

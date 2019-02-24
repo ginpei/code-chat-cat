@@ -5,9 +5,9 @@ import styled from 'styled-components';
 import DefaultLayout from '../components/DefaultLayout';
 import LoadingView from '../components/LoadingView';
 import { appHistory } from '../misc';
-import { connectRoom, deleteRoom, updateRoom } from '../models/rooms';
+import { connectRoom, deleteRoom } from '../models/rooms';
 import { Dispatch, IState } from '../reducers';
-import { IRoom } from '../reducers/rooms';
+import { IRoom, RoomsActionTypes } from '../reducers/rooms';
 
 const DangerZone = styled.div`
   border: solid 1px tomato;
@@ -21,6 +21,7 @@ interface IRoomSettingsPageProps
   extends RouteComponentProps<IRoomSettingsPageParams> {
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
+  saveRoom: (room: IRoom) => void;
 }
 interface IRoomSettingsPageState {
   errorMessage: string;
@@ -201,27 +202,13 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
 
   public async onRoomSubmit (event: React.MouseEvent<HTMLFormElement>) {
     event.preventDefault();
-    this.setState({
-      roomSaving: true,
-    });
 
-    try {
-      const room: IRoom = {
-        ...this.state.room!,
-        active: this.state.roomActive,
-        name: this.state.roomName,
-      };
-      await updateRoom(room);
-    } catch (error) {
-      console.error(error);
-      this.setState({
-        errorMessage: error.message,
-      });
-    } finally {
-      this.setState({
-        roomSaving: false,
-      });
-    }
+    const room: IRoom = {
+      ...this.state.room!,
+      active: this.state.roomActive,
+      name: this.state.roomName,
+    };
+    this.props.saveRoom(room);
   }
 
   public async onRoomDeleteClick (event: React.MouseEvent<HTMLButtonElement>) {
@@ -249,6 +236,7 @@ const mapStateToProps = (state: IState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
+  saveRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.saveRoom }),
 });
 
 export default connect(
