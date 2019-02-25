@@ -1,4 +1,5 @@
 import firebase from 'firebase/app';
+import firebaseui from 'firebaseui';
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { connect } from 'react-redux';
@@ -35,6 +36,7 @@ class LoginPage extends React.Component<ILoginPageProps> {
 
     // TODO
     const uiConfig = {
+      credentialHelper: firebaseui.auth.CredentialHelper.NONE,
       privacyPolicyUrl () {
         window.location.assign('/privacy');
       },
