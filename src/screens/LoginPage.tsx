@@ -1,4 +1,6 @@
+import firebase from 'firebase/app';
 import React from 'react';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DefaultLayout from '../components/DefaultLayout';
@@ -31,17 +33,27 @@ class LoginPage extends React.Component<ILoginPageProps> {
       );
     }
 
+    // TODO
+    const uiConfig = {
+      privacyPolicyUrl () {
+        window.location.assign('/privacy');
+      },
+      signInOptions: [
+        // firebase.auth.GithubAuthProvider.PROVIDER_ID,
+        firebase.auth.EmailAuthProvider.PROVIDER_ID,
+      ],
+      signInSuccessUrl: '/login?success',
+      tosUrl: '/tos',
+    };
+
     return (
       <DefaultLayout>
         <h1>Login</h1>
         <p><Link to="/">Home</Link></p>
-        <p>name [{this.props.currentUser.name}]</p>
-        <p>
-          { this.props.currentUser.loggedIn
-            ? <Link to="/logout">Log out</Link>
-            : <button onClick={this.logIn} disabled={this.props.working} >Log in</button>
-          }
-        </p>
+        <StyledFirebaseAuth
+          firebaseAuth={firebase.auth()}
+          uiConfig={uiConfig}
+        />
       </DefaultLayout>
     );
   }

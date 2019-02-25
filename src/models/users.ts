@@ -16,7 +16,7 @@ export async function initializeCurrentUser (store: Store) {
 
   let lastUserId = '';
   let unsubscribeDatabase: () => void = () => undefined;
-  const unsubscribeStore = store.subscribe(() => {
+  const unsubscribeStore = store.subscribe(async () => {
     const state: IState = store.getState();
     const { firebaseUser } = state.currentUser;
     const uid = firebaseUser ? firebaseUser.uid : '';
@@ -25,6 +25,12 @@ export async function initializeCurrentUser (store: Store) {
       lastUserId = uid;
 
       if (uid) {
+        const firstSnapshot = await usersRef.doc(uid).get();
+
+        if (!firstSnapshot.exists) {
+          await initializeUser(firebaseUser!);
+        }
+
         unsubscribeDatabase = usersRef.doc(uid).onSnapshot((snapshot) => {
           const profile = snapshotToUser(snapshot);
           store.dispatch({
@@ -33,8 +39,11 @@ export async function initializeCurrentUser (store: Store) {
           });
 
           getReady(store);
-        });
+        }, (error) => console.log('ERR', error));
       }
+    } else if (!uid && state.currentUser.profile) {
+      // probably the user is new and while creating initial profile
+      // so do nothing here
     } else {
       getReady(store);
     }
@@ -82,7 +91,7 @@ export async function loadUser (userId: string): Promise<IUserProfile | null> {
 export function initializeUser (firebaseUser: firebase.User) {
   const user: IUserProfile = {
     createdAt: firebase.firestore.Timestamp.now(),
-    id: '',
+    id: firebaseUser.uid,
     name: firebaseUser.displayName || firebaseUser.email || 'Anonymous',
     updatedAt: firebase.firestore.Timestamp.now(),
   };
