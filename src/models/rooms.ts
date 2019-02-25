@@ -148,17 +148,6 @@ export async function deleteRoom (room: IRoom) {
   return roomsRef.doc(room.id).delete();
 }
 
-type RoomObserver = (error: Error | null, room?: IRoom | null) => void;
-export function observeRoom (id: string, observer: RoomObserver): () => void {
-  const ref = roomsRef.doc(id);
-  return ref.onSnapshot((snapshot) => {
-    const room = snapshotToRoom(snapshot);
-    observer(null, room);
-  }, (error) => {
-    observer(error);
-  });
-}
-
 function snapshotToRoom (snapshot: firebase.firestore.DocumentSnapshot): IRoom | null {
   const data = snapshot.data();
   if (!data) {
