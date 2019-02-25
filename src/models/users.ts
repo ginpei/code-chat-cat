@@ -41,8 +41,8 @@ export async function initializeCurrentUser (store: Store) {
           getReady(store);
         }, (error) => console.log('ERR', error));
       }
-    } else if (!uid && state.currentUser.profile) {
-      // probably the user is new and while creating initial profile
+    } else if (uid && !state.currentUser.profile) {
+      // probably the user is logged in and yet fetching profile
       // so do nothing here
     } else {
       getReady(store);
