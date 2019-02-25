@@ -72,6 +72,9 @@ export function connectUserRooms (store: Store) {
 let unsubscribeActiveRooms: (() => void) | null = null;
 export function connectActiveRooms (store: Store, callback?: () => void) {
   if (unsubscribeActiveRooms) {
+    if (callback) {
+      callback();
+    }
     return unsubscribeActiveRooms;
   }
   unsubscribeActiveRooms = null;
@@ -104,13 +107,6 @@ export function connectActiveRooms (store: Store, callback?: () => void) {
     unsubscribeSnapshot();
   };
   return unsubscribeActiveRooms;
-}
-
-export async function loadActiveRooms (): Promise<IRoom[]> {
-  const snapshot = await roomsRef
-    .where('active', '==', true)
-    .get();
-  return snapshot.docs.map((v) => snapshotToRoom(v)!);
 }
 
 type ConnectRoomCallback = (room: IRoom | null) => void;

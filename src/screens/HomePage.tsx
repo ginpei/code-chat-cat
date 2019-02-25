@@ -8,7 +8,8 @@ import { getDefaultHeaderMenu } from '../components/DefaultLayout';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import LoadingView from '../components/LoadingView';
-import { loadActiveRooms } from '../models/rooms';
+import { store } from '../misc';
+import { connectActiveRooms } from '../models/rooms';
 import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
 import { IRoom } from '../reducers/rooms';
@@ -22,52 +23,15 @@ const LogoImage = styled.img`
   }
 `;
 
-const LogoImageSection = () => (
-  <LogoImageContainer>
-    <h1>Code Chat Cat</h1>
-    <LogoImage src={logoImageSrc} width="256" height="256"/>
-  </LogoImageContainer>
-);
-
 interface IHomePageProps {
+  activeRooms: IRoom[];
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
   userProfile: IUserProfile | null;
   userRooms: IRoom[];
 }
 
-interface IHomePageState {
-  ready: boolean;
-  rooms: IRoom[];
-}
-
 function HomePage (props: IHomePageProps) {
-  const [state, setState] = useState<IHomePageState>({
-    ready: false,
-    rooms: [],
-  });
-
-  if (!state.ready) {
-    loadActiveRooms()
-      .then((activeRooms) => {
-        setState({
-          ...state,
-          ready: true,
-          rooms: activeRooms,
-        });
-      })
-      .catch((error) => console.error(error));
-    return (
-      <div>
-        <Header
-          title=""
-        />
-        <LogoImageSection/>
-        <LoadingView/>
-      </div>
-    );
-  }
-
   const menus = getDefaultHeaderMenu(props.userProfile);
 
   return (
@@ -77,10 +41,13 @@ function HomePage (props: IHomePageProps) {
         title=""
       />
       <Container>
-        <LogoImageSection/>
+        <LogoImageContainer>
+          <h1>Code Chat Cat</h1>
+          <LogoImage src={logoImageSrc} width="256" height="256"/>
+        </LogoImageContainer>
         <p>Active rooms</p>
         <ul>
-          {state.rooms.map((room) => (
+          {props.activeRooms.map((room) => (
             <li key={room.id}>
               <Link to={`/rooms/${room.id}`}>{room.name || '(no name)'}</Link>
             </li>
@@ -112,7 +79,29 @@ function HomePage (props: IHomePageProps) {
   );
 }
 
+function Wrapper (props: IHomePageProps) {
+  const [working, setWorking] = useState(false);
+  const [ready, setReady] = useState(false);
+
+  if (!working) {
+    // no need to unsubscribe
+    connectActiveRooms(store, () => setReady(true));
+    setWorking(true);
+  }
+
+  if (!ready) {
+    return (
+      <LoadingView/>
+    );
+  }
+
+  return (
+    <HomePage {...props} />
+  );
+}
+
 const mapStateToProps = (state: IState) => ({
+  activeRooms: state.rooms.activeRooms,
   firebaseUser: state.currentUser.firebaseUser,
   loggedIn: state.currentUser.loggedIn,
   userProfile: state.currentUser.profile,
@@ -122,4 +111,4 @@ const mapStateToProps = (state: IState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) => ({
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
+export default connect(mapStateToProps, mapDispatchToProps)(Wrapper);
