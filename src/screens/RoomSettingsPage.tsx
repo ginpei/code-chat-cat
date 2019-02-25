@@ -20,14 +20,11 @@ interface IRoomSettingsPageParams {
 }
 interface IRoomSettingsPageProps
   extends RouteComponentProps<IRoomSettingsPageParams> {
-  firebaseUser: firebase.User | null;
-  loggedIn: boolean;
+  deleteRoom: (room: IRoom) => void;
   saveRoom: (room: IRoom) => void;
   userRooms: IRoom[];
 }
 interface IRoomSettingsPageState {
-  errorMessage: string;
-  ready: boolean;
   roomActive: boolean;
   roomName: string;
   roomSaving: boolean;
@@ -46,8 +43,6 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     super(props);
     const { room } = this;
     this.state = {
-      errorMessage: '',
-      ready: false,
       roomActive: room ? room.active : false,
       roomName: room ? room.name : '',
       roomSaving: false,
@@ -143,35 +138,44 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
   public async onRoomSubmit (event: React.MouseEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    this.setState({
+      roomSaving: true,
+    });
+
     const room: IRoom = {
       ...this.room!,
       active: this.state.roomActive,
       name: this.state.roomName,
     };
     this.props.saveRoom(room);
+
+    setTimeout(() => {
+      this.setState({
+        roomSaving: false,
+      });
+    }, 500);
   }
 
-  public async onRoomDeleteClick (event: React.MouseEvent<HTMLButtonElement>) {
+  public onRoomDeleteClick (event: React.MouseEvent<HTMLButtonElement>) {
     const ok = confirm('Are you sure you want to delete this room?');
     if (!ok) {
       return;
     }
 
     this.setState({
-      ready: false,
+      roomSaving: true,
     });
-    await deleteRoom(this.room!);
+    this.props.deleteRoom(this.room!);
     appHistory.push('/rooms');
   }
 }
 
 const mapStateToProps = (state: IState) => ({
-  firebaseUser: state.currentUser.firebaseUser,
-  loggedIn: state.currentUser.loggedIn,
   userRooms: state.rooms.userRooms,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
+  deleteRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.deleteRoom }),
   saveRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.saveRoom }),
 });
 

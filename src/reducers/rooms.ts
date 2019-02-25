@@ -1,5 +1,5 @@
 import { ClientRecord, IRecord } from '../misc';
-import { updateRoom } from '../models/rooms';
+import { deleteRoom as firebaseDeleteRoom, updateRoom } from '../models/rooms';
 
 export interface IRoomRecord extends IRecord {
   active: boolean;
@@ -27,13 +27,15 @@ export enum RoomsActionTypes {
   setActiveRooms = 'rooms/setActiveRooms',
   setUserRooms = 'rooms/setUserRooms',
   saveRoom = 'rooms/saveRoom',
+  deleteRoom = 'rooms/deleteRoom',
 }
 
 export type RoomsAction =
   | IRoomsSetReadyAction
   | IRoomsSetActiveRoomsAction
   | IRoomsSetUserRoomsAction
-  | IRoomsSaveRoomAction;
+  | IRoomsSaveRoomAction
+  | IRoomsDeleteRoomAction;
 
 // --------------------------
 // set ready or not
@@ -87,7 +89,7 @@ function setUserRooms (
 }
 
 // --------------------------
-// save user's rooms
+// save user's room
 
 interface IRoomsSaveRoomAction {
   type: RoomsActionTypes.saveRoom;
@@ -115,6 +117,34 @@ function saveRoom (
 }
 
 // --------------------------
+// delete user's room
+
+interface IRoomsDeleteRoomAction {
+  type: RoomsActionTypes.deleteRoom;
+  room: IRoom;
+}
+function deleteRoom (
+  state: IRoomState,
+  action: IRoomsDeleteRoomAction,
+): IRoomState {
+  const userRooms = [...state.userRooms];
+  const { room } = action;
+  const index = userRooms.findIndex((v) => v.id === room.id);
+  if (index >= 0) {
+    userRooms.splice(index, 1);
+  } else {
+    throw new Error('Attempted delete non-existing room');
+  }
+
+  firebaseDeleteRoom(room);
+
+  return {
+    ...state,
+    userRooms,
+  };
+}
+
+// --------------------------
 // Reducer
 
 export default (
@@ -130,6 +160,8 @@ export default (
       return setUserRooms(state, action);
     case RoomsActionTypes.saveRoom:
       return saveRoom(state, action);
+    case RoomsActionTypes.deleteRoom:
+      return deleteRoom(state, action);
     default:
       return state;
   }
