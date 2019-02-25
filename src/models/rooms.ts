@@ -109,19 +109,6 @@ export function connectActiveRooms (store: Store, callback?: () => void) {
   return unsubscribeActiveRooms;
 }
 
-type ConnectRoomCallback = (room: IRoom | null) => void;
-type ConnectRoomErrorCallback = (error: Error) => void;
-export function connectRoom (
-  id: string,
-  callback: ConnectRoomCallback,
-  onError?: ConnectRoomErrorCallback,
-): () => void {
-  return roomsRef.doc(id).onSnapshot((snapshot) => {
-    const room = snapshotToRoom(snapshot);
-    callback(room);
-  }, onError);
-}
-
 export function createRoom (
   roomData: { name: string; userId: string; },
 ) {

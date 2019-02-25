@@ -5,9 +5,10 @@ import styled from 'styled-components';
 import DefaultLayout from '../components/DefaultLayout';
 import LoadingView from '../components/LoadingView';
 import { appHistory } from '../misc';
-import { connectRoom, deleteRoom } from '../models/rooms';
+import { deleteRoom } from '../models/rooms';
 import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
+import NotFoundPage from './NotFoundPage';
 
 const DangerZone = styled.div`
   border: solid 1px tomato;
@@ -22,31 +23,33 @@ interface IRoomSettingsPageProps
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
   saveRoom: (room: IRoom) => void;
+  userRooms: IRoom[];
 }
 interface IRoomSettingsPageState {
   errorMessage: string;
   ready: boolean;
-  room: IRoom | null;
   roomActive: boolean;
   roomName: string;
   roomSaving: boolean;
 }
 
 class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSettingsPageState> {
-  protected unsubscribe: (() => void) | null = null;
-
   protected get roomId () {
     return this.props.match.params.id;
   }
 
+  protected get room () {
+    return this.props.userRooms.find((v) => v.id === this.roomId) || null;
+  }
+
   constructor (props: IRoomSettingsPageProps) {
     super(props);
+    const { room } = this;
     this.state = {
       errorMessage: '',
       ready: false,
-      room: null,
-      roomActive: false,
-      roomName: '',
+      roomActive: room ? room.active : false,
+      roomName: room ? room.name : '',
       roomSaving: false,
     };
     this.onRoomNameChange = this.onRoomNameChange.bind(this);
@@ -56,44 +59,11 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
   }
 
   public render () {
-    const room = this.state.room;
-
-    // TODO error view
-    if (this.state.errorMessage) {
-      return (
-        <div>
-          <p>{this.state.errorMessage}</p>
-        </div>
-      );
-    }
-
-    if (!this.state.ready) {
-      return (
-        <DefaultLayout>
-          <LoadingView/>
-        </DefaultLayout>
-      );
-    }
+    const room = this.room;
 
     if (!room) {
       return (
-        <div>
-          <p>404</p>
-        </div>
-      );
-    }
-
-    if (!this.props.firebaseUser) {
-      return (
-        <div>
-          <p>401</p>
-        </div>
-      );
-    } else if (this.props.firebaseUser.uid !== room.userId) {
-      return (
-        <div>
-          <p>403</p>
-        </div>
+        <NotFoundPage/>
       );
     }
 
@@ -158,36 +128,6 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     );
   }
 
-  public componentDidMount () {
-    this.unsubscribe = connectRoom(this.roomId, (room) => {
-      this.setState({ room });
-
-      if (!this.state.ready) {
-        if (room) {
-          this.setState({
-            ready: true,
-            roomActive: room.active,
-            roomName: room.name,
-          });
-        } else {
-          this.setState({
-            ready: true,
-          });
-        }
-      }
-    }, (error) => {
-      this.setState({
-        errorMessage: error.message,
-      });
-    });
-  }
-
-  public componentWillUnmount () {
-    if (this.unsubscribe) {
-      this.unsubscribe();
-    }
-  }
-
   public onRoomNameChange (event: React.ChangeEvent<HTMLInputElement>) {
     const el = event.currentTarget;
     const roomName = el.value;
@@ -204,7 +144,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     event.preventDefault();
 
     const room: IRoom = {
-      ...this.state.room!,
+      ...this.room!,
       active: this.state.roomActive,
       name: this.state.roomName,
     };
@@ -217,15 +157,10 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
       return;
     }
 
-    // disconnect not to show 404
-    if (this.unsubscribe) {
-      this.unsubscribe();
-    }
-
     this.setState({
       ready: false,
     });
-    await deleteRoom(this.state.room!);
+    await deleteRoom(this.room!);
     appHistory.push('/rooms');
   }
 }
@@ -233,6 +168,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
 const mapStateToProps = (state: IState) => ({
   firebaseUser: state.currentUser.firebaseUser,
   loggedIn: state.currentUser.loggedIn,
+  userRooms: state.rooms.userRooms,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
