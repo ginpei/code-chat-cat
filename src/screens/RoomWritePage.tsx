@@ -114,6 +114,10 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     );
   }
 
+  public componentDidMount () {
+    this.subscribeSyncScroll();
+  }
+
   public componentWillUnmount () {
     if (this.unsubscribeSyncScroll) {
       this.unsubscribeSyncScroll();
@@ -121,19 +125,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
   }
 
   public componentDidUpdate () {
-    if (this.unsubscribeSyncScroll) {
-      this.unsubscribeSyncScroll();
-    }
-
-    const els = [
-      this.refInput.current!,
-      this.refOutput.current!,
-    ];
-    if (!els.every((v) => Boolean(v))) {
-      return;
-    }
-
-    this.unsubscribeSyncScroll = syncScroll(els);
+    this.subscribeSyncScroll();
   }
 
   public async onContentInput (event: React.ChangeEvent<HTMLTextAreaElement>) {
@@ -148,6 +140,22 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     });
 
     this.props.saveRoom({ ...room!, textbookContent: newContent });
+  }
+
+  protected subscribeSyncScroll () {
+    if (this.unsubscribeSyncScroll) {
+      this.unsubscribeSyncScroll();
+    }
+
+    const els = [
+      this.refInput.current!,
+      this.refOutput.current!,
+    ];
+    if (!els.every((v) => Boolean(v))) {
+      return;
+    }
+
+    this.unsubscribeSyncScroll = syncScroll(els);
   }
 
   protected updateContent (content: string) {
