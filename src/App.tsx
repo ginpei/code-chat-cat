@@ -9,12 +9,14 @@ import HomePage from './screens/HomePage';
 import LoginPage from './screens/LoginPage';
 import LogoutPage from './screens/LogoutPage';
 import NotFoundPage from './screens/NotFoundPage';
+import PrivacyPage from './screens/PrivacyPage';
 import RoomListPage from './screens/RoomListPage';
 import RoomNewPage from './screens/RoomNewPage';
 import RoomSettingsPage from './screens/RoomSettingsPage';
 import RoomTextbookPage from './screens/RoomTextbookPage';
 import RoomWritePage from './screens/RoomWritePage';
 import SettingsPage from './screens/SettingsPage';
+import TermsPage from './screens/TermsPage';
 
 // tslint:disable:no-empty-interface
 interface IAppProps {
@@ -57,6 +59,8 @@ class App extends Component<IAppProps, IAppState> {
               <Route exact={true} path="/rooms/:id/write" component={RoomWritePage}/>
               <Route exact={true} path="/rooms/:id/settings" component={RoomSettingsPage}/>
               <Route exact={true} path="/settings" component={SettingsPage}/>
+              <Route exact={true} path="/terms" component={TermsPage}/>
+              <Route exact={true} path="/privacy" component={PrivacyPage}/>
               <Route component={NotFoundPage}/>
             </Switch>
           </div>

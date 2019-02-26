@@ -5,6 +5,7 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DefaultLayout from '../components/DefaultLayout';
+import { appHistory } from '../misc';
 import * as users from '../models/users';
 import { Dispatch, IState } from '../reducers';
 import { CurrentUserActionTypes } from '../reducers/currentUser';
@@ -30,15 +31,13 @@ class LoginPage extends React.Component<ILoginPageProps> {
 
     const uiConfig = {
       credentialHelper: firebaseui.auth.CredentialHelper.NONE,
-      privacyPolicyUrl () {
-        window.location.assign('/privacy'); // TODO
-      },
+      privacyPolicyUrl: () => appHistory.push('/privacy'),
       signInOptions: [
         firebase.auth.GithubAuthProvider.PROVIDER_ID,
         firebase.auth.EmailAuthProvider.PROVIDER_ID,
       ],
       signInSuccessUrl: '/login?success', // TODO
-      tosUrl: '/tos', // TODO
+      tosUrl: () => appHistory.push('/terms'),
     };
 
     return (
