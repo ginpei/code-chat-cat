@@ -31,7 +31,6 @@ function LoginPage (props: ILoginPageProps) {
       firebase.auth.GithubAuthProvider.PROVIDER_ID,
       firebase.auth.EmailAuthProvider.PROVIDER_ID,
     ],
-    signInSuccessUrl: '/login?success', // TODO
     tosUrl: () => appHistory.push('/terms'),
   };
 
