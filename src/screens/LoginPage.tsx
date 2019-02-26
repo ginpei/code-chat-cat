@@ -16,12 +16,6 @@ interface ILoginPageProps {
 }
 
 class LoginPage extends React.Component<ILoginPageProps> {
-  constructor (props: ILoginPageProps) {
-    super(props);
-
-    this.logIn = this.logIn.bind(this);
-  }
-
   public render () {
     if (this.props.currentUser.loggedIn) {
       return (
@@ -34,18 +28,17 @@ class LoginPage extends React.Component<ILoginPageProps> {
       );
     }
 
-    // TODO
     const uiConfig = {
       credentialHelper: firebaseui.auth.CredentialHelper.NONE,
       privacyPolicyUrl () {
-        window.location.assign('/privacy');
+        window.location.assign('/privacy'); // TODO
       },
       signInOptions: [
-        // firebase.auth.GithubAuthProvider.PROVIDER_ID,
+        firebase.auth.GithubAuthProvider.PROVIDER_ID,
         firebase.auth.EmailAuthProvider.PROVIDER_ID,
       ],
-      signInSuccessUrl: '/login?success',
-      tosUrl: '/tos',
+      signInSuccessUrl: '/login?success', // TODO
+      tosUrl: '/tos', // TODO
     };
 
     return (
@@ -58,12 +51,6 @@ class LoginPage extends React.Component<ILoginPageProps> {
         />
       </DefaultLayout>
     );
-  }
-
-  public async logIn () {
-    this.props.setWorking(true);
-    await users.logIn();
-    this.props.setWorking(false);
   }
 }
 
