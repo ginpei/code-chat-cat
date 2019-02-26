@@ -29,8 +29,8 @@ class LoginPage extends React.Component<ILoginPageProps> {
       );
     }
 
-    const uiConfig = {
-      credentialHelper: firebaseui.auth.CredentialHelper.NONE,
+    const uiConfig: firebaseui.auth.Config = {
+      credentialHelper: firebaseui.auth.CredentialHelper.NONE, // disable AccountChooser.com
       privacyPolicyUrl: () => appHistory.push('/privacy'),
       signInOptions: [
         firebase.auth.GithubAuthProvider.PROVIDER_ID,
