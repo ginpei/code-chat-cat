@@ -25,7 +25,7 @@ export default function path (base: string, params?: any): string {
     case 'room-write': return `${path('room', params)}/write`;
     case 'room': return `/rooms/${params.id}`;
     case 'settings': return '/settings';
-    default:throw new Error('Unknown path');
+    default: throw new Error(`Unknown path: ${base}`);
   }
 }
 
