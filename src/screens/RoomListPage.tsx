@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DefaultLayout from '../components/DefaultLayout';
+import { RoomLink } from '../path';
 import { IState } from '../reducers';
 import { IRoom } from '../reducers/rooms';
 
@@ -12,9 +13,9 @@ function RoomItem ({ room }: { room: IRoom }) {
       <td>
         {active && <span title="Active">✅</span>}
       </td>
-      <td><Link to={`/rooms/${room.id}/settings`}>💬 {name}</Link></td>
-      <td><Link to={`/rooms/${room.id}/`}>📖 View</Link></td>
-      <td><Link to={`/rooms/${room.id}/write`}>📝 Write</Link></td>
+      <td><RoomLink room={room} type="settings">💬 {name}</RoomLink></td>
+      <td><RoomLink room={room}>📖 View</RoomLink></td>
+      <td><RoomLink room={room} type="write">📝 Write</RoomLink></td>
       <td>{String(room.updatedAt && room.updatedAt.toDate())}</td>
     </tr>
   );

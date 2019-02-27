@@ -3,9 +3,9 @@ import firebaseui from 'firebaseui';
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import DefaultLayout from '../components/DefaultLayout';
 import { appHistory } from '../misc';
+import { HomeLink } from '../path';
 import { Dispatch, IState } from '../reducers';
 
 interface ILoginPageProps {
@@ -17,9 +17,7 @@ function LoginPage (props: ILoginPageProps) {
     return (
       <DefaultLayout>
         <h1>Logged in ✓</h1>
-        <p>
-          <Link to="/">Back to Home</Link>
-        </p>
+        <p><HomeLink/></p>
       </DefaultLayout>
     );
   }
@@ -37,7 +35,7 @@ function LoginPage (props: ILoginPageProps) {
   return (
     <DefaultLayout>
       <h1>Login</h1>
-      <p><Link to="/">Home</Link></p>
+      <p><HomeLink/></p>
       <StyledFirebaseAuth
         firebaseAuth={firebase.auth()}
         uiConfig={uiConfig}

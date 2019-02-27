@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DefaultLayout from '../components/DefaultLayout';
 import * as users from '../models/users';
+import path from '../path';
 import { Dispatch, IState } from '../reducers';
 import { ICurrentUser, IUserProfile } from '../reducers/currentUser';
 
@@ -32,9 +33,7 @@ class SettingsPage extends React.Component<ISettingsPageProps, ISettingsPageStat
     if (!this.props.currentUser.loggedIn) {
       return (
         <DefaultLayout>
-          <p>
-            <Link to="/login">Login</Link>
-          </p>
+          <p><Link to={path('login')}>Login</Link></p>
         </DefaultLayout>
       );
     }

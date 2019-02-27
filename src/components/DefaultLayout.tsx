@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Container from '../components/Container';
 import Footer from '../components/Footer';
 import Header, { headerHeight } from '../components/Header';
+import path from '../path';
 import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
 import { IHeaderMenu } from './HeaderMenu';
@@ -41,15 +42,15 @@ function getLoggedInMenu (profile: IUserProfile): IHeaderMenu[] {
   return [
     {
       links: [
-        { title: 'List', href: '/rooms' },
-        { title: 'Create new', href: '/rooms/new' },
+        { title: 'List', href: path('room-list') },
+        { title: 'Create new', href: path('room-new') },
       ],
       name: 'Rooms',
     },
     {
       links: [
-        { title: 'Settings', href: '/settings' },
-        { title: 'Log out', href: '/logout' },
+        { title: 'Settings', href: path('settings') },
+        { title: 'Log out', href: path('logout') },
       ],
       name: profile.name,
     },
@@ -60,7 +61,7 @@ function getAnonymousMenu (): IHeaderMenu[] {
   return [
     {
       links: [
-        { title: 'Log in', href: '/login' },
+        { title: 'Log in', href: path('login') },
       ],
       name: 'Account',
     },

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import DefaultLayout from '../components/DefaultLayout';
 import * as users from '../models/users';
+import { HomeLink } from '../path';
 
 export default function LogoutPage () {
   const [done, setDone] = useState(false);
@@ -11,10 +11,11 @@ export default function LogoutPage () {
 
   return (
     <DefaultLayout>
+
       {done ? (
         <>
           <h1>Logged out ✓</h1>
-          <p><Link to="/">Back to Home</Link></p>
+          <p><HomeLink/></p>
         </>
       ) : (
         <p>Logging out...</p>

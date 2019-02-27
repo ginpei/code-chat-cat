@@ -10,6 +10,7 @@ import Header from '../components/Header';
 import LoadingView from '../components/LoadingView';
 import { store } from '../misc';
 import { connectActiveRooms } from '../models/rooms';
+import path, { RoomLink } from '../path';
 import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
 import { IRoom } from '../reducers/rooms';
@@ -49,7 +50,7 @@ function HomePage (props: IHomePageProps) {
         <ul>
           {props.activeRooms.map((room) => (
             <li key={room.id}>
-              <Link to={`/rooms/${room.id}`}>{room.name || '(no name)'}</Link>
+              <RoomLink room={room}/>
             </li>
           ))}
         </ul>
@@ -57,21 +58,19 @@ function HomePage (props: IHomePageProps) {
           <>
             <p>
               Welcome back, {props.userProfile!.name}!
-              <Link to="/logout">Log out</Link>
+              <Link to={path('logout')}>Log out</Link>
             </p>
             <p>Your rooms</p>
             <ul>
               {props.userRooms.map((room) => (
                 <li key={room.id}>
-                  <Link to={`/rooms/${room.id}/settings`}>{room.name || '(no name)'}</Link>
-                  {' / '}
-                  [<Link to={`/rooms/${room.id}`}>Textbook</Link>]
+                  <RoomLink room={room} type="settings"/>
                 </li>
               ))}
             </ul>
           </>
         ) : (
-          <p><Link to="/login">Login</Link></p>
+          <p><Link to={path('login')}>Login</Link></p>
         )}
       </Container>
       <Footer/>

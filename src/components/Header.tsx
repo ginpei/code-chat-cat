@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import path from '../path';
 import Container from './Container';
 import HeaderMenu, { IHeaderMenu } from './HeaderMenu';
 
@@ -71,7 +72,7 @@ export default class Header extends React.Component<IHeaderProps> {
                   <span>{this.props.title}</span>
                 )
               ) : (
-                <HeaderLink to="/">Code Chat Cat</HeaderLink>
+                <HeaderLink to={path('home')}>Code Chat Cat</HeaderLink>
               )}
             </Title>
             <HeaderMenu menus={this.props.menus}/>

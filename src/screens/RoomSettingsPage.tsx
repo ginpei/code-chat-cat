@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 import DefaultLayout from '../components/DefaultLayout';
 import LoadingView from '../components/LoadingView';
 import { appHistory } from '../misc';
 import { deleteRoom } from '../models/rooms';
+import { RoomLink } from '../path';
 import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
 import NotFoundPage from './NotFoundPage';
@@ -66,9 +67,9 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
       <DefaultLayout>
         <h1>Room settings</h1>
         <p>
-          <Link to={`/rooms/${room.id}`}>Textbook</Link>
+          <RoomLink room={room}>Textbook</RoomLink>
           {' | '}
-          <Link to={`/rooms/${room.id}/write`}>Write</Link>
+          <RoomLink room={room} type="write">Write</RoomLink>
         </p>
         <form
           onSubmit={this.onRoomSubmit}
