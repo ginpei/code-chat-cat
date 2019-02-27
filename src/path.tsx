@@ -16,26 +16,16 @@ export default function path (
 ): string;
 export default function path (base: string, params?: any): string {
   switch (base) {
-    case 'home':
-      return '/';
-    case 'settings':
-      return '/settings';
-    case 'login':
-      return '/login';
-    case 'logout':
-      return '/logout';
-    case 'room-list':
-      return '/rooms';
-    case 'room-new':
-      return '/rooms/new';
-    case 'room':
-      return `/rooms/${params.id}`;
-    case 'room-write':
-      return `${path('room', params)}/write`;
-    case 'room-settings':
-      return `${path('room', params)}/settings`;
-    default:
-      throw new Error('Unknown path');
+    case 'home': return '/';
+    case 'login': return '/login';
+    case 'logout': return '/logout';
+    case 'room-list': return '/rooms';
+    case 'room-new': return '/rooms/new';
+    case 'room-settings': return `${path('room', params)}/settings`;
+    case 'room-write': return `${path('room', params)}/write`;
+    case 'room': return `/rooms/${params.id}`;
+    case 'settings': return '/settings';
+    default:throw new Error('Unknown path');
   }
 }
 
