@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DefaultLayout from '../components/DefaultLayout';
-import { RoomLink } from '../path';
+import path, { RoomLink } from '../path';
 import { IState } from '../reducers';
 import { IRoom } from '../reducers/rooms';
 
@@ -34,7 +34,7 @@ class RoomListPage extends React.Component<IRoomListPageProps> {
       <DefaultLayout>
         <h1>Room list</h1>
         <p>
-          <Link to="/rooms/new">Create new room</Link>
+          <Link to={path('room-new')}>Create new room</Link>
         </p>
         <p>✅ Active room</p>
         {rooms.length < 1 ? (
