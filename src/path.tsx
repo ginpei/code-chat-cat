@@ -2,7 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { IRoom } from './reducers/rooms';
 
-export default function path (base: 'home' | 'settings' | 'login' | 'logout' | 'room-list' | 'room-new'): string;
+type SimplePathBase =
+  | 'home'
+  | 'settings'
+  | 'login'
+  | 'logout'
+  | 'room-list'
+  | 'room-new';
+export default function path (base: SimplePathBase): string;
 export default function path (
   base: 'room' | 'room-write' | 'room-settings',
   params: { id: string },
