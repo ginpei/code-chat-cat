@@ -1,6 +1,11 @@
 import hljs from 'highlight.js';
 import MarkdownIt from 'markdown-it';
 import React from 'react';
+import styled from 'styled-components';
+
+const MarkdownBlock = styled.div.attrs({
+  className: 'Markdown-Container',
+})``;
 
 interface IMarkdownProps {
   content: string;
@@ -35,7 +40,7 @@ export default class Markdown extends React.Component<IMarkdownProps> {
 
   public render () {
     return (
-      <div dangerouslySetInnerHTML={{ __html: this.content }}/>
+      <MarkdownBlock dangerouslySetInnerHTML={{ __html: this.content }}/>
     );
   }
 }
