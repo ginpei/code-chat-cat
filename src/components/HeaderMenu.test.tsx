@@ -2,7 +2,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
 import HeaderMenu, { IHeaderMenu } from './HeaderMenu';
 
-describe('path', () => {
+describe('<HeaderMenu>', () => {
   let wrapper: ShallowWrapper;
 
   describe('default', () => {
