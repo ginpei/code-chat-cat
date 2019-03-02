@@ -33,12 +33,10 @@ export function HomeLink () {
   return <Link to={path('home')}>Home</Link>;
 }
 
-export function RoomLink (props: {
-  // children?: string | JSX.Element | JSX.Element[]; // TODO
-  children?: any;
+export function RoomLink (props: React.PropsWithChildren<{
   room: IRoom;
   type?: 'settings' | 'write';
-}) {
+}>) {
   const base =
     props.type === 'write'
       ? 'room-write'
