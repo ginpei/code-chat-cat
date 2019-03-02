@@ -12,6 +12,7 @@ describe('path', () => {
       expect(path('login')).toBe('/login');
       expect(path('logout')).toBe('/logout');
       expect(path('settings')).toBe('/settings');
+      expect(() => path('undefined-path' as any)).toThrow('undefined-path');
     });
 
     describe('room', () => {
@@ -75,13 +76,27 @@ describe('path', () => {
       });
     });
 
-    describe('type', () => {
+    describe('write', () => {
       beforeEach(() => {
         wrapper = shallow(<RoomLink room={room} type="write"/>);
       });
 
       it('sets room home path', () => {
         expect(wrapper.find(Link).prop('to')).toBe('/rooms/roomId123/write');
+      });
+
+      it('sets room name as link text', () => {
+        expect(wrapper.find(Link).prop('children')).toBe('Room Name');
+      });
+    });
+
+    describe('settings', () => {
+      beforeEach(() => {
+        wrapper = shallow(<RoomLink room={room} type="settings"/>);
+      });
+
+      it('sets room home path', () => {
+        expect(wrapper.find(Link).prop('to')).toBe('/rooms/roomId123/settings');
       });
 
       it('sets room name as link text', () => {
