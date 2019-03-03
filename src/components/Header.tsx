@@ -29,7 +29,7 @@ const HeaderLink = styled(Link)`
     text-decoration: underline;
   }
 `;
-const FullscreenContainer = styled.div`
+export const FullscreenContainer = styled.div`
   padding: 0 1rem;
 `;
 

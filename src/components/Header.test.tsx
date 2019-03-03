@@ -1,6 +1,8 @@
-import { shallow, ShallowWrapper } from 'enzyme';
+import { mount, shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
-import Header from './Header';
+import { BrowserRouter } from 'react-router-dom';
+import Container from './Container';
+import Header, { FullscreenContainer } from './Header';
 import { IHeaderMenu } from './HeaderMenu';
 
 describe('<Header>', () => {
@@ -11,12 +13,6 @@ describe('<Header>', () => {
     beforeEach(() => {
       wrapper = shallow(<Header/>);
       container = wrapper.childAt(0).childAt(0);
-    });
-
-    // TODO find out how to do this
-    it.skip('is not fullscreen mode', () => {
-      const innerContainer = wrapper.childAt(0).childAt(0);
-      expect(innerContainer.props()).toEqual(NaN);
     });
 
     it('renders app name as title', () => {
@@ -36,8 +32,24 @@ describe('<Header>', () => {
     });
   });
 
-  describe.skip('fullscreen', () => {
-    // how to test it?
+  describe('fullscreen', () => {
+    it('renders in container', () => {
+      const w = mount((
+        <BrowserRouter>
+          <Header/>
+        </BrowserRouter>
+      ));
+      expect(w.find(Container)).toHaveLength(1);
+    });
+
+    it('renders in fullscreen size', () => {
+      const w = mount((
+        <BrowserRouter>
+          <Header fullscreen={true} />
+        </BrowserRouter>
+      ));
+      expect(w.find(FullscreenContainer)).toHaveLength(1);
+    });
   });
 
   describe('title', () => {
