@@ -170,17 +170,13 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
   }
 }
 
-const mapStateToProps = (state: IState) => ({
-  firebaseUser: state.currentUser.firebaseUser,
-  loggedIn: state.currentUser.loggedIn,
-  userRooms: state.rooms.userRooms,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.saveRoom }),
-});
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
+  (state: IState) => ({
+    firebaseUser: state.currentUser.firebaseUser,
+    loggedIn: state.currentUser.loggedIn,
+    userRooms: state.rooms.userRooms,
+  }),
+  (dispatch: Dispatch) => ({
+    saveRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.saveRoom }),
+  }),
 )(RoomWritePage);

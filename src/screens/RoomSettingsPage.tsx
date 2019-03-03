@@ -171,16 +171,12 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
   }
 }
 
-const mapStateToProps = (state: IState) => ({
-  userRooms: state.rooms.userRooms,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  deleteRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.deleteRoom }),
-  saveRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.saveRoom }),
-});
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
+  (state: IState) => ({
+    userRooms: state.rooms.userRooms,
+  }),
+  (dispatch: Dispatch) => ({
+    deleteRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.deleteRoom }),
+    saveRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.saveRoom }),
+  }),
 )(RoomSettingsPage);

@@ -56,9 +56,9 @@ class RoomListPage extends React.Component<IRoomListPageProps> {
   }
 }
 
-const mapStateToProps = (state: IState) => ({
-  userId: state.currentUser.uid,
-  userRooms: state.rooms.userRooms,
-});
-
-export default connect(mapStateToProps)(RoomListPage);
+export default connect(
+  (state: IState) => ({
+    userId: state.currentUser.uid,
+    userRooms: state.rooms.userRooms,
+  }),
+)(RoomListPage);

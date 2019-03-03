@@ -48,6 +48,4 @@ export default connect(
   (state: IState) => ({
     loggedIn: state.currentUser.loggedIn,
   }),
-  (dispatch: Dispatch) => ({
-  }),
 )(LoginPage);

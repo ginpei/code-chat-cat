@@ -99,15 +99,12 @@ function Wrapper (props: IHomePageProps) {
   );
 }
 
-const mapStateToProps = (state: IState) => ({
-  activeRooms: state.rooms.activeRooms,
-  firebaseUser: state.currentUser.firebaseUser,
-  loggedIn: state.currentUser.loggedIn,
-  userProfile: state.currentUser.profile,
-  userRooms: state.rooms.userRooms,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Wrapper);
+export default connect(
+  (state: IState) => ({
+    activeRooms: state.rooms.activeRooms,
+    firebaseUser: state.currentUser.firebaseUser,
+    loggedIn: state.currentUser.loggedIn,
+    userProfile: state.currentUser.profile,
+    userRooms: state.rooms.userRooms,
+  }),
+)(Wrapper);

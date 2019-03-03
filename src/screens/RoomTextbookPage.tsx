@@ -98,6 +98,4 @@ export default connect(
     activeRooms: state.rooms.activeRooms,
     userRooms: state.rooms.userRooms,
   }),
-  (dispatch: Dispatch) => ({
-  }),
 )(Wrapper);

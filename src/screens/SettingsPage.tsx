@@ -117,12 +117,9 @@ class SettingsPage extends React.Component<ISettingsPageProps, ISettingsPageStat
   }
 }
 
-const mapStateToProps = (state: IState) => ({
-  currentUser: state.currentUser,
-  userProfile: state.currentUser.profile,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SettingsPage);
+export default connect(
+  (state: IState) => ({
+    currentUser: state.currentUser,
+    userProfile: state.currentUser.profile,
+  }),
+)(SettingsPage);

@@ -103,18 +103,8 @@ class RoomNewPage extends React.Component<IRoomNewPageProps, IRoomNewPageState> 
   }
 }
 
-const mapStateToProps = (state: IState) => ({
-  userId: state.currentUser.uid,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  // setRooms: (rooms: IRoom[]) => dispatch({
-  //   rooms,
-  //   type: RoomsActionTypes.setRooms,
-  // }),
-});
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
+  (state: IState) => ({
+    userId: state.currentUser.uid,
+  }),
 )(RoomNewPage);

@@ -68,11 +68,8 @@ function getAnonymousMenu (): IHeaderMenu[] {
   ];
 }
 
-const mapStateToProps = (state: IState) => ({
-  userProfile: state.currentUser.profile,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(DefaultLayout);
+export default connect(
+  (state: IState) => ({
+    userProfile: state.currentUser.profile,
+  }),
+)(DefaultLayout);
