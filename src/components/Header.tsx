@@ -33,7 +33,11 @@ const FullscreenContainer = styled.div`
   padding: 0 1rem;
 `;
 
-function InnerContainer (props: any) {
+interface IInnerContainerProps {
+  children: React.ReactNode;
+  fullscreen?: boolean;
+}
+function InnerContainer (props: IInnerContainerProps) {
   if (props.fullscreen) {
     return (
       <FullscreenContainer>{props.children}</FullscreenContainer>
