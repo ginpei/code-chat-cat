@@ -18,7 +18,7 @@ interface IDefaultLayoutProps {
   userProfile: IUserProfile | null;
 }
 
-function DefaultLayout (props: IDefaultLayoutProps) {
+export function DefaultLayout (props: IDefaultLayoutProps) {
   const menus = getDefaultHeaderMenu(props.userProfile);
 
   return (
