@@ -1,11 +1,15 @@
+/**
+ * Set up elements to sync scrolling when each of them scrolls.
+ * @param els The target element to sync scrolling.
+ */
 export default function syncScroll (els: Element[]) {
   let scrolling = false;
   const handleScrolling = createHandler(els);
-  const listener = async (event: Event) => {
+  const listener = (event: Event) => {
     if (!scrolling) {
       scrolling = true;
-      await handleScrolling(event);
-      scrolling = false;
+      handleScrolling(event)
+        .then(() => scrolling = false);
     }
   };
 
@@ -19,8 +23,13 @@ export default function syncScroll (els: Element[]) {
   return unsubscribe;
 }
 
+/**
+ * Create a handler function which should be called when one of the target
+ * event fires a `scroll` event.
+ * @param els The target elements.
+ */
 function createHandler (els: Element[]) {
-  return async (event: Event) => {
+  function onScroll (event: Event) {
     const elTarget = event.currentTarget;
     if (!(elTarget instanceof Element)) {
       return Promise.resolve();
@@ -37,12 +46,18 @@ function createHandler (els: Element[]) {
 
       return scroll(el, progress);
     });
-    // waiting.push(new Promise((f) => setTimeout(f, 100)));
 
     return Promise.all(waiting).then(() => undefined);
-  };
+  }
+
+  return onScroll;
 }
 
+/**
+ * Set scroll top by position ratio.
+ * @param el The target scrolling element.
+ * @param progress Scrolling position ratio from `0` to `1`.
+ */
 function scroll (el: Element, progress: number): Promise<void> {
   return new Promise<void>((resolve) => {
     const height = el.scrollHeight - el.clientHeight;
