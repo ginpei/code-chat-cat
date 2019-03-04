@@ -1,26 +1,23 @@
 /**
- * Set up elements to sync scrolling when each of them scrolls.
- * @param els The target element to sync scrolling.
+ * Set scroll top by position ratio.
+ * @param el The target scrolling element.
+ * @param progress Scrolling position ratio from `0` to `1`.
  */
-export default function syncScroll (els: Element[]) {
-  let scrolling = false;
-  const handleScrolling = createHandler(els);
-  const listener = (event: Event) => {
-    if (!scrolling) {
-      scrolling = true;
-      handleScrolling(event)
-        .then(() => scrolling = false);
+function scroll (el: Element, progress: number): Promise<void> {
+  return new Promise<void>((resolve) => {
+    const height = el.scrollHeight - el.clientHeight;
+    const top = height * progress;
+
+    // skip if it won't fire a scroll event
+    const curTop = el.scrollTop;
+    if (Math.abs(top - curTop) < 1) {
+      resolve();
+      return;
     }
-  };
 
-  els.forEach((node) => {
-    node.addEventListener('scroll', listener);
+    el.addEventListener('scroll', () => resolve(), { once: true });
+    el.scrollTop = top;
   });
-
-  const unsubscribe = () => {
-    els.forEach((el) => el.removeEventListener('scroll', listener));
-  };
-  return unsubscribe;
 }
 
 /**
@@ -54,23 +51,26 @@ function createHandler (els: Element[]) {
 }
 
 /**
- * Set scroll top by position ratio.
- * @param el The target scrolling element.
- * @param progress Scrolling position ratio from `0` to `1`.
+ * Set up elements to sync scrolling when each of them scrolls.
+ * @param els The target element to sync scrolling.
  */
-function scroll (el: Element, progress: number): Promise<void> {
-  return new Promise<void>((resolve) => {
-    const height = el.scrollHeight - el.clientHeight;
-    const top = height * progress;
-
-    // skip if it won't fire a scroll event
-    const curTop = el.scrollTop;
-    if (Math.abs(top - curTop) < 1) {
-      resolve();
-      return;
+export default function syncScroll (els: Element[]) {
+  let scrolling = false;
+  const handleScrolling = createHandler(els);
+  const listener = (event: Event) => {
+    if (!scrolling) {
+      scrolling = true;
+      handleScrolling(event)
+        .then(() => scrolling = false);
     }
+  };
 
-    el.addEventListener('scroll', () => resolve(), { once: true });
-    el.scrollTop = top;
+  els.forEach((node) => {
+    node.addEventListener('scroll', listener);
   });
+
+  const unsubscribe = () => {
+    els.forEach((el) => el.removeEventListener('scroll', listener));
+  };
+  return unsubscribe;
 }
