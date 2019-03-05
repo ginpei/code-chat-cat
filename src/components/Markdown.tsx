@@ -3,6 +3,10 @@ import MarkdownIt from 'markdown-it';
 import React from 'react';
 import styled from 'styled-components';
 
+// html-to-react does not have type definition
+// tslint:disable-next-line:no-var-requires
+const HtmlToReactParser = require('html-to-react').Parser;
+
 const MarkdownBlock = styled.div.attrs({
   className: 'Markdown-Container',
 })``;
@@ -30,7 +34,9 @@ export default class Markdown extends React.Component<IMarkdownProps> {
     linkify: true,
   });
 
-  protected get content () {
+  protected htmlToReactParser = new HtmlToReactParser();
+
+  protected get contentHtml () {
     return this.mdit.render(this.props.content);
   }
 
@@ -40,7 +46,9 @@ export default class Markdown extends React.Component<IMarkdownProps> {
 
   public render () {
     return (
-      <MarkdownBlock dangerouslySetInnerHTML={{ __html: this.content }}/>
+      <MarkdownBlock>
+        {this.htmlToReactParser.parse(this.contentHtml)}
+      </MarkdownBlock>
     );
   }
 }
