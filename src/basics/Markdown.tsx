@@ -46,6 +46,7 @@ export default class Markdown extends React.Component<IMarkdownProps> {
     this.mdit.use(markdownItAnchor, {
       permalink: true,
     });
+    this.mdit.use(require('markdown-it-toc-done-right'));
   }
 
   public render () {

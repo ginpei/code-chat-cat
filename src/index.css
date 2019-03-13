@@ -38,3 +38,11 @@ body {
 .Markdown-Container h6:hover .header-anchor {
   visibility: visible;
 }
+.Markdown-Container > .table-of-contents {
+  background-color: cornsilk;
+  border: 2px solid burlywood;
+  font-size: 0.8em;
+}
+.Markdown-Container > .table-of-contents ol {
+  padding-left: 2em;
+}
