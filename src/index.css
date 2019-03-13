@@ -22,3 +22,19 @@ body {
   margin-left: 1em;
   padding-left: 1em;
 }
+.Markdown-Container h1 .header-anchor,
+.Markdown-Container h2 .header-anchor,
+.Markdown-Container h3 .header-anchor,
+.Markdown-Container h4 .header-anchor,
+.Markdown-Container h5 .header-anchor,
+.Markdown-Container h6 .header-anchor {
+  visibility: hidden;
+}
+.Markdown-Container h1:hover .header-anchor,
+.Markdown-Container h2:hover .header-anchor,
+.Markdown-Container h3:hover .header-anchor,
+.Markdown-Container h4:hover .header-anchor,
+.Markdown-Container h5:hover .header-anchor,
+.Markdown-Container h6:hover .header-anchor {
+  visibility: visible;
+}

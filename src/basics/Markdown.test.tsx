@@ -12,7 +12,7 @@ describe('<Markdown>', () => {
     });
 
     it('renders heading', () => {
-      expect(wrapper.find('h1').text()).toBe('Heading Lv.1');
+      expect(wrapper.find('h1').text()).toContain('Heading Lv.1');
     });
 
     it('renders paragraph', () => {
@@ -32,6 +32,28 @@ describe('<Markdown>', () => {
       expect(wrapper.find('pre > code.hljs.js')).toHaveLength(1);
       expect(wrapper.find('pre > code > .hljs-keyword')).toHaveLength(1);
       expect(wrapper.find('pre > code > .hljs-keyword').text()).toBe('const');
+    });
+  });
+
+  describe('markdown-it-anchor', () => {
+    beforeEach(() => {
+      const content = '# Header\n## 日本語です';
+      wrapper = render(<Markdown content={content} />);
+    });
+
+    it('renders headers with links', () => {
+      const h1 = wrapper.find('h1');
+      expect(h1.text()).toBe('Header ¶');
+      expect(h1.attr('id')).toBe('header');
+      expect(h1.find('a.header-anchor').attr('href')).toBe('#header');
+    });
+
+    it('works with non-English words', () => {
+      const h2 = wrapper.find('h2');
+      expect(h2.text()).toBe('日本語です ¶');
+      expect(h2.attr('id')).toBe(encodeURI('日本語です'));
+      expect(h2.find('a.header-anchor').attr('href'))
+        .toBe(encodeURI('#日本語です'));
     });
   });
 });

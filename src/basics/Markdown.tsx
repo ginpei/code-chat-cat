@@ -1,5 +1,6 @@
 import hljs from 'highlight.js';
 import MarkdownIt from 'markdown-it';
+import markdownItAnchor from 'markdown-it-anchor';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -42,6 +43,9 @@ export default class Markdown extends React.Component<IMarkdownProps> {
 
   constructor (props: IMarkdownProps) {
     super(props);
+    this.mdit.use(markdownItAnchor, {
+      permalink: true,
+    });
   }
 
   public render () {
