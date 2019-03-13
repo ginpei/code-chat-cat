@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import DefaultLayout from '../components/DefaultLayout';
+import DefaultLayout from '../containers/DefaultLayout';
 import * as users from '../models/users';
 import path from '../path';
 import { Dispatch, IState } from '../reducers';

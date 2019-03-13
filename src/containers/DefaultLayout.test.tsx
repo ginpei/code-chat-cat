@@ -2,10 +2,10 @@ import { mount, ReactWrapper } from 'enzyme';
 import firebase from 'firebase';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
 import { IUserProfile } from '../reducers/currentUser';
 import { DefaultLayout } from './DefaultLayout';
-import Footer from './Footer';
-import Header from './Header';
 
 describe('<Header>', () => {
   let wrapper: ReactWrapper;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DefaultLayout from '../components/DefaultLayout';
+import DefaultLayout from '../containers/DefaultLayout';
 import * as users from '../models/users';
 import { HomeLink } from '../path';
 

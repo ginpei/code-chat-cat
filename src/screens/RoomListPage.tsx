@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import DefaultLayout from '../components/DefaultLayout';
+import DefaultLayout from '../containers/DefaultLayout';
 import path, { RoomLink } from '../path';
 import { IState } from '../reducers';
 import { IRoom } from '../reducers/rooms';

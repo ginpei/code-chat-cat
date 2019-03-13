@@ -1,5 +1,5 @@
 import React from 'react';
-import DefaultLayout from '../components/DefaultLayout';
+import DefaultLayout from '../containers/DefaultLayout';
 import { HomeLink } from '../path';
 
 export default function NotFoundPage () {

@@ -4,10 +4,10 @@ import styled from 'styled-components';
 import Container from '../components/Container';
 import Footer from '../components/Footer';
 import Header, { headerHeight } from '../components/Header';
+import { IHeaderMenu } from '../components/HeaderMenu';
 import path from '../path';
 import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
-import { IHeaderMenu } from './HeaderMenu';
 
 const MainContainer = styled(Container)`
   min-height: calc(100vh - ${headerHeight}px - 10rem);
