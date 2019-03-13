@@ -17,6 +17,7 @@
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.10.0",
     "firebase": "^5.8.2",
+    "firebase-mock": "^2.2.10",
     "highlight.js": "^9.14.2",
     "html-to-react": "^1.3.4",
     "markdown-it": "^8.4.2",
