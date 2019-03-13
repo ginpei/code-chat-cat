@@ -3,6 +3,7 @@ import MarkdownIt from 'markdown-it';
 import markdownItAnchor from 'markdown-it-anchor';
 import React from 'react';
 import styled from 'styled-components';
+import './Markdown.css';
 
 // html-to-react does not have type definition
 // tslint:disable-next-line:no-var-requires
