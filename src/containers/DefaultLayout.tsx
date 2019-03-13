@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 import Header, { headerHeight } from '../components/Header';
 import { IHeaderMenu } from '../components/HeaderMenu';
 import path from '../path';
-import { Dispatch, IState } from '../reducers';
+import { IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
 
 const MainContainer = styled(Container)`
