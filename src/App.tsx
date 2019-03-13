@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router';
-import LoadingView from './components/LoadingView';
+import LoadingView from './basics/LoadingView';
 import { appHistory, store } from './misc';
 import { connectUserRooms } from './models/rooms';
 import * as users from './models/users';

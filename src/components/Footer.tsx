@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Container from '../components/Container';
+import Container from '../basics/Container';
 
 const FooterContainer = styled.footer`
 border-top: 1px solid lavender;

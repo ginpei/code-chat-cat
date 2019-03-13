@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
-import LoadingView from '../components/LoadingView';
+import LoadingView from '../basics/LoadingView';
 import DefaultLayout from '../containers/DefaultLayout';
 import { appHistory } from '../misc';
 import { deleteRoom } from '../models/rooms';

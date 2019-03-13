@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import Container from '../components/Container';
+import Container from '../basics/Container';
 import Footer from '../components/Footer';
 import Header, { headerHeight } from '../components/Header';
 import { IHeaderMenu } from '../components/HeaderMenu';

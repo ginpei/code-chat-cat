@@ -1,7 +1,7 @@
 import { mount, shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import Container from './Container';
+import Container from '../basics/Container';
 import Header, { FullscreenContainer } from './Header';
 import { IHeaderMenu } from './HeaderMenu';
 
