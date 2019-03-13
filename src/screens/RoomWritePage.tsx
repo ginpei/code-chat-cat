@@ -4,9 +4,11 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import Markdown from '../basics/Markdown';
-import Header, { headerHeight } from '../components/Header';
+import { headerHeight } from '../components/Header';
+import RoomHeader from '../components/RoomHeader';
 import syncScroll from '../functions/syncScroll';
 import { Dispatch, IState } from '../reducers';
+import { IUserProfile } from '../reducers/currentUser';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
 
 const EditorContainer = styled.div`
@@ -39,6 +41,7 @@ interface IRoomWritePageProps
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
   saveRoom: (room: IRoom) => void;
+  userProfile: IUserProfile | null;
   userRooms: IRoom[];
 }
 interface IRoomWritePageState {
@@ -91,10 +94,10 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
 
     return (
       <div>
-        <Header
+        <RoomHeader
           fullscreen={true}
-          title={roomName}
-          titleHref={`/rooms/${this.roomId}`}
+          room={room}
+          userProfile={this.props.userProfile}
         />
         {room && (
           <EditorContainer>
@@ -174,6 +177,7 @@ export default connect(
   (state: IState) => ({
     firebaseUser: state.currentUser.firebaseUser,
     loggedIn: state.currentUser.loggedIn,
+    userProfile: state.currentUser.profile,
     userRooms: state.rooms.userRooms,
   }),
   (dispatch: Dispatch) => ({

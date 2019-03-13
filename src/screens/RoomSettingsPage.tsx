@@ -3,11 +3,14 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 import LoadingView from '../basics/LoadingView';
-import DefaultLayout from '../containers/DefaultLayout';
+import Footer from '../components/Footer';
+import RoomHeader from '../components/RoomHeader';
+import DefaultLayout, { MainContainer } from '../containers/DefaultLayout';
 import { appHistory } from '../misc';
 import { deleteRoom } from '../models/rooms';
 import { RoomLink } from '../path';
 import { Dispatch, IState } from '../reducers';
+import { IUserProfile } from '../reducers/currentUser';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
 import NotFoundPage from './NotFoundPage';
 
@@ -23,6 +26,7 @@ interface IRoomSettingsPageProps
   extends RouteComponentProps<IRoomSettingsPageParams> {
   deleteRoom: (room: IRoom) => void;
   saveRoom: (room: IRoom) => void;
+  userProfile: IUserProfile | null;
   userRooms: IRoom[];
 }
 interface IRoomSettingsPageState {
@@ -64,63 +68,70 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     }
 
     return (
-      <DefaultLayout>
-        <h1>Room settings</h1>
-        <p>
-          <RoomLink room={room}>Textbook</RoomLink>
-          {' | '}
-          <RoomLink room={room} type="write">Write</RoomLink>
-        </p>
-        <form
-          onSubmit={this.onRoomSubmit}
-        >
-          <table>
-            <tbody>
-              <tr>
-                <th>ID</th>
-                <td>{room.id}</td>
-              </tr>
-              <tr>
-                <th>Name</th>
-                <td>
-                  <input
-                    disabled={this.state.roomSaving}
-                    onChange={this.onRoomNameChange}
-                    type="text"
-                    value={this.state.roomName}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <th>Active</th>
-                <td>
-                  <input
-                    disabled={this.state.roomSaving}
-                    onChange={this.onRoomActiveChange}
-                    type="checkbox"
-                    checked={this.state.roomActive}
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      <div>
+        <RoomHeader
+          room={room}
+          userProfile={this.props.userProfile}
+        />
+        <MainContainer>
+          <h1>Room settings</h1>
           <p>
-            <button
-              disabled={this.state.roomSaving}
-            >
-              Save
-            </button>
+            <RoomLink room={room}>Textbook</RoomLink>
+            {' | '}
+            <RoomLink room={room} type="write">Write</RoomLink>
           </p>
-        </form>
-        <h2>Danger zone</h2>
-        <DangerZone>
-          <button
-            onClick={this.onRoomDeleteClick}
+          <form
+            onSubmit={this.onRoomSubmit}
           >
-            Delete
-          </button>
-        </DangerZone>
-      </DefaultLayout>
+            <table>
+              <tbody>
+                <tr>
+                  <th>ID</th>
+                  <td>{room.id}</td>
+                </tr>
+                <tr>
+                  <th>Name</th>
+                  <td>
+                    <input
+                      disabled={this.state.roomSaving}
+                      onChange={this.onRoomNameChange}
+                      type="text"
+                      value={this.state.roomName}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th>Active</th>
+                  <td>
+                    <input
+                      disabled={this.state.roomSaving}
+                      onChange={this.onRoomActiveChange}
+                      type="checkbox"
+                      checked={this.state.roomActive}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p>
+              <button
+                disabled={this.state.roomSaving}
+              >
+                Save
+              </button>
+            </p>
+          </form>
+          <h2>Danger zone</h2>
+          <DangerZone>
+            <button
+              onClick={this.onRoomDeleteClick}
+            >
+              Delete
+            </button>
+          </DangerZone>
+        </MainContainer>
+        <Footer/>
+      </div>
     );
   }
 
@@ -173,6 +184,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
 
 export default connect(
   (state: IState) => ({
+    userProfile: state.currentUser.profile,
     userRooms: state.rooms.userRooms,
   }),
   (dispatch: Dispatch) => ({

@@ -9,7 +9,7 @@ import path from '../path';
 import { IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
 
-const MainContainer = styled(Container)`
+export const MainContainer = styled(Container)`
   min-height: calc(100vh - ${headerHeight}px - 10rem);
 `;
 

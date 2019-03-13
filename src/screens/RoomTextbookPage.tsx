@@ -5,11 +5,13 @@ import styled from 'styled-components';
 import Container from '../basics/Container';
 import LoadingView from '../basics/LoadingView';
 import Markdown from '../basics/Markdown';
-import Header, { headerHeight } from '../components/Header';
+import { headerHeight } from '../components/Header';
+import RoomHeader from '../components/RoomHeader';
 import DefaultLayout from '../containers/DefaultLayout';
 import { store } from '../misc';
 import { connectActiveRooms } from '../models/rooms';
-import { Dispatch, IState } from '../reducers';
+import { IState } from '../reducers';
+import { IUserProfile } from '../reducers/currentUser';
 import { IRoom } from '../reducers/rooms';
 
 const TextbookContainer = styled.div`
@@ -29,6 +31,7 @@ interface IRoomTextbookPageParams {
 interface IRoomTextbookPageProps
   extends RouteComponentProps<IRoomTextbookPageParams> {
   activeRooms: IRoom[];
+  userProfile: IUserProfile | null;
   userRooms: IRoom[];
 }
 
@@ -57,10 +60,10 @@ class RoomTextbookPage extends React.Component<IRoomTextbookPageProps> {
 
     return (
       <div>
-        <Header
+        <RoomHeader
           fullscreen={true}
-          title={room.name}
-          titleHref={`/rooms/${this.roomId}`}
+          room={room}
+          userProfile={this.props.userProfile}
         />
         <TextbookContainer>
           <TextbookContent>
@@ -96,6 +99,7 @@ function Wrapper (props: IRoomTextbookPageProps) {
 export default connect(
   (state: IState) => ({
     activeRooms: state.rooms.activeRooms,
+    userProfile: state.currentUser.profile,
     userRooms: state.rooms.userRooms,
   }),
 )(Wrapper);
