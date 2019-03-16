@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 import LoadingView from '../basics/LoadingView';
+import RoomTaskEdit from '../basics/RoomTaskEdit';
 import Footer from '../components/Footer';
 import RoomHeader from '../components/RoomHeader';
 import DefaultLayout, { MainContainer } from '../containers/DefaultLayout';
@@ -11,9 +12,12 @@ import { deleteRoom } from '../models/rooms';
 import { RoomLink } from '../path';
 import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
-import { IRoom, RoomsActionTypes } from '../reducers/rooms';
+import { IRoom, IRoomTask, RoomsActionTypes } from '../reducers/rooms';
 import NotFoundPage from './NotFoundPage';
 
+const TaskItem = styled.div`
+  margin-bottom: 1em;
+`;
 const DangerZone = styled.div`
   border: solid 1px tomato;
   padding: 1rem;
@@ -66,6 +70,34 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
         <NotFoundPage/>
       );
     }
+
+    const tasks = [
+      {
+        closed: true,
+        id: '100',
+        mdContent: `
+1. \`npm install ...\` でインストール
+2. \`.eslintrc.js\` 作成
+3. \`npx eslint .\` で実行`.trim(),
+        title: 'ESLint導入',
+      },
+      {
+        closed: false,
+        id: '101',
+        mdContent: `\
+3. npm scripts へ記述`.trim(),
+        title: 'ESLint用スクリプト',
+      },
+    ];
+
+    const onTaskChange = (task: IRoomTask) => console.log('# task', task);
+    const onNewTaskChange = (task: IRoomTask) => console.log('# new task', task);
+    const newTask: IRoomTask = {
+      closed: false,
+      id: '',
+      mdContent: '',
+      title: '',
+    };
 
     return (
       <div>
@@ -121,6 +153,22 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
               </button>
             </p>
           </form>
+          <h2>Tasks</h2>
+          {tasks.map((task) => (
+            <TaskItem>
+              <RoomTaskEdit
+                key={task.id}
+                onChange={onTaskChange}
+                task={task}
+              />
+            </TaskItem>
+          ))}
+          <TaskItem>
+            <RoomTaskEdit
+              onChange={onNewTaskChange}
+              task={newTask}
+            />
+          </TaskItem>
           <h2>Danger zone</h2>
           <DangerZone>
             <button

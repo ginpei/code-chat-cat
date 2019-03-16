@@ -19,6 +19,13 @@ const defaultRooms: IRoomState = {
   userRooms: [],
 };
 
+export interface IRoomTask {
+  closed: boolean;
+  id: string;
+  mdContent: string;
+  title: string;
+}
+
 // --------------------------
 // actions
 
