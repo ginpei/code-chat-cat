@@ -8,3 +8,21 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+button {
+  cursor: pointer;
+}
+button.link {
+  background-color: transparent;
+  border: none;
+  color: blue;
+  font-family: inherit;
+  font-size: 1em;
+  text-decoration: underline;
+}
+summary {
+  cursor: pointer;
+}
+summary:hover {
+  text-decoration: underline;
+}
