@@ -99,20 +99,18 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
           room={room}
           userProfile={this.props.userProfile}
         />
-        {room && (
-          <EditorContainer>
-            <EditorInput
-              ref={this.refInput}
-              onChange={this.onContentInput}
-              value={content}
-            />
-            <EditorOutput
-              ref={this.refOutput}
-            >
-              <TextbookContent editing={true} content={content} />
-            </EditorOutput>
-          </EditorContainer>
-        )}
+        <EditorContainer>
+          <EditorInput
+            ref={this.refInput}
+            onChange={this.onContentInput}
+            value={content}
+          />
+          <EditorOutput
+            ref={this.refOutput}
+          >
+            <TextbookContent editing={true} content={content} />
+          </EditorOutput>
+        </EditorContainer>
       </div>
     );
   }
