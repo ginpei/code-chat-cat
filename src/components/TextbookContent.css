@@ -1,0 +1,14 @@
+.TextbookContent-separator {
+  border-top: 2px solid #036;
+}
+.TextbookContent-separator[data-published="true"] {
+  opacity: 0.5;
+}
+.TextbookContent-separatorLabel {
+  background-color: #036;
+  border-radius: 0 0 0.2em 0.2em;
+  color: white;
+  cursor: pointer;
+  float: right;
+  padding: 0 1em;
+}

@@ -3,9 +3,9 @@ import React, { createRef } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import Markdown from '../basics/Markdown';
 import { headerHeight } from '../components/Header';
 import RoomHeader from '../components/RoomHeader';
+import TextbookContent from '../components/TextbookContent';
 import syncScroll from '../functions/syncScroll';
 import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
@@ -99,20 +99,18 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
           room={room}
           userProfile={this.props.userProfile}
         />
-        {room && (
-          <EditorContainer>
-            <EditorInput
-              ref={this.refInput}
-              onChange={this.onContentInput}
-              value={content}
-            />
-            <EditorOutput
-              ref={this.refOutput}
-            >
-              <Markdown content={content} />
-            </EditorOutput>
-          </EditorContainer>
-        )}
+        <EditorContainer>
+          <EditorInput
+            ref={this.refInput}
+            onChange={this.onContentInput}
+            value={content}
+          />
+          <EditorOutput
+            ref={this.refOutput}
+          >
+            <TextbookContent editing={true} content={content} />
+          </EditorOutput>
+        </EditorContainer>
       </div>
     );
   }

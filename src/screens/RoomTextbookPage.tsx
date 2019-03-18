@@ -4,9 +4,9 @@ import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 import Container from '../basics/Container';
 import LoadingView from '../basics/LoadingView';
-import Markdown from '../basics/Markdown';
 import { headerHeight } from '../components/Header';
 import RoomHeader from '../components/RoomHeader';
+import TextbookContent from '../components/TextbookContent';
 import DefaultLayout from '../containers/DefaultLayout';
 import { store } from '../misc';
 import { connectActiveRooms } from '../models/rooms';
@@ -18,7 +18,7 @@ const TextbookContainer = styled.div`
   height: calc(100vh - ${headerHeight}px);
   overflow-y: scroll;
 `;
-const TextbookContent = styled(Container)`
+const TextbookWrapper = styled(Container)`
   background-color: snow;
   box-shadow: 0 0 10px #0003;
   min-height: 100%;
@@ -66,9 +66,9 @@ class RoomTextbookPage extends React.Component<IRoomTextbookPageProps> {
           userProfile={this.props.userProfile}
         />
         <TextbookContainer>
-          <TextbookContent>
-            <Markdown content={room.textbookContent} />
-          </TextbookContent>
+          <TextbookWrapper>
+            <TextbookContent content={room.textbookContent} />
+          </TextbookWrapper>
         </TextbookContainer>
       </div>
     );
