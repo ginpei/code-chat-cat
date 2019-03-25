@@ -11,7 +11,7 @@ import { deleteRoom } from '../models/rooms';
 import { RoomLink } from '../path';
 import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
-import { IRoom, RoomsActionTypes } from '../reducers/rooms';
+import { IRoom, RoomsActionTypes, RoomStatus } from '../reducers/rooms';
 import NotFoundPage from './NotFoundPage';
 
 const DangerZone = styled.div`
@@ -48,7 +48,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     super(props);
     const { room } = this;
     this.state = {
-      roomActive: room ? room.active : false,
+      roomActive: room ? room.status === RoomStatus.active : false,
       roomName: room ? room.name : '',
       roomSaving: false,
     };
@@ -156,8 +156,8 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
 
     const room: IRoom = {
       ...this.room!,
-      active: this.state.roomActive,
       name: this.state.roomName,
+      status: this.state.roomActive ? RoomStatus.active : RoomStatus.draft,
     };
     this.props.saveRoom(room);
 

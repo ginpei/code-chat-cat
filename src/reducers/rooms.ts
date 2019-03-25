@@ -2,8 +2,8 @@ import { ClientRecord, IRecord } from '../misc';
 import { deleteRoom as firebaseDeleteRoom, updateRoom } from '../models/rooms';
 
 export interface IRoomRecord extends IRecord {
-  active: boolean;
   name: string;
+  status: RoomStatus;
   textbookContent: string;
   userId: string;
 }
@@ -12,6 +12,11 @@ export interface IRoomState {
   activeRooms: IRoom[];
   ready: boolean;
   userRooms: IRoom[];
+}
+export enum RoomStatus {
+  draft, // only owner can access
+  public, // public for those who know the URL
+  active, // public and listed
 }
 const defaultRooms: IRoomState = {
   activeRooms: [],

@@ -16,7 +16,7 @@ export type ClientRecord<T> = {
   [P in Exclude<keyof T, 'modelVersion'>]: T[P];
 } & { id: string; };
 
-export type Migrations = { [key in string]: (v: IRecord) => IRecord };
+export type Migrations = { [key in string]: (v: any) => any };
 
 export function isRecord (record: any): record is IRecord {
   return 'createdAt' in record && 'updatedAt' in record && 'modelVersion' in record;

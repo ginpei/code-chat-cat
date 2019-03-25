@@ -3,7 +3,7 @@ import firebase from 'firebase';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import path, { HomeLink, RoomLink } from './path';
-import { IRoom } from './reducers/rooms';
+import { IRoom, RoomStatus } from './reducers/rooms';
 
 describe('path', () => {
   describe('path()', () => {
@@ -53,10 +53,10 @@ describe('path', () => {
     let wrapper: ShallowWrapper;
 
     const room: IRoom = {
-      active: false,
       createdAt: firebase.firestore.Timestamp.now(),
       id: 'roomId123',
       name: 'Room Name',
+      status: RoomStatus.draft,
       textbookContent: '',
       updatedAt: firebase.firestore.Timestamp.now(),
       userId: 'userId123',

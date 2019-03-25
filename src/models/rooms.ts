@@ -1,6 +1,6 @@
 import firebase from '../middleware/firebase';
 import { Store } from '../reducers';
-import { IRoom, IRoomRecord, RoomsActionTypes } from '../reducers/rooms';
+import { IRoom, IRoomRecord, RoomsActionTypes, RoomStatus } from '../reducers/rooms';
 import migrateRoom, { roomVersion } from './rooms.migration';
 
 const roomsRef = firebase.firestore().collection('/rooms');
@@ -81,7 +81,7 @@ export function connectActiveRooms (store: Store, callback?: () => void) {
   let calledBack = false;
 
   let unsubscribeSnapshot: () => void = () => undefined;
-  const userRoomsRef = roomsRef.where('active', '==', true);
+  const userRoomsRef = roomsRef.where('status', '==', RoomStatus.active);
   unsubscribeSnapshot = userRoomsRef.onSnapshot({
     error: (error) => {
       console.error('Error on user rooms connection', error);
@@ -115,10 +115,10 @@ export function createRoom (
   return new Promise<IRoom>(async (resolve, reject) => {
     try {
       const record: IRoomRecord = {
-        active: false,
         createdAt: firebase.firestore.Timestamp.now(),
         modelVersion: roomVersion,
         name: roomData.name,
+        status: RoomStatus.draft,
         textbookContent: `# ${roomData.name}`,
         updatedAt: firebase.firestore.Timestamp.now(),
         userId: roomData.userId,
@@ -157,10 +157,10 @@ function snapshotToRoom (snapshot: firebase.firestore.DocumentSnapshot): IRoom |
   const migratedData = migrateRoom(data);
 
   return {
-    active: migratedData.active,
     createdAt: migratedData.createdAt,
     id: snapshot.id,
     name: migratedData.name,
+    status: migratedData.status,
     textbookContent: migratedData.textbookContent,
     updatedAt: migratedData.updatedAt,
     userId: migratedData.userId,

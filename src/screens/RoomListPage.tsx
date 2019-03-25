@@ -4,14 +4,14 @@ import { Link } from 'react-router-dom';
 import DefaultLayout from '../containers/DefaultLayout';
 import path, { RoomLink } from '../path';
 import { IState } from '../reducers';
-import { IRoom } from '../reducers/rooms';
+import { IRoom, RoomStatus } from '../reducers/rooms';
 
 function RoomItem ({ room }: { room: IRoom }) {
-  const { active, name } = room;
+  const { status, name } = room;
   return (
     <tr>
       <td>
-        {active && <span title="Active">✅</span>}
+        {status === RoomStatus.active && <span title="Active">✅</span>}
       </td>
       <td><RoomLink room={room} type="settings">💬 {name}</RoomLink></td>
       <td><RoomLink room={room}>📖 View</RoomLink></td>
