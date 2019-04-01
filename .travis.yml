@@ -9,6 +9,7 @@ script:
   - npm test -- --coverage
 before_deploy:
   - npm run build
+  - ls
 deploy:
   provider: firebase
   project: code-chat-cat
@@ -16,5 +17,6 @@ deploy:
     secure: $FIREBASE_TOKEN
   on:
     branch: staging
+  skip_cleanup: true
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
