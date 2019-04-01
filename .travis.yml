@@ -9,3 +9,9 @@ script:
   - npm test -- --coverage
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+deploy:
+  provider: firebase
+  token:
+    secure: $FIREBASE_TOKEN
+  on:
+    branch: staging
