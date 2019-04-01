@@ -11,6 +11,7 @@ after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 deploy:
   provider: firebase
+  project: code-chat-cat
   token:
     secure: $FIREBASE_TOKEN
   on:
