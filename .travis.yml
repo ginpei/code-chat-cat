@@ -7,8 +7,6 @@ before_script:
   - ./cc-test-reporter before-build
 script:
   - npm test -- --coverage
-after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 before_deploy:
   - npm run build
 deploy:
@@ -18,3 +16,5 @@ deploy:
     secure: $FIREBASE_TOKEN
   on:
     branch: staging
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
