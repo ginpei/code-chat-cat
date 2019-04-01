@@ -16,3 +16,5 @@ deploy:
     secure: $FIREBASE_TOKEN
   on:
     branch: staging
+  before_deploy:
+    - npm run build
