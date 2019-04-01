@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
@@ -11,6 +11,70 @@ import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
 import { IRoom, RoomsActionTypes, RoomStatus } from '../reducers/rooms';
 import NotFoundPage from './NotFoundPage';
+
+const RoomStatusInputLabel = styled.label`
+  margin-right: 1em;
+`;
+
+interface IRoomStatusInputProps {
+  disabled: boolean;
+  name: string;
+  onChange: (roomStatus: RoomStatus) => void;
+  type: RoomStatus;
+  value: RoomStatus;
+}
+function RoomStatusInput (props: IRoomStatusInputProps) {
+  const sLabel = props.type === RoomStatus.draft
+    ? 'Draft'
+    : props.type === RoomStatus.public
+      ? 'Public'
+      : 'Active';
+
+  const onChange = () => props.onChange(props.type);
+
+  return (
+    <RoomStatusInputLabel>
+      <input
+        checked={props.value === props.type}
+        disabled={props.disabled}
+        name={props.name}
+        onChange={onChange}
+        type="radio"
+      />
+      {sLabel}
+    </RoomStatusInputLabel>
+  );
+}
+
+interface IRoomStatusInputGroupProps {
+  disabled: boolean;
+  onChange: (roomStatus: RoomStatus) => void;
+  value: RoomStatus;
+}
+function RoomStatusInputGroup (props: IRoomStatusInputGroupProps) {
+  const randomKey = String(Math.floor(Math.random() * 1000));
+  const initialName = `RoomStatusInputGroup-${Date.now()}-${randomKey}`;
+  const [name] = useState(initialName);
+  const types = [
+    RoomStatus.draft,
+    RoomStatus.public,
+    RoomStatus.active,
+  ];
+  return (
+    <>
+      {types.map((type) => (
+        <RoomStatusInput
+          disabled={props.disabled}
+          key={type}
+          name={name}
+          onChange={props.onChange}
+          type={type}
+          value={props.value}
+        />
+      ))}
+    </>
+  );
+}
 
 const DangerZone = styled.div`
   border: solid 1px tomato;
@@ -28,9 +92,9 @@ interface IRoomSettingsPageProps
   userRooms: IRoom[];
 }
 interface IRoomSettingsPageState {
-  roomActive: boolean;
   roomName: string;
   roomSaving: boolean;
+  roomStatus: RoomStatus;
 }
 
 class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSettingsPageState> {
@@ -46,9 +110,9 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     super(props);
     const { room } = this;
     this.state = {
-      roomActive: room ? room.status === RoomStatus.active : false,
       roomName: room ? room.name : '',
       roomSaving: false,
+      roomStatus: room ? room.status : RoomStatus.draft,
     };
     this.onRoomNameChange = this.onRoomNameChange.bind(this);
     this.onRoomActiveChange = this.onRoomActiveChange.bind(this);
@@ -99,13 +163,12 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
                   </td>
                 </tr>
                 <tr>
-                  <th>Active</th>
+                  <th>Status</th>
                   <td>
-                    <input
+                    <RoomStatusInputGroup
                       disabled={this.state.roomSaving}
                       onChange={this.onRoomActiveChange}
-                      type="checkbox"
-                      checked={this.state.roomActive}
+                      value={this.state.roomStatus}
                     />
                   </td>
                 </tr>
@@ -139,10 +202,8 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     this.setState({ roomName });
   }
 
-  public onRoomActiveChange (event: React.ChangeEvent<HTMLInputElement>) {
-    const el = event.currentTarget;
-    const roomActive = el.checked;
-    this.setState({ roomActive });
+  public onRoomActiveChange (roomStatus: RoomStatus) {
+    this.setState({ roomStatus });
   }
 
   public async onRoomSubmit (event: React.MouseEvent<HTMLFormElement>) {
@@ -155,7 +216,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     const room: IRoom = {
       ...this.room!,
       name: this.state.roomName,
-      status: this.state.roomActive ? RoomStatus.active : RoomStatus.draft,
+      status: this.state.roomStatus,
     };
     this.props.saveRoom(room);
 
