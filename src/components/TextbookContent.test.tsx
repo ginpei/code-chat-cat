@@ -19,11 +19,11 @@ describe('<TextbookContent>', () => {
   describe('in public mode', () => {
     beforeEach(() => {
       const content = `# Header 1
----[x]---
+<!--[x]-->
 
 **STRONG**
 
----[ ]---
+<!--[ ]-->
 
 *EMPHASIZE*`;
       wrapper = render(<TextbookContent content={content} />);
@@ -46,11 +46,11 @@ describe('<TextbookContent>', () => {
   describe('in edit mode', () => {
     beforeEach(() => {
       const content = `# Header 1
----[x]---
+<!--[x]-->
 
 **STRONG**
 
----[ ]---
+<!--[ ]-->
 
 *EMPHASIZE*`;
       wrapper = render(<TextbookContent content={content} editing={true} />);
