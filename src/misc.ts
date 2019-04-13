@@ -22,6 +22,7 @@ export function isRecord (record: any): record is IRecord {
   return 'createdAt' in record && 'updatedAt' in record && 'modelVersion' in record;
 }
 
+// TODO remove default (wow)
 export default function migrate (migrations: Migrations, record: any) {
   const startedAt = Date.now();
   while (true) {
@@ -48,4 +49,13 @@ export default function migrate (migrations: Migrations, record: any) {
 
     record = result;
   }
+}
+
+// tslint:disable-next-line:ban-types
+export function debounce<F extends Function> (fn: F, delay: number): F {
+  let tm = 0;
+  return function (this: any, ...args: any[]) {
+    window.clearTimeout(tm);
+    tm  = window.setTimeout(() => fn.apply(this, args), delay);
+  } as any;
 }
