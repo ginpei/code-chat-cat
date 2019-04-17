@@ -16,18 +16,18 @@ function generateSeparatorHtml (published: boolean) {
 
 function buildEditingContent (content: string) {
   const modified = content
-    .replace(/\n---\[ ?\]---\n/g, `\n${generateSeparatorHtml(false)}\n`)
-    .replace(/\n---\[x\]---\n/g, `\n${generateSeparatorHtml(true)}\n`);
+    .replace(/\n<!--\[ ?\]-->\n/g, `\n${generateSeparatorHtml(false)}\n`)
+    .replace(/\n<!--\[x\]-->\n/g, `\n${generateSeparatorHtml(true)}\n`);
   return modified;
 }
 
 function buildPublishedContent (content: string) {
   const index = Math.max(
-    content.indexOf('\n---[]---\n'),
-    content.indexOf('\n---[ ]---\n'),
+    content.indexOf('\n<!--[]-->\n'),
+    content.indexOf('\n<!--[ ]-->\n'),
   );
   const sliced = index < 0 ? content : content.slice(0, index);
-  const modified = sliced.replace(/\n---\[x\]---\n/g, '\n');
+  const modified = sliced.replace(/\n<!--\[x\]-->\n/g, '\n');
   return modified;
 }
 

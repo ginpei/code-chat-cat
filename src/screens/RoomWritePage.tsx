@@ -7,6 +7,7 @@ import { headerHeight } from '../components/Header';
 import RoomHeader from '../components/RoomHeader';
 import TextbookContent from '../components/TextbookContent';
 import syncScroll from '../functions/syncScroll';
+import { debounce } from '../misc';
 import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
@@ -46,6 +47,7 @@ interface IRoomWritePageProps
 }
 interface IRoomWritePageState {
   content: string;
+  previewingContent: string;
 }
 
 class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageState> {
@@ -63,11 +65,15 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
 
   constructor (props: IRoomWritePageProps) {
     super(props);
+    const content = this.room ? this.room.textbookContent : '';
     this.state = {
-      content: this.room ? this.room.textbookContent : '',
+      content,
+      previewingContent: content,
     };
 
     this.onContentInput = this.onContentInput.bind(this);
+    // this.setRenderingContent = debounce(this.setRenderingContent, 500);
+    this.saveContent = debounce(this.saveContent, 500);
   }
 
   public render () {
@@ -88,7 +94,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     }
 
     const { room } = this;
-    const { content } = this.state;
+    const { content, previewingContent } = this.state;
 
     const roomName = room.name;
 
@@ -108,7 +114,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
           <EditorOutput
             ref={this.refOutput}
           >
-            <TextbookContent editing={true} content={content} />
+            <TextbookContent editing={true} content={previewingContent} />
           </EditorOutput>
         </EditorContainer>
       </div>
@@ -130,17 +136,36 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
   }
 
   public async onContentInput (event: React.ChangeEvent<HTMLTextAreaElement>) {
+    const content = event.currentTarget.value;
+    this.setContent(content);
+  }
+
+  protected setContent (content: string) {
+    this.setState({ content });
+    this.setRenderingContent(content);
+    this.saveContent();
+  }
+
+  /**
+   * This method is debounce. See constructor.
+   */
+  protected setRenderingContent (previewingContent: string) {
+    this.setState({ previewingContent });
+  }
+
+  /**
+   * This method is debounce. See constructor.
+   */
+  protected saveContent () {
     const { room } = this;
     if (!room) {
       return;
     }
 
-    const newContent = event.currentTarget.value;
-    this.setState({
-      content: newContent,
+    this.props.saveRoom({
+      ...room,
+      textbookContent: this.state.content,
     });
-
-    this.props.saveRoom({ ...room!, textbookContent: newContent });
   }
 
   protected subscribeSyncScroll () {
