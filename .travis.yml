@@ -9,7 +9,6 @@ script:
   - npm test -- --coverage
 before_deploy:
   - npm run build
-  - ls
 deploy:
   provider: firebase
   project: code-chat-cat

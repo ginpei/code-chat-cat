@@ -11,7 +11,9 @@ function RoomItem ({ room }: { room: IRoom }) {
   return (
     <tr>
       <td>
-        {status === RoomStatus.active && <span title="Active">✅</span>}
+        {status === RoomStatus.draft && <span title="Draft">🔒</span>}
+        {status === RoomStatus.public && <span title="Public">✅</span>}
+        {status === RoomStatus.active && <span title="Active">🔥</span>}
       </td>
       <td><RoomLink room={room} type="settings">💬 {name}</RoomLink></td>
       <td><RoomLink room={room}>📖 View</RoomLink></td>
@@ -36,7 +38,7 @@ class RoomListPage extends React.Component<IRoomListPageProps> {
         <p>
           <Link to={path('room-new')}>Create new room</Link>
         </p>
-        <p>✅ Active room</p>
+        <p>🔒 Draft / ✅ Public room / 🔥 Active room</p>
         {rooms.length < 1 ? (
           <p>No rooms found.</p>
         ) : (
