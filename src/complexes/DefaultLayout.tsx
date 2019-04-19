@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import Container from '../basics/Container';
-import Footer from '../components/Footer';
-import Header, { headerHeight } from '../components/Header';
-import { IHeaderMenu } from '../components/HeaderMenu';
+import Footer from '../basics/Footer';
+import Header, { headerHeight } from '../basics/Header';
+import { IHeaderMenu } from '../basics/HeaderMenu';
+import Container from '../independents/Container';
 import path from '../path';
 import { IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';

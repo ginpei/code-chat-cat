@@ -3,7 +3,7 @@ import firebaseui from 'firebaseui';
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { connect } from 'react-redux';
-import DefaultLayout from '../containers/DefaultLayout';
+import DefaultLayout from '../complexes/DefaultLayout';
 import { appHistory } from '../misc';
 import { HomeLink } from '../path';
 import { Dispatch, IState } from '../reducers';

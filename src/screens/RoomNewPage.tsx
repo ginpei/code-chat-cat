@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import DefaultLayout from '../containers/DefaultLayout';
+import DefaultLayout from '../complexes/DefaultLayout';
 import { appHistory } from '../misc';
 import { createRoom } from '../models/rooms';
 import { Dispatch, IState } from '../reducers';
