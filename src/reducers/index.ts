@@ -10,7 +10,7 @@ export interface IState {
   currentUser: CurrentUser.ICurrentUserState;
   currentUser0: ICurrentUser;
   errorLogs: ErrorLogs.IErrorLog[];
-  rooms: IRoomState;
+  rooms0: IRoomState;
   userRooms: Rooms.IRoom[];
 }
 
@@ -27,6 +27,6 @@ export default combineReducers<IState>({
   currentUser: CurrentUser.reduceCurrentUser,
   currentUser0: currentUser,
   errorLogs: ErrorLogs.reduceErrorLogs,
-  rooms,
+  rooms0: rooms,
   userRooms: Rooms.reduceUserRooms,
 });

@@ -83,7 +83,7 @@ class App extends Component<IAppProps, IAppState> {
 
     const un = store.subscribe(() => {
       const userReady = store.getState().currentUser0.ready;
-      const roomReady = store.getState().rooms.ready;
+      const roomReady = store.getState().rooms0.ready;
       if (userReady && roomReady) {
         this.setState({ ready: true });
         un();
