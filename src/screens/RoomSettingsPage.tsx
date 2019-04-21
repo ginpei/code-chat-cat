@@ -244,7 +244,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
 export default connect(
   (state: IState) => ({
     userProfile: state.currentUser0.profile,
-    userRooms: state.rooms.userRooms,
+    userRooms: state.userRooms,
   }),
   (dispatch: Dispatch) => ({
     deleteRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.deleteRoom }),

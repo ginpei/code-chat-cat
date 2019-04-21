@@ -9,6 +9,7 @@ import { getDefaultHeaderMenu } from '../complexes/DefaultLayout';
 import Container from '../independents/Container';
 import LoadingView from '../independents/LoadingView';
 import { store } from '../misc';
+import * as Rooms from '../models/Rooms';
 import { connectActiveRooms } from '../models/rooms0';
 import path, { RoomLink } from '../path';
 import { Dispatch, IState } from '../reducers';
@@ -29,7 +30,7 @@ interface IHomePageProps {
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
   userProfile: IUserProfile | null;
-  userRooms: IRoom[];
+  userRooms: Rooms.IRoom[];
 }
 
 function HomePage (props: IHomePageProps) {
@@ -105,6 +106,6 @@ export default connect(
     firebaseUser: state.currentUser0.firebaseUser,
     loggedIn: state.currentUser.loggedIn,
     userProfile: state.currentUser0.profile,
-    userRooms: state.rooms.userRooms,
+    userRooms: state.userRooms,
   }),
 )(Wrapper);

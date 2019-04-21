@@ -131,7 +131,7 @@ class App extends Component<IAppProps, IAppState> {
   private connectUserRooms (user: firebase.User) {
     const unsubscribe = Rooms.connectUserRooms(
       user.uid,
-      (rooms) => console.log('# rooms', rooms),
+      (rooms) => store.dispatch(Rooms.setUserRooms(rooms)),
       (error) => this.saveError('connect user rooms', error),
     );
     return unsubscribe;

@@ -100,6 +100,6 @@ export default connect(
   (state: IState) => ({
     activeRooms: state.rooms.activeRooms,
     userProfile: state.currentUser0.profile,
-    userRooms: state.rooms.userRooms,
+    userRooms: state.userRooms,
   }),
 )(Wrapper);

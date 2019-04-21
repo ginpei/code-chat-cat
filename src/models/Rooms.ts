@@ -38,6 +38,39 @@ function getEmptyRoom (): IRoom {
 }
 
 // ----------------------------------------------------------------------------
+// actions
+
+interface ISetUserRoomsAction {
+  rooms: IRoom[];
+  type: 'Rooms/setUserRooms';
+}
+
+export function setUserRooms (rooms: IRoom[]): ISetUserRoomsAction {
+  return {
+    rooms,
+    type: 'Rooms/setUserRooms',
+  };
+}
+
+export type UserRoomAction =
+  | ISetUserRoomsAction;
+
+// ----------------------------------------------------------------------------
+// reducers
+
+export function reduceUserRooms (
+  state: IRoom[] = [],
+  action: UserRoomAction,
+): IRoom[] {
+  switch (action.type) {
+    case 'Rooms/setUserRooms':
+      return action.rooms;
+    default:
+      return state;
+  }
+}
+
+// ----------------------------------------------------------------------------
 // connectors
 
 export function connectRoom (

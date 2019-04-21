@@ -201,7 +201,7 @@ export default connect(
     firebaseUser: state.currentUser0.firebaseUser,
     loggedIn: state.currentUser0.loggedIn,
     userProfile: state.currentUser0.profile,
-    userRooms: state.rooms.userRooms,
+    userRooms: state.userRooms,
   }),
   (dispatch: Dispatch) => ({
     saveRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.saveRoom }),
