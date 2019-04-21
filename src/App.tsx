@@ -5,7 +5,7 @@ import LoadingView from './independents/LoadingView';
 import { appHistory, noop, store } from './misc';
 import * as CurrentUser from './models/CurrentUser';
 import * as Profiles from './models/Profiles';
-import { connectUserRooms } from './models/rooms';
+import { connectUserRooms } from './models/rooms0';
 import * as users from './models/users';
 import HomePage from './screens/HomePage';
 import LoginPage from './screens/LoginPage';

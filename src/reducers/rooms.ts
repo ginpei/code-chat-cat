@@ -1,5 +1,5 @@
 import { ClientRecord, IRecord } from '../misc';
-import { deleteRoom as firebaseDeleteRoom, updateRoom } from '../models/rooms';
+import { deleteRoom as firebaseDeleteRoom, updateRoom } from '../models/rooms0';
 
 export interface IRoomRecord extends IRecord {
   name: string;

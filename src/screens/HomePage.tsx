@@ -9,7 +9,7 @@ import { getDefaultHeaderMenu } from '../complexes/DefaultLayout';
 import Container from '../independents/Container';
 import LoadingView from '../independents/LoadingView';
 import { store } from '../misc';
-import { connectActiveRooms } from '../models/rooms';
+import { connectActiveRooms } from '../models/rooms0';
 import path, { RoomLink } from '../path';
 import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';

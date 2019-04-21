@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import DefaultLayout from '../complexes/DefaultLayout';
 import { appHistory } from '../misc';
-import { createRoom } from '../models/rooms';
+import { createRoom } from '../models/rooms0';
 import { Dispatch, IState } from '../reducers';
 
 const ErrorBlock = styled.div`
