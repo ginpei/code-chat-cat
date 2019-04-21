@@ -31,7 +31,7 @@ export function getInitialProfile (userId: string): IProfile {
 
 export function connectProfile (
   userId: string,
-  onNext: (snapshot: firebase.firestore.DocumentSnapshot) => void,
+  onNext: (profile: IProfile) => void,
   onError: (error: Error) => void = noop,
   onEach: () => void = noop,
 ): () => void {
@@ -43,7 +43,10 @@ export function connectProfile (
   const userRef = firebase.firestore().collection(collectionName).doc(userId);
   const unsubscribeNotes = userRef.onSnapshot(
     (snapshot) => {
-      onNext(snapshot);
+      const profile =
+        snapshotToProfile(snapshot)
+        || getInitialProfile(userId);
+      onNext(profile);
       onEach();
     },
     (error) => {

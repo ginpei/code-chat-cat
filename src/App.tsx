@@ -117,16 +117,11 @@ class App extends Component<IAppProps, IAppState> {
     this.unsubscribeAuth();
   }
 
-  private connectProfile (user: firebase.User | null) {
+  private connectProfile (user: firebase.User) {
     store.dispatch(CurrentUser.set(user));
     const unsubscribeProfile = Profiles.connectProfile(
       user ? user.uid : '',
-      (snapshot) => {
-        const profile =
-          Profiles.snapshotToProfile(snapshot)
-          || Profiles.getInitialProfile(user!.uid);
-        store.dispatch(CurrentUser.setProfile(profile));
-      },
+      (profile) => store.dispatch(CurrentUser.setProfile(profile)),
       (error) => {
         console.log('# profile error', error);
       },
