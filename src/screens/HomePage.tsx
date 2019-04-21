@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -9,6 +9,7 @@ import { getDefaultHeaderMenu } from '../complexes/DefaultLayout';
 import Container from '../independents/Container';
 import LoadingView from '../independents/LoadingView';
 import { store } from '../misc';
+import * as ErrorLogs from '../models/ErrorLogs';
 import * as Rooms from '../models/Rooms';
 import { connectActiveRooms } from '../models/rooms0';
 import path, { RoomLink } from '../path';
@@ -27,13 +28,17 @@ const LogoImage = styled.img`
 
 interface IHomePageProps {
   activeRooms: IRoom[];
+  connectUserRooms: (userId: string) => () => void;
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
+  userId: string;
   userProfile: IUserProfile | null;
   userRooms: Rooms.IRoom[];
 }
 
 function HomePage (props: IHomePageProps) {
+  useEffect(() => props.connectUserRooms(props.userId), [props.userId]);
+
   const menus = getDefaultHeaderMenu(props.userProfile);
 
   return (
@@ -105,7 +110,15 @@ export default connect(
     activeRooms: state.rooms.activeRooms,
     firebaseUser: state.currentUser0.firebaseUser,
     loggedIn: state.currentUser.loggedIn,
+    userId: state.currentUser.id,
     userProfile: state.currentUser0.profile,
     userRooms: state.userRooms,
+  }),
+  (dispatch: Dispatch) => ({
+    connectUserRooms: (userId: string) => Rooms.connectUserRooms(
+      userId,
+      (rooms) => dispatch(Rooms.setUserRooms(rooms)),
+      (error) => dispatch(ErrorLogs.add('connect user rooms', error)),
+    ),
   }),
 )(Wrapper);

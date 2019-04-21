@@ -32,7 +32,6 @@ interface IAppState {
 class App extends Component<IAppProps, IAppState> {
   protected unsubscribeAuth = noop;
   protected unsubscribeProfile = noop;
-  protected unsubscribeUserRooms = noop;
   protected unsubscribeCurrentUser0: () => void;
   protected unsubscribeUserRooms0: () => void;
 
@@ -106,14 +105,12 @@ class App extends Component<IAppProps, IAppState> {
           return;
         }
         this.unsubscribeProfile = this.connectProfile(user);
-        this.unsubscribeUserRooms = this.connectUserRooms(user);
       },
       (error) => this.saveError('auth error', error),
     );
   }
 
   private disconnectCurrentUser () {
-    this.unsubscribeUserRooms();
     this.unsubscribeProfile();
     this.unsubscribeAuth();
   }
@@ -126,15 +123,6 @@ class App extends Component<IAppProps, IAppState> {
       (error) => this.saveError('connect profile', error),
     );
     return unsubscribeProfile;
-  }
-
-  private connectUserRooms (user: firebase.User) {
-    const unsubscribe = Rooms.connectUserRooms(
-      user.uid,
-      (rooms) => store.dispatch(Rooms.setUserRooms(rooms)),
-      (error) => this.saveError('connect user rooms', error),
-    );
-    return unsubscribe;
   }
 
   private saveError (location: string, error: ErrorLogs.AppError) {

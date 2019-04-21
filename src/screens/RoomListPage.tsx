@@ -2,8 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DefaultLayout from '../complexes/DefaultLayout';
+import { noop } from '../misc';
+import * as ErrorLogs from '../models/ErrorLogs';
+import * as Rooms from '../models/Rooms';
 import path, { RoomLink } from '../path';
-import { IState } from '../reducers';
+import { Dispatch, IState } from '../reducers';
 import { IRoom, RoomStatus } from '../reducers/rooms';
 
 function RoomItem ({ room }: { room: IRoom }) {
@@ -24,11 +27,14 @@ function RoomItem ({ room }: { room: IRoom }) {
 }
 
 interface IRoomListPageProps {
+  connectUserRooms: (userId: string) => () => void;
   userId: string;
   userRooms: IRoom[];
 }
 
 class RoomListPage extends React.Component<IRoomListPageProps> {
+  protected unsubscribeUserRooms = noop;
+
   public render () {
     const rooms = this.props.userRooms;
 
@@ -56,11 +62,26 @@ class RoomListPage extends React.Component<IRoomListPageProps> {
       </DefaultLayout>
     );
   }
+
+  public componentDidMount () {
+    this.unsubscribeUserRooms = this.props.connectUserRooms(this.props.userId);
+  }
+
+  public componentWillUnmount () {
+    this.unsubscribeUserRooms();
+  }
 }
 
 export default connect(
   (state: IState) => ({
-    userId: state.currentUser0.uid,
+    userId: state.currentUser.id,
     userRooms: state.userRooms,
+  }),
+  (dispatch: Dispatch) => ({
+    connectUserRooms: (userId: string) => Rooms.connectUserRooms(
+      userId,
+      (rooms) => dispatch(Rooms.setUserRooms(rooms)),
+      (error) => dispatch(ErrorLogs.add('connect user rooms', error)),
+    ),
   }),
 )(RoomListPage);
