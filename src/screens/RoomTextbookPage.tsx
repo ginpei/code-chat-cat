@@ -30,33 +30,11 @@ interface IRoomTextbookPageParams {
 }
 interface IRoomTextbookPageProps
   extends RouteComponentProps<IRoomTextbookPageParams> {
-  room: Rooms.IRoom;
   userProfile: IUserProfile | null;
   saveError: (location: string, error: ErrorLogs.AppError) => void;
 }
 
-class RoomTextbookPage extends React.Component<IRoomTextbookPageProps> {
-  public render () {
-    const { room } = this.props;
-
-    return (
-      <div>
-        <RoomHeader
-          fullscreen={true}
-          room={room}
-          userProfile={this.props.userProfile}
-        />
-        <TextbookContainer>
-          <TextbookWrapper>
-            <TextbookContent content={room.textbookContent} />
-          </TextbookWrapper>
-        </TextbookContainer>
-      </div>
-    );
-  }
-}
-
-function Wrapper (props: IRoomTextbookPageProps) {
+function RoomTextbookPage (props: IRoomTextbookPageProps) {
   const roomId = props.match.params.id;
   const initialRoom = Rooms.emptyRoom;
 
@@ -85,7 +63,18 @@ function Wrapper (props: IRoomTextbookPageProps) {
   }
 
   return (
-    <RoomTextbookPage {...props} room={room} />
+    <div>
+      <RoomHeader
+        fullscreen={true}
+        room={room}
+        userProfile={props.userProfile}
+      />
+      <TextbookContainer>
+        <TextbookWrapper>
+          <TextbookContent content={room.textbookContent} />
+        </TextbookWrapper>
+      </TextbookContainer>
+    </div>
   );
 }
 
@@ -97,4 +86,4 @@ export default connect(
     saveError: (location: string, error: ErrorLogs.AppError) =>
       dispatch(ErrorLogs.add(location, error)),
   }),
-)(Wrapper);
+)(RoomTextbookPage);
