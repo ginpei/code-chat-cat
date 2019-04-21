@@ -66,20 +66,21 @@ export function connectRoom (
 
 export function connectUserRooms (
   userId: string,
-  onNext: (snapshot: firebase.firestore.QuerySnapshot) => void,
+  onNext: (rooms: IRoom[]) => void,
   onError: (error: Error) => void = noop,
   onEach: () => void = noop,
 ): () => void {
   if (!userId) {
     onEach();
-    return;
+    return noop;
   }
 
   const collRef = firebase.firestore().collection(collectionName)
     .where('userId', '==', userId);
   const unsubscribe = collRef.onSnapshot(
     (snapshot) => {
-      onNext(snapshot);
+      const rooms = snapshot.docs.map((v) => snapshotToRoom(v));
+      onNext(rooms);
       onEach();
     },
     (error) => {
