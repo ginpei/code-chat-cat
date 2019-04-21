@@ -3,7 +3,7 @@ import React from 'react';
 import App from './App';
 
 jest.mock('./models/users');
-jest.mock('./models/rooms');
+jest.mock('./models/rooms0');
 
 describe('<App>', () => {
   let wrapper: ShallowWrapper;
@@ -17,7 +17,7 @@ describe('<App>', () => {
       unsubscribeCurrentUser = jest.fn();
       users.initializeCurrentUser.mockReturnValue(unsubscribeCurrentUser);
 
-      const rooms = require('./models/rooms');
+      const rooms = require('./models/rooms0');
       unsubscribeUserRooms = jest.fn();
       rooms.connectUserRooms.mockReturnValue(unsubscribeUserRooms);
 
@@ -38,7 +38,7 @@ describe('<App>', () => {
 
     describe('user rooms', () => {
       it('connects', async () => {
-        const rooms = require('./models/rooms');
+        const rooms = require('./models/rooms0');
         expect(rooms.connectUserRooms).toBeCalled();
       });
 
