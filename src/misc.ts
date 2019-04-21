@@ -3,6 +3,8 @@ import { createBrowserHistory } from 'history';
 import { createStore } from 'redux';
 import rootReducer, { Action, IState } from './reducers';
 
+export const noop: () => void = () => undefined;
+
 export const appHistory = createBrowserHistory();
 export const store = createStore<IState, Action, {}, {}>(rootReducer);
 

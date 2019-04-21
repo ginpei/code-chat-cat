@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router';
 import LoadingView from './independents/LoadingView';
-import { appHistory, store } from './misc';
+import { appHistory, noop, store } from './misc';
+import * as CurrentUser from './models/CurrentUser';
+import * as Profiles from './models/Profiles';
 import { connectUserRooms } from './models/rooms';
 import * as users from './models/users';
 import HomePage from './screens/HomePage';
@@ -26,6 +28,8 @@ interface IAppState {
 }
 
 class App extends Component<IAppProps, IAppState> {
+  protected unsubscribeAuth = noop;
+  protected unsubscribeProfile = noop;
   protected unsubscribeCurrentUser0: () => void;
   protected unsubscribeUserRooms: () => void;
 
@@ -70,6 +74,8 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public async componentDidMount () {
+    this.connectCurrentUser();
+
     this.unsubscribeCurrentUser0 = await users.initializeCurrentUser(store);
     this.unsubscribeUserRooms = await connectUserRooms(store);
 
@@ -84,8 +90,39 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public componentWillUnmount () {
+    this.disconnectCurrentUser();
     this.unsubscribeCurrentUser0();
     this.unsubscribeUserRooms();
+  }
+
+  private connectCurrentUser () {
+    this.disconnectCurrentUser();
+    this.unsubscribeAuth = CurrentUser.connectAuth(
+      (user) => {
+        this.unsubscribeProfile = this.connectProfile(user);
+      },
+      (error) => console.log('# auth error', error), // TODO
+    );
+  }
+
+  private disconnectCurrentUser () {
+    this.unsubscribeProfile();
+    this.unsubscribeAuth();
+  }
+
+  private connectProfile (user: firebase.User | null) {
+    store.dispatch(CurrentUser.set(user));
+    const unsubscribeProfile = Profiles.connectProfile(
+      user ? user.uid : '',
+      (snapshot) => {
+        const profile = Profiles.snapshotToProfile(snapshot)!;
+        store.dispatch(CurrentUser.setProfile(profile));
+      },
+      (error) => {
+        console.log('# profile error', error);
+      },
+    );
+    return unsubscribeProfile;
   }
 }
 

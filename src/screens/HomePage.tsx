@@ -103,7 +103,7 @@ export default connect(
   (state: IState) => ({
     activeRooms: state.rooms.activeRooms,
     firebaseUser: state.currentUser0.firebaseUser,
-    loggedIn: state.currentUser0.loggedIn,
+    loggedIn: state.currentUser.loggedIn,
     userProfile: state.currentUser0.profile,
     userRooms: state.rooms.userRooms,
   }),
