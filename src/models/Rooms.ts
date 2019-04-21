@@ -35,19 +35,6 @@ export const emptyRoom = Object.freeze<IRoom>({
   userId: '',
 });
 
-/** @deprecated */
-function getEmptyRoom (): IRoom {
-  return {
-    createdAt: new firebase.firestore.Timestamp(0, 0),
-    id: '',
-    name: '',
-    status: RoomStatus.draft,
-    textbookContent: '',
-    updatedAt: new firebase.firestore.Timestamp(0, 0),
-    userId: '',
-  };
-}
-
 // ----------------------------------------------------------------------------
 // actions
 
@@ -149,14 +136,14 @@ export function snapshotToRoom (
     return null;
   }
 
-  const empty = getEmptyRoom();
+  const e = emptyRoom;
   return {
-    createdAt: data.createdAt || empty.createdAt,
-    id: data.id || empty.id,
-    name: data.name || empty.name,
-    status: data.status || empty.status,
-    textbookContent: data.textbookContent || empty.textbookContent,
-    updatedAt: data.updatedAt || empty.updatedAt,
-    userId: data.userId || empty.userId,
+    createdAt: data.createdAt || e.createdAt,
+    id: data.id || e.id,
+    name: data.name || e.name,
+    status: data.status || e.status,
+    textbookContent: data.textbookContent || e.textbookContent,
+    updatedAt: data.updatedAt || e.updatedAt,
+    userId: data.userId || e.userId,
   };
 }
