@@ -1,8 +1,7 @@
 import firebase from '../middleware/firebase';
 import { noop } from '../misc';
 
-const collectionName = 'users';
-// const collectionName = 'profiles';
+const collectionName = 'profiles';
 
 // ----------------------------------------------------------------------------
 // states
@@ -11,6 +10,20 @@ export interface IProfile {
   id: string;
   message: string;
   name: string;
+}
+
+export const emptyProfile: Readonly<IProfile> = Object.freeze({
+  id: '',
+  message: '',
+  name: '',
+});
+
+export function getInitialProfile (userId: string): IProfile {
+  return {
+    ...emptyProfile,
+    id: userId,
+    name: 'No name',
+  };
 }
 
 // ----------------------------------------------------------------------------

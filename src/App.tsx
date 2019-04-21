@@ -115,7 +115,9 @@ class App extends Component<IAppProps, IAppState> {
     const unsubscribeProfile = Profiles.connectProfile(
       user ? user.uid : '',
       (snapshot) => {
-        const profile = Profiles.snapshotToProfile(snapshot)!;
+        const profile =
+          Profiles.snapshotToProfile(snapshot)
+          || Profiles.getInitialProfile(user!.uid);
         store.dispatch(CurrentUser.setProfile(profile));
       },
       (error) => {
