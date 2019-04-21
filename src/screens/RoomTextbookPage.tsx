@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
@@ -8,8 +8,7 @@ import TextbookContent from '../basics/TextbookContent';
 import DefaultLayout from '../complexes/DefaultLayout';
 import Container from '../independents/Container';
 import LoadingView from '../independents/LoadingView';
-import { store } from '../misc';
-import { connectActiveRooms } from '../models/rooms0';
+import * as Rooms from '../models/Rooms';
 import { IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
 import { IRoom } from '../reducers/rooms';
@@ -30,25 +29,13 @@ interface IRoomTextbookPageParams {
 }
 interface IRoomTextbookPageProps
   extends RouteComponentProps<IRoomTextbookPageParams> {
-  activeRooms: IRoom[];
+  room: Rooms.IRoom | null;
   userProfile: IUserProfile | null;
-  userRooms: IRoom[];
 }
 
 class RoomTextbookPage extends React.Component<IRoomTextbookPageProps> {
-  protected get roomId () {
-    return this.props.match.params.id;
-  }
-
-  protected get room () {
-    return (
-      this.props.activeRooms.find((v) => v.id === this.roomId) ||
-      this.props.userRooms.find((v) => v.id === this.roomId)
-    );
-  }
-
   public render () {
-    const { room } = this;
+    const { room } = this.props;
 
     if (!room) {
       return (
@@ -76,30 +63,28 @@ class RoomTextbookPage extends React.Component<IRoomTextbookPageProps> {
 }
 
 function Wrapper (props: IRoomTextbookPageProps) {
-  const [working, setWorking] = useState(false);
-  const [ready, setReady] = useState(false);
+  const roomId = props.match.params.id;
+  const initialRoom = Rooms.emptyRoom;
 
-  if (!working) {
-    // no need to unsubscribe
-    connectActiveRooms(store, () => setReady(true));
-    setWorking(true);
-  }
+  const [room, setRoom] = useState<IRoom | null>(initialRoom);
+  useEffect(() => Rooms.connectRoom(
+    roomId,
+    (v) => setRoom(v),
+  ), [roomId]);
 
-  if (!ready) {
+  if (room === initialRoom) {
     return (
       <LoadingView/>
     );
   }
 
   return (
-    <RoomTextbookPage {...props} />
+    <RoomTextbookPage {...props} room={room} />
   );
 }
 
 export default connect(
   (state: IState) => ({
-    activeRooms: state.rooms0.activeRooms,
     userProfile: state.currentUser0.profile,
-    userRooms: state.userRooms,
   }),
 )(Wrapper);

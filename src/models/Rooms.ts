@@ -25,6 +25,17 @@ export enum RoomStatus {
   active = 2, // public and listed
 }
 
+export const emptyRoom = Object.freeze<IRoom>({
+  createdAt: new firebase.firestore.Timestamp(0, 0),
+  id: '',
+  name: '',
+  status: RoomStatus.draft,
+  textbookContent: '',
+  updatedAt: new firebase.firestore.Timestamp(0, 0),
+  userId: '',
+});
+
+/** @deprecated */
 function getEmptyRoom (): IRoom {
   return {
     createdAt: new firebase.firestore.Timestamp(0, 0),
@@ -75,7 +86,7 @@ export function reduceUserRooms (
 
 export function connectRoom (
   roomId: string,
-  onNext: (snapshot: firebase.firestore.DocumentSnapshot) => void,
+  onNext: (room: IRoom | null) => void,
   onError: (error: Error) => void = noop,
   onEach: () => void = noop,
 ): () => void {
@@ -86,7 +97,7 @@ export function connectRoom (
   const docRef = firebase.firestore().collection(collectionName).doc(roomId);
   const unsubscribe = docRef.onSnapshot(
     (snapshot) => {
-      onNext(snapshot);
+      onNext(snapshotToRoom(snapshot));
       onEach();
     },
     (error) => {
