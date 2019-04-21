@@ -102,9 +102,9 @@ function Wrapper (props: IHomePageProps) {
 export default connect(
   (state: IState) => ({
     activeRooms: state.rooms.activeRooms,
-    firebaseUser: state.currentUser.firebaseUser,
-    loggedIn: state.currentUser.loggedIn,
-    userProfile: state.currentUser.profile,
+    firebaseUser: state.currentUser0.firebaseUser,
+    loggedIn: state.currentUser0.loggedIn,
+    userProfile: state.currentUser0.profile,
     userRooms: state.rooms.userRooms,
   }),
 )(Wrapper);

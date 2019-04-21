@@ -70,6 +70,6 @@ function getAnonymousMenu (): IHeaderMenu[] {
 
 export default connect(
   (state: IState) => ({
-    userProfile: state.currentUser.profile,
+    userProfile: state.currentUser0.profile,
   }),
 )(DefaultLayout);

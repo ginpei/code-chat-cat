@@ -243,7 +243,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
 
 export default connect(
   (state: IState) => ({
-    userProfile: state.currentUser.profile,
+    userProfile: state.currentUser0.profile,
     userRooms: state.rooms.userRooms,
   }),
   (dispatch: Dispatch) => ({

@@ -99,7 +99,7 @@ function Wrapper (props: IRoomTextbookPageProps) {
 export default connect(
   (state: IState) => ({
     activeRooms: state.rooms.activeRooms,
-    userProfile: state.currentUser.profile,
+    userProfile: state.currentUser0.profile,
     userRooms: state.rooms.userRooms,
   }),
 )(Wrapper);

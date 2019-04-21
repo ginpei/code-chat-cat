@@ -26,7 +26,7 @@ interface IAppState {
 }
 
 class App extends Component<IAppProps, IAppState> {
-  protected unsubscribeCurrentUser: () => void;
+  protected unsubscribeCurrentUser0: () => void;
   protected unsubscribeUserRooms: () => void;
 
   constructor (props: IAppProps) {
@@ -34,7 +34,7 @@ class App extends Component<IAppProps, IAppState> {
     this.state = {
       ready: false,
     };
-    this.unsubscribeCurrentUser = () => undefined;
+    this.unsubscribeCurrentUser0 = () => undefined;
     this.unsubscribeUserRooms = () => undefined;
   }
 
@@ -70,11 +70,11 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public async componentDidMount () {
-    this.unsubscribeCurrentUser = await users.initializeCurrentUser(store);
+    this.unsubscribeCurrentUser0 = await users.initializeCurrentUser(store);
     this.unsubscribeUserRooms = await connectUserRooms(store);
 
     const un = store.subscribe(() => {
-      const userReady = store.getState().currentUser.ready;
+      const userReady = store.getState().currentUser0.ready;
       const roomReady = store.getState().rooms.ready;
       if (userReady && roomReady) {
         this.setState({ ready: true });
@@ -84,7 +84,7 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public componentWillUnmount () {
-    this.unsubscribeCurrentUser();
+    this.unsubscribeCurrentUser0();
     this.unsubscribeUserRooms();
   }
 }

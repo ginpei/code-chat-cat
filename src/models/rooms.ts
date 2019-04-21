@@ -16,7 +16,7 @@ export function connectUserRooms (store: Store) {
   let unsubscribeUserRoomsSnapshot: () => void = () => undefined;
   const unsubscribeStore = store.subscribe(() => {
     const state = store.getState();
-    const newUserId = state.currentUser.uid;
+    const newUserId = state.currentUser0.uid;
     if (newUserId === userId) {
       return;
     }

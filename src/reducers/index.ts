@@ -4,7 +4,7 @@ import currentUser, { CurrentUserAction, ICurrentUser } from './currentUser';
 import rooms, { IRoomState, RoomsAction } from './rooms';
 
 export interface IState {
-  currentUser: ICurrentUser;
+  currentUser0: ICurrentUser;
   rooms: IRoomState;
 }
 
@@ -13,6 +13,6 @@ export type Dispatch = (action: Action) => void;
 export type Store = ReduxStore<IState, Action>;
 
 export default combineReducers<IState>({
-  currentUser,
+  currentUser0: currentUser,
   rooms,
 });

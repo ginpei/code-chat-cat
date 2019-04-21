@@ -119,7 +119,7 @@ class SettingsPage extends React.Component<ISettingsPageProps, ISettingsPageStat
 
 export default connect(
   (state: IState) => ({
-    currentUser: state.currentUser,
-    userProfile: state.currentUser.profile,
+    currentUser: state.currentUser0,
+    userProfile: state.currentUser0.profile,
   }),
 )(SettingsPage);

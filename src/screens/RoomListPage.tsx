@@ -60,7 +60,7 @@ class RoomListPage extends React.Component<IRoomListPageProps> {
 
 export default connect(
   (state: IState) => ({
-    userId: state.currentUser.uid,
+    userId: state.currentUser0.uid,
     userRooms: state.rooms.userRooms,
   }),
 )(RoomListPage);
