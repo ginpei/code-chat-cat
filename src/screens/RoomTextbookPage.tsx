@@ -8,8 +8,9 @@ import TextbookContent from '../basics/TextbookContent';
 import DefaultLayout from '../complexes/DefaultLayout';
 import Container from '../independents/Container';
 import LoadingView from '../independents/LoadingView';
+import * as ErrorLogs from '../models/ErrorLogs';
 import * as Rooms from '../models/Rooms';
-import { IState } from '../reducers';
+import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
 import { IRoom } from '../reducers/rooms';
 
@@ -29,21 +30,14 @@ interface IRoomTextbookPageParams {
 }
 interface IRoomTextbookPageProps
   extends RouteComponentProps<IRoomTextbookPageParams> {
-  room: Rooms.IRoom | null;
+  room: Rooms.IRoom;
   userProfile: IUserProfile | null;
+  saveError: (location: string, error: ErrorLogs.AppError) => void;
 }
 
 class RoomTextbookPage extends React.Component<IRoomTextbookPageProps> {
   public render () {
     const { room } = this.props;
-
-    if (!room) {
-      return (
-        <DefaultLayout>
-          <h1>Room not found</h1>
-        </DefaultLayout>
-      );
-    }
 
     return (
       <div>
@@ -70,11 +64,23 @@ function Wrapper (props: IRoomTextbookPageProps) {
   useEffect(() => Rooms.connectRoom(
     roomId,
     (v) => setRoom(v),
+    (error) => {
+      setRoom(null);
+      props.saveError('connect room', error);
+    },
   ), [roomId]);
 
   if (room === initialRoom) {
     return (
       <LoadingView/>
+    );
+  }
+
+  if (!room) {
+    return (
+      <DefaultLayout>
+        <h1>Room not found</h1>
+      </DefaultLayout>
     );
   }
 
@@ -86,5 +92,9 @@ function Wrapper (props: IRoomTextbookPageProps) {
 export default connect(
   (state: IState) => ({
     userProfile: state.currentUser0.profile,
+  }),
+  (dispatch: Dispatch) => ({
+    saveError: (location: string, error: ErrorLogs.AppError) =>
+      dispatch(ErrorLogs.add(location, error)),
   }),
 )(Wrapper);
