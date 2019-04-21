@@ -4,6 +4,7 @@ import { Route, Router, Switch } from 'react-router';
 import LoadingView from './independents/LoadingView';
 import { appHistory, noop, store } from './misc';
 import * as CurrentUser from './models/CurrentUser';
+import * as ErrorLogs from './models/ErrorLogs';
 import * as Profiles from './models/Profiles';
 import * as Rooms from './models/Rooms';
 import { connectUserRooms } from './models/rooms0';
@@ -107,7 +108,7 @@ class App extends Component<IAppProps, IAppState> {
         this.unsubscribeProfile = this.connectProfile(user);
         this.unsubscribeUserRooms = this.connectUserRooms(user);
       },
-      (error) => console.log('# auth error', error), // TODO
+      (error) => this.saveError('auth error', error),
     );
   }
 
@@ -122,9 +123,7 @@ class App extends Component<IAppProps, IAppState> {
     const unsubscribeProfile = Profiles.connectProfile(
       user ? user.uid : '',
       (profile) => store.dispatch(CurrentUser.setProfile(profile)),
-      (error) => {
-        console.log('# profile error', error);
-      },
+      (error) => this.saveError('connect profile', error),
     );
     return unsubscribeProfile;
   }
@@ -133,9 +132,13 @@ class App extends Component<IAppProps, IAppState> {
     const unsubscribe = Rooms.connectUserRooms(
       user.uid,
       (rooms) => console.log('# rooms', rooms),
-      (error) => console.log('# error', error),
+      (error) => this.saveError('connect user rooms', error),
     );
     return unsubscribe;
+  }
+
+  private saveError (location: string, error: ErrorLogs.AppError) {
+    store.dispatch(ErrorLogs.add(location, error));
   }
 }
 
