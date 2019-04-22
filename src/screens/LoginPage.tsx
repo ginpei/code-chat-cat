@@ -46,6 +46,6 @@ function LoginPage (props: ILoginPageProps) {
 
 export default connect(
   (state: IState) => ({
-    loggedIn: state.currentUser0.loggedIn,
+    loggedIn: state.currentUser.loggedIn,
   }),
 )(LoginPage);

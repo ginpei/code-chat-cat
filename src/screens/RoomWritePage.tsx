@@ -10,6 +10,7 @@ import syncScroll from '../functions/syncScroll';
 import LoadingView from '../independents/LoadingView';
 import { debounce, noop } from '../misc';
 import * as ErrorLogs from '../models/ErrorLogs';
+import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
 import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
@@ -48,7 +49,7 @@ interface IRoomWritePageProps
   pickRoom: (roomId: string) => IRoom;
   saveError: (location: string, error: ErrorLogs.AppError) => void;
   saveRoom: (room: IRoom) => void;
-  userProfile: IUserProfile | null;
+  userProfile: Profiles.IProfile | null;
   userRooms: IRoom[];
 }
 interface IRoomWritePageState {
@@ -224,10 +225,10 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
 
 export default connect(
   (state: IState) => ({
-    firebaseUser: state.currentUser0.firebaseUser,
-    loggedIn: state.currentUser0.loggedIn,
+    firebaseUser: state.currentUser.firebaseUser,
+    loggedIn: state.currentUser.loggedIn,
     pickRoom: (roomId: string) => Rooms.pickRoom(state, roomId),
-    userProfile: state.currentUser0.profile,
+    userProfile: state.currentUser.profile,
     userRooms: Rooms.pickUserRooms(state),
   }),
   (dispatch: Dispatch) => ({

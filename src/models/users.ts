@@ -18,7 +18,7 @@ export async function initializeCurrentUser (store: Store) {
   let unsubscribeDatabase: () => void = () => undefined;
   const unsubscribeStore = store.subscribe(async () => {
     const state: IState = store.getState();
-    const { firebaseUser } = state.currentUser0;
+    const { firebaseUser } = state.currentUser;
     const uid = firebaseUser ? firebaseUser.uid : '';
     if (uid !== lastUserId) {
       unsubscribeDatabase();
@@ -41,7 +41,7 @@ export async function initializeCurrentUser (store: Store) {
           getReady(store);
         }, (error) => console.log('ERR', error));
       }
-    } else if (uid && !state.currentUser0.profile) {
+    } else if (uid && !state.currentUser.profile) {
       // probably the user is logged in and yet fetching profile
       // so do nothing here
     } else {
@@ -57,7 +57,7 @@ export async function initializeCurrentUser (store: Store) {
 }
 
 function getReady (store: Store) {
-  if (!store.getState().currentUser0.ready) {
+  if (!store.getState().currentUser.ready) {
     // if not wait, store subscriber won't be called back in App.tsx
     // when not logged in and hot module replacement happened
     // (why??)

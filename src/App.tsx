@@ -82,7 +82,7 @@ class App extends Component<IAppProps, IAppState> {
     this.unsubscribeUserRooms0 = await connectUserRooms(store);
 
     const un = store.subscribe(() => {
-      const userReady = store.getState().currentUser0.ready;
+      const userReady = store.getState().currentUser.ready;
       const roomReady = store.getState().rooms0.ready;
       if (userReady && roomReady) {
         this.setState({ ready: true });

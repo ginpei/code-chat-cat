@@ -105,6 +105,6 @@ class RoomNewPage extends React.Component<IRoomNewPageProps, IRoomNewPageState> 
 
 export default connect(
   (state: IState) => ({
-    userId: state.currentUser0.uid,
+    userId: state.currentUser.id,
   }),
 )(RoomNewPage);

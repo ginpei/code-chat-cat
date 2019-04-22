@@ -1,11 +1,11 @@
 import React from 'react';
+import * as Profiles from '../models/Profiles';
 import path from '../path';
-import { IUserProfile } from '../reducers/currentUser';
 import { IRoom } from '../reducers/rooms';
 import Header from './Header';
 import { IHeaderMenu } from './HeaderMenu';
 
-function getLoggedInMenu (profile: IUserProfile, room: IRoom): IHeaderMenu[] {
+function getLoggedInMenu (profile: Profiles.IProfile, room: IRoom): IHeaderMenu[] {
   return [
     {
       links: [
@@ -48,7 +48,7 @@ function getAnonymousMenu (): IHeaderMenu[] {
 interface IRoomHeaderProps {
   fullscreen?: boolean;
   room: IRoom;
-  userProfile: IUserProfile | null;
+  userProfile: Profiles.IProfile | null;
 }
 
 export default function RoomHeader (props: IRoomHeaderProps) {

@@ -5,13 +5,12 @@ import styled from 'styled-components';
 import { headerHeight } from '../basics/Header';
 import RoomHeader from '../basics/RoomHeader';
 import TextbookContent from '../basics/TextbookContent';
-import DefaultLayout from '../complexes/DefaultLayout';
 import Container from '../independents/Container';
 import LoadingView from '../independents/LoadingView';
 import * as ErrorLogs from '../models/ErrorLogs';
+import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
 import { Dispatch, IState } from '../reducers';
-import { IUserProfile } from '../reducers/currentUser';
 import { IRoom } from '../reducers/rooms';
 import NotFoundPage from './NotFoundPage';
 
@@ -32,7 +31,7 @@ interface IRoomTextbookPageParams {
 interface IRoomTextbookPageProps
   extends RouteComponentProps<IRoomTextbookPageParams> {
   pickRoom: (roomId: string) => IRoom;
-  userProfile: IUserProfile | null;
+  userProfile: Profiles.IProfile | null;
   saveError: (location: string, error: ErrorLogs.AppError) => void;
 }
 
@@ -83,7 +82,7 @@ function RoomTextbookPage (props: IRoomTextbookPageProps) {
 export default connect(
   (state: IState) => ({
     pickRoom: (roomId: string) => Rooms.pickRoom(state, roomId),
-    userProfile: state.currentUser0.profile,
+    userProfile: state.currentUser.profile,
   }),
   (dispatch: Dispatch) => ({
     saveError: (location: string, error: ErrorLogs.AppError) =>

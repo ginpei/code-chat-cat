@@ -8,6 +8,7 @@ import { MainContainer } from '../complexes/DefaultLayout';
 import LoadingView from '../independents/LoadingView';
 import { appHistory, noop } from '../misc';
 import * as ErrorLogs from '../models/ErrorLogs';
+import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
 import { RoomLink } from '../path';
 import { Dispatch, IState } from '../reducers';
@@ -93,7 +94,7 @@ interface IRoomSettingsPageProps
   pickRoom: (roomId: string) => IRoom;
   saveError: (location: string, error: ErrorLogs.AppError) => void;
   saveRoom: (room: IRoom) => void;
-  userProfile: IUserProfile | null;
+  userProfile: Profiles.IProfile | null;
   userRooms: IRoom[];
 }
 interface IRoomSettingsPageState {
@@ -279,7 +280,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
 export default connect(
   (state: IState) => ({
     pickRoom: (roomId: string) => Rooms.pickRoom(state, roomId),
-    userProfile: state.currentUser0.profile,
+    userProfile: state.currentUser.profile,
     userRooms: Rooms.pickUserRooms(state),
   }),
   (dispatch: Dispatch) => ({

@@ -8,7 +8,7 @@ import rooms, { IRoomState, RoomsAction } from './rooms';
 
 export interface IState {
   currentUser: CurrentUser.ICurrentUserState;
-  currentUser0: ICurrentUser;
+  // currentUser0: ICurrentUser;
   errorLogs: ErrorLogs.IErrorLog[];
   rooms: Rooms.IRoomState;
   rooms0: IRoomState;
@@ -25,7 +25,7 @@ export type Store = ReduxStore<IState, Action>;
 
 export default combineReducers<IState>({
   currentUser: CurrentUser.reduceCurrentUser,
-  currentUser0: currentUser,
+  // currentUser0: currentUser,
   errorLogs: ErrorLogs.reduceErrorLogs,
   rooms: Rooms.reduceRooms,
   rooms0: rooms,

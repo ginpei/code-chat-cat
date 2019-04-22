@@ -10,6 +10,7 @@ import Container from '../independents/Container';
 import LoadingView from '../independents/LoadingView';
 import { store } from '../misc';
 import * as ErrorLogs from '../models/ErrorLogs';
+import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
 import { connectActiveRooms } from '../models/rooms0';
 import path, { RoomLink } from '../path';
@@ -33,7 +34,7 @@ interface IHomePageProps {
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
   userId: string;
-  userProfile: IUserProfile | null;
+  userProfile: Profiles.IProfile | null;
   userRooms: Rooms.IRoom[];
 }
 
@@ -110,10 +111,10 @@ function Wrapper (props: IHomePageProps) {
 export default connect(
   (state: IState) => ({
     activeRooms: Rooms.pickActiveRooms(state),
-    firebaseUser: state.currentUser0.firebaseUser,
+    firebaseUser: state.currentUser.firebaseUser,
     loggedIn: state.currentUser.loggedIn,
     userId: state.currentUser.id,
-    userProfile: state.currentUser0.profile,
+    userProfile: state.currentUser.profile,
     userRooms: Rooms.pickUserRooms(state),
   }),
   (dispatch: Dispatch) => ({

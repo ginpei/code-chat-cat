@@ -6,15 +6,20 @@ import * as Profiles from './Profiles';
 // states
 
 export interface ICurrentUserState {
+  firebaseUser: firebase.User | null;
   id: string;
   loggedIn: boolean;
   name: string;
+  profile: Profiles.IProfile | null;
   ready: boolean;
 }
+
 const initialState: ICurrentUserState = {
+  firebaseUser: null,
   id: '',
   loggedIn: false,
   name: '',
+  profile: null,
   ready: false,
 };
 
@@ -42,9 +47,11 @@ function setCurrentUser (user: firebase.User | null): ICurrentUserState {
   }
 
   return {
+    firebaseUser: user,
     id: user.uid,
     loggedIn: true,
     name: '',
+    profile: null,
     ready: true,
   };
 }
@@ -79,6 +86,7 @@ export function reduceCurrentUser (
       return {
         ...state,
         name: action.profile.name,
+        profile: action.profile,
       };
     default:
       return state;
