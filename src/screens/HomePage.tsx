@@ -62,10 +62,10 @@ function HomePage (props: IHomePageProps) {
             </li>
           ))}
         </ul>
-        {props.loggedIn ? (
+        {props.userProfile ? (
           <>
             <p>
-              Welcome back, {props.userProfile!.name}!
+              Welcome back, {props.userProfile.name}!
               <Link to={path('logout')}>Log out</Link>
             </p>
             <p>Your rooms</p>
