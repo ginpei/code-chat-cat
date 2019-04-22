@@ -57,6 +57,11 @@ export function connectProfile (
   return unsubscribeNotes;
 }
 
+export function saveProfile (profile: IProfile) {
+  const userRef = firebase.firestore().collection(collectionName).doc(profile.id);
+  return userRef.set(profile);
+}
+
 export function snapshotToProfile (
   snapshot: firebase.firestore.DocumentSnapshot,
 ): IProfile | null {

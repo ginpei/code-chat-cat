@@ -4,10 +4,8 @@ import { Link } from 'react-router-dom';
 import DefaultLayout from '../complexes/DefaultLayout';
 import * as CurrentUser from '../models/CurrentUser';
 import * as Profiles from '../models/Profiles';
-import * as users from '../models/users';
 import path from '../path';
-import { Dispatch, IState } from '../reducers';
-import { ICurrentUser, IUserProfile } from '../reducers/currentUser';
+import { IState } from '../reducers';
 
 interface ISettingsPageProps {
   currentUser: CurrentUser.ICurrentUserState;
@@ -103,11 +101,10 @@ class SettingsPage extends React.Component<ISettingsPageProps, ISettingsPageStat
       savingProfile: true,
     });
 
-    // TODO update
-    // await users.saveUser({
-    //   ...this.props.userProfile!,
-    //   name: this.state.userName,
-    // });
+    await Profiles.saveProfile({
+      ...this.props.userProfile!,
+      name: this.state.userName,
+    });
     this.setState({
       savingProfile: false,
     });
