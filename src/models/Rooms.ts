@@ -133,6 +133,7 @@ export function reduceDocs (
   action: RoomsAction,
 ): IIdMap<IRoom> {
   switch (action.type) {
+    case 'Rooms/setActiveRooms':
     case 'Rooms/setUserRooms': {
       const docs = { ...state };
       action.rooms.forEach((v) => docs[v.id] = v);
