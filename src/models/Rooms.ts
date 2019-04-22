@@ -103,19 +103,6 @@ export type RoomsAction =
 // ----------------------------------------------------------------------------
 // reducers
 
-/** @deprecated */
-export function reduceUserRooms (
-  state: IRoom[] = [],
-  action: RoomsAction,
-): IRoom[] {
-  switch (action.type) {
-    case 'Rooms/setUserRooms':
-      return action.rooms;
-    default:
-      return state;
-  }
-}
-
 export function reduceActiveRoomIds (
   state: string[] = [],
   action: RoomsAction,
