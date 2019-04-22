@@ -8,14 +8,11 @@ import Header from '../basics/Header';
 import { getDefaultHeaderMenu } from '../complexes/DefaultLayout';
 import Container from '../independents/Container';
 import LoadingView from '../independents/LoadingView';
-import { store } from '../misc';
 import * as ErrorLogs from '../models/ErrorLogs';
 import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
-import { connectActiveRooms } from '../models/rooms0';
 import path, { RoomLink } from '../path';
 import { Dispatch, IState } from '../reducers';
-import { IUserProfile } from '../reducers/currentUser';
 import { IRoom } from '../reducers/rooms';
 
 const LogoImageContainer = styled.div`
@@ -29,8 +26,8 @@ const LogoImage = styled.img`
 
 interface IHomePageProps {
   activeRooms: IRoom[];
-  connectActiveRooms: () => () => void;
-  connectUserRooms: (userId: string) => () => void;
+  connectActiveRooms: (setReady: () => void) => () => void;
+  connectUserRooms: (userId: string, setReady: () => void) => () => void;
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
   userId: string;
@@ -39,8 +36,22 @@ interface IHomePageProps {
 }
 
 function HomePage (props: IHomePageProps) {
-  useEffect(() => props.connectActiveRooms(), []);
-  useEffect(() => props.connectUserRooms(props.userId), [props.userId]);
+  const [activeRoomsReady, setActiveRoomsReady] = useState(false);
+  useEffect(() => props.connectActiveRooms(
+    () => setActiveRoomsReady(true),
+  ), []);
+
+  const [userRoomsReady, setUserRoomsReady] = useState(false);
+  useEffect(() => props.connectUserRooms(
+    props.userId,
+    () => setUserRoomsReady(true),
+  ), [props.userId]);
+
+  if (!activeRoomsReady || !userRoomsReady) {
+    return (
+      <LoadingView/>
+    );
+  }
 
   const menus = getDefaultHeaderMenu(props.userProfile);
 
@@ -87,27 +98,6 @@ function HomePage (props: IHomePageProps) {
   );
 }
 
-function Wrapper (props: IHomePageProps) {
-  const [working, setWorking] = useState(false);
-  const [ready, setReady] = useState(false);
-
-  if (!working) {
-    // no need to unsubscribe
-    connectActiveRooms(store, () => setReady(true));
-    setWorking(true);
-  }
-
-  if (!ready) {
-    return (
-      <LoadingView/>
-    );
-  }
-
-  return (
-    <HomePage {...props} />
-  );
-}
-
 export default connect(
   (state: IState) => ({
     activeRooms: Rooms.pickActiveRooms(state),
@@ -118,14 +108,17 @@ export default connect(
     userRooms: Rooms.pickUserRooms(state),
   }),
   (dispatch: Dispatch) => ({
-    connectActiveRooms: () => Rooms.connectActiveRooms(
+    connectActiveRooms: (setReady: () => void) => Rooms.connectActiveRooms(
       (rooms) => dispatch(Rooms.setActiveRooms(rooms)),
       (error) => dispatch(ErrorLogs.add('connect active rooms', error)),
+      () => setReady(),
     ),
-    connectUserRooms: (userId: string) => Rooms.connectUserRooms(
-      userId,
-      (rooms) => dispatch(Rooms.setUserRooms(rooms)),
-      (error) => dispatch(ErrorLogs.add('connect user rooms', error)),
-    ),
+    connectUserRooms: (userId: string, setReady: () => void) =>
+      Rooms.connectUserRooms(
+        userId,
+        (rooms) => dispatch(Rooms.setUserRooms(rooms)),
+        (error) => dispatch(ErrorLogs.add('connect user rooms', error)),
+        () => setReady(),
+      ),
   }),
-)(Wrapper);
+)(HomePage);
