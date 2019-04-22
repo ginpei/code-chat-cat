@@ -168,6 +168,9 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
   }
 
   protected setContent (content: string) {
+    if (content === this.state.content) {
+      return;
+    }
     this.setState({ content });
     this.setRenderingContent(content);
     this.saveContent();
