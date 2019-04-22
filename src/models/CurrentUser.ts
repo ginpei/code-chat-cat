@@ -113,3 +113,7 @@ export function connectAuth (
   );
   return unsubscribeAuth;
 }
+
+export function logOut () {
+  return firebase.auth().signOut();
+}

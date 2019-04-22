@@ -6,9 +6,6 @@ import { appHistory, noop, store } from './misc';
 import * as CurrentUser from './models/CurrentUser';
 import * as ErrorLogs from './models/ErrorLogs';
 import * as Profiles from './models/Profiles';
-import * as Rooms from './models/Rooms';
-import { connectUserRooms } from './models/rooms0';
-import * as users from './models/users';
 import HomePage from './screens/HomePage';
 import LoginPage from './screens/LoginPage';
 import LogoutPage from './screens/LogoutPage';
@@ -32,16 +29,12 @@ interface IAppState {
 class App extends Component<IAppProps, IAppState> {
   protected unsubscribeAuth = noop;
   protected unsubscribeProfile = noop;
-  protected unsubscribeCurrentUser0: () => void;
-  protected unsubscribeUserRooms0: () => void;
 
   constructor (props: IAppProps) {
     super(props);
     this.state = {
       ready: false,
     };
-    this.unsubscribeCurrentUser0 = () => undefined;
-    this.unsubscribeUserRooms0 = () => undefined;
   }
 
   public render () {
@@ -77,24 +70,10 @@ class App extends Component<IAppProps, IAppState> {
 
   public async componentDidMount () {
     this.connectCurrentUser();
-
-    this.unsubscribeCurrentUser0 = await users.initializeCurrentUser(store);
-    this.unsubscribeUserRooms0 = await connectUserRooms(store);
-
-    const un = store.subscribe(() => {
-      const userReady = store.getState().currentUser.ready;
-      const roomReady = store.getState().rooms0.ready;
-      if (userReady && roomReady) {
-        this.setState({ ready: true });
-        un();
-      }
-    });
   }
 
   public componentWillUnmount () {
     this.disconnectCurrentUser();
-    this.unsubscribeCurrentUser0();
-    this.unsubscribeUserRooms0();
   }
 
   private connectCurrentUser () {
@@ -107,6 +86,7 @@ class App extends Component<IAppProps, IAppState> {
         this.unsubscribeProfile = this.connectProfile(user);
       },
       (error) => this.saveError('auth error', error),
+      () => this.setState({ ready: true }),
     );
   }
 

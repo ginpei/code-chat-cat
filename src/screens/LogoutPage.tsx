@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import DefaultLayout from '../complexes/DefaultLayout';
-import * as users from '../models/users';
+import * as CurrentUser from '../models/CurrentUser';
 import { HomeLink } from '../path';
 
 export default function LogoutPage () {
   const [done, setDone] = useState(false);
 
-  users.logOut()
+  CurrentUser.logOut()
     .then(() => setDone(true));
 
   return (
