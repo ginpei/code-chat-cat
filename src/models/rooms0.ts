@@ -32,12 +32,12 @@ export function createRoom (
   });
 }
 
-export async function updateRoom (room: IRoom): Promise<void> {
-  const record = roomToRecord(room);
-  record.createdAt = record.createdAt || firebase.firestore.Timestamp.now();
-  record.updatedAt = firebase.firestore.Timestamp.now();
-  return roomsRef.doc(room.id).update(record);
-}
+// export async function updateRoom (room: IRoom): Promise<void> {
+//   const record = roomToRecord(room);
+//   record.createdAt = record.createdAt || firebase.firestore.Timestamp.now();
+//   record.updatedAt = firebase.firestore.Timestamp.now();
+//   return roomsRef.doc(room.id).update(record);
+// }
 
 export async function deleteRoom (room: IRoom) {
   return roomsRef.doc(room.id).delete();

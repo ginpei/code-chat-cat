@@ -84,6 +84,18 @@ export function setUserRooms (rooms: IRoom[]): ISetUserRoomsAction {
   };
 }
 
+interface ISaveRoomAction {
+  room: IRoom;
+  type: 'Rooms/saveRoom';
+}
+
+export function saveRoom (room: IRoom): ISaveRoomAction {
+  return {
+    room,
+    type: 'Rooms/saveRoom',
+  };
+}
+
 interface ISetActiveRoomsAction {
   rooms: IRoom[];
   type: 'Rooms/setActiveRooms';
@@ -98,6 +110,7 @@ export function setActiveRooms (rooms: IRoom[]): ISetActiveRoomsAction {
 
 export type RoomsAction =
   | ISetUserRoomsAction
+  | ISaveRoomAction
   | ISetActiveRoomsAction;
 
 // ----------------------------------------------------------------------------
@@ -120,6 +133,19 @@ export function reduceDocs (
   action: RoomsAction,
 ): IIdMap<IRoom> {
   switch (action.type) {
+    case 'Rooms/saveRoom': {
+      const docs = { ...state };
+      const room = {
+        ...action.room,
+        createdAt: action.room.createdAt || firebase.firestore.Timestamp.now(),
+        updatedAt: firebase.firestore.Timestamp.now(),
+      };
+      const collRef = firebase.firestore().collection(collectionName);
+      collRef.doc(room.id).update(room);
+
+      docs[room.id] = room;
+      return docs;
+    }
     case 'Rooms/setActiveRooms':
     case 'Rooms/setUserRooms': {
       const docs = { ...state };

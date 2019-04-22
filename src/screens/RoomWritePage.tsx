@@ -237,7 +237,6 @@ export default connect(
   (dispatch: Dispatch) => ({
     saveError: (location: string, error: ErrorLogs.AppError) =>
       dispatch(ErrorLogs.add(location, error)),
-    saveRoom: (room: IRoom) =>
-      dispatch({ room, type: RoomsActionTypes.saveRoom }),
+    saveRoom: (room: IRoom) => dispatch(Rooms.saveRoom(room)),
   }),
 )(RoomWritePage);

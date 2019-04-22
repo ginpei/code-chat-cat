@@ -271,7 +271,6 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     this.setState({
       room,
       roomName: room ? room.name : '',
-      roomSaving: false,
       roomStatus: room ? room.status : RoomStatus.draft,
     });
   }
@@ -287,6 +286,6 @@ export default connect(
     deleteRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.deleteRoom }),
     saveError: (location: string, error: ErrorLogs.AppError) =>
       dispatch(ErrorLogs.add(location, error)),
-    saveRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.saveRoom }),
+    saveRoom: (room: IRoom) => dispatch(Rooms.saveRoom(room)),
   }),
 )(RoomSettingsPage);
