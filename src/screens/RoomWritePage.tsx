@@ -14,6 +14,7 @@ import * as Rooms from '../models/Rooms';
 import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
+import NotFoundPage from './NotFoundPage';
 
 const EditorContainer = styled.div`
   display: grid;
@@ -94,9 +95,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
 
     if (!room) {
       return (
-        <div>
-          <p>404</p>
-        </div>
+        <NotFoundPage/>
       );
     }
 

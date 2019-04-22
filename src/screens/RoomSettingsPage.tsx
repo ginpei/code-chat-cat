@@ -130,9 +130,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
 
     if (!room) {
       return (
-        <div>
-          <p>404</p>
-        </div>
+        <NotFoundPage/>
       );
     }
 

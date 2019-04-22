@@ -13,6 +13,7 @@ import * as Rooms from '../models/Rooms';
 import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
 import { IRoom } from '../reducers/rooms';
+import NotFoundPage from './NotFoundPage';
 
 const TextbookContainer = styled.div`
   height: calc(100vh - ${headerHeight}px);
@@ -59,9 +60,7 @@ function RoomTextbookPage (props: IRoomTextbookPageProps) {
 
   if (!room) {
     return (
-      <DefaultLayout>
-        <h1>Room not found</h1>
-      </DefaultLayout>
+      <NotFoundPage/>
     );
   }
 
