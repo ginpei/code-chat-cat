@@ -28,6 +28,7 @@ export enum RoomStatus {
 }
 
 export interface IRoomState {
+  activeRoomIds: string[];
   docs: IIdMap<IRoom>;
   userRoomIds: string[];
 }
@@ -35,6 +36,7 @@ export interface IRoomState {
 interface IIdMap<T> { [id: string]: T; }
 
 const initialRoomState = Object.freeze<IRoomState>({
+  activeRoomIds: [],
   docs: {},
   userRoomIds: [],
 });
@@ -54,9 +56,17 @@ export function pickRoom (state: IState, roomId: string) {
   return room;
 }
 
+export function pickRoomsByIds (state: IState, roomIds: string[]) {
+  const rooms = roomIds.map((id) => pickRoom(state, id));
+  return rooms;
+}
+
 export function pickUserRooms (state: IState) {
-  const userRooms = state.rooms.userRoomIds.map((id) => pickRoom(state, id));
-  return userRooms;
+  return pickRoomsByIds(state, state.rooms.userRoomIds);
+}
+
+export function pickActiveRooms (state: IState) {
+  return pickRoomsByIds(state, state.rooms.activeRoomIds);
 }
 
 // ----------------------------------------------------------------------------
@@ -74,8 +84,21 @@ export function setUserRooms (rooms: IRoom[]): ISetUserRoomsAction {
   };
 }
 
+interface ISetActiveRoomsAction {
+  rooms: IRoom[];
+  type: 'Rooms/setActiveRooms';
+}
+
+export function setActiveRooms (rooms: IRoom[]): ISetActiveRoomsAction {
+  return {
+    rooms,
+    type: 'Rooms/setActiveRooms',
+  };
+}
+
 export type RoomsAction =
-  | ISetUserRoomsAction;
+  | ISetUserRoomsAction
+  | ISetActiveRoomsAction;
 
 // ----------------------------------------------------------------------------
 // reducers
@@ -88,6 +111,18 @@ export function reduceUserRooms (
   switch (action.type) {
     case 'Rooms/setUserRooms':
       return action.rooms;
+    default:
+      return state;
+  }
+}
+
+export function reduceActiveRoomIds (
+  state: string[] = [],
+  action: RoomsAction,
+): string[] {
+  switch (action.type) {
+    case 'Rooms/setActiveRooms':
+      return action.rooms.map((v) => v.id);
     default:
       return state;
   }
@@ -121,6 +156,7 @@ export function reduceUserRoomIds (
 }
 
 export const reduceRooms = combineReducers<IRoomState>({
+  activeRoomIds: reduceActiveRoomIds,
   docs: reduceDocs,
   userRoomIds: reduceUserRoomIds,
 });
@@ -165,6 +201,27 @@ export function connectUserRooms (
 
   const collRef = firebase.firestore().collection(collectionName)
     .where('userId', '==', userId);
+  const unsubscribe = collRef.onSnapshot(
+    (snapshot) => {
+      const rooms = snapshot.docs.map((v) => snapshotToRoom(v));
+      onNext(rooms);
+      onEach();
+    },
+    (error) => {
+      onError(error);
+      onEach();
+    },
+  );
+  return unsubscribe;
+}
+
+export function connectActiveRooms (
+  onNext: (rooms: IRoom[]) => void,
+  onError: (error: Error) => void = noop,
+  onEach: () => void = noop,
+): () => void {
+  const collRef = firebase.firestore().collection(collectionName)
+    .where('status', '==', RoomStatus.active);
   const unsubscribe = collRef.onSnapshot(
     (snapshot) => {
       const rooms = snapshot.docs.map((v) => snapshotToRoom(v));

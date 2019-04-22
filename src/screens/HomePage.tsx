@@ -28,6 +28,7 @@ const LogoImage = styled.img`
 
 interface IHomePageProps {
   activeRooms: IRoom[];
+  connectActiveRooms: () => () => void;
   connectUserRooms: (userId: string) => () => void;
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
@@ -37,6 +38,7 @@ interface IHomePageProps {
 }
 
 function HomePage (props: IHomePageProps) {
+  useEffect(() => props.connectActiveRooms(), []);
   useEffect(() => props.connectUserRooms(props.userId), [props.userId]);
 
   const menus = getDefaultHeaderMenu(props.userProfile);
@@ -107,7 +109,7 @@ function Wrapper (props: IHomePageProps) {
 
 export default connect(
   (state: IState) => ({
-    activeRooms: state.rooms0.activeRooms,
+    activeRooms: Rooms.pickActiveRooms(state),
     firebaseUser: state.currentUser0.firebaseUser,
     loggedIn: state.currentUser.loggedIn,
     userId: state.currentUser.id,
@@ -115,6 +117,10 @@ export default connect(
     userRooms: Rooms.pickUserRooms(state),
   }),
   (dispatch: Dispatch) => ({
+    connectActiveRooms: () => Rooms.connectActiveRooms(
+      (rooms) => dispatch(Rooms.setActiveRooms(rooms)),
+      (error) => dispatch(ErrorLogs.add('connect active rooms', error)),
+    ),
     connectUserRooms: (userId: string) => Rooms.connectUserRooms(
       userId,
       (rooms) => dispatch(Rooms.setUserRooms(rooms)),
