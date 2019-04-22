@@ -5,7 +5,9 @@ import styled from 'styled-components';
 import Footer from '../basics/Footer';
 import RoomHeader from '../basics/RoomHeader';
 import { MainContainer } from '../complexes/DefaultLayout';
-import { appHistory } from '../misc';
+import LoadingView from '../independents/LoadingView';
+import { appHistory, noop } from '../misc';
+import * as ErrorLogs from '../models/ErrorLogs';
 import * as Rooms from '../models/Rooms';
 import { RoomLink } from '../path';
 import { Dispatch, IState } from '../reducers';
@@ -88,29 +90,31 @@ interface IRoomSettingsPageParams {
 interface IRoomSettingsPageProps
   extends RouteComponentProps<IRoomSettingsPageParams> {
   deleteRoom: (room: IRoom) => void;
+  pickRoom: (roomId: string) => IRoom;
+  saveError: (location: string, error: ErrorLogs.AppError) => void;
   saveRoom: (room: IRoom) => void;
   userProfile: IUserProfile | null;
   userRooms: IRoom[];
 }
 interface IRoomSettingsPageState {
+  room: IRoom | null;
   roomName: string;
   roomSaving: boolean;
   roomStatus: RoomStatus;
 }
 
 class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSettingsPageState> {
+  protected unsubscribeRoom = noop;
+
   protected get roomId () {
     return this.props.match.params.id;
   }
 
-  protected get room () {
-    return this.props.userRooms.find((v) => v.id === this.roomId) || null;
-  }
-
   constructor (props: IRoomSettingsPageProps) {
     super(props);
-    const { room } = this;
+    const room = props.pickRoom(this.roomId) || Rooms.emptyRoom;
     this.state = {
+      room,
       roomName: room ? room.name : '',
       roomSaving: false,
       roomStatus: room ? room.status : RoomStatus.draft,
@@ -122,11 +126,19 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
   }
 
   public render () {
-    const room = this.room;
+    const { room } = this.state;
 
     if (!room) {
       return (
-        <NotFoundPage/>
+        <div>
+          <p>404</p>
+        </div>
+      );
+    }
+
+    if (!room.id) {
+      return (
+        <LoadingView/>
       );
     }
 
@@ -197,6 +209,21 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     );
   }
 
+  public componentDidMount () {
+    this.unsubscribeRoom = Rooms.connectRoom(
+      this.roomId,
+      (room) => this.setRoom(room),
+      (error) => {
+        this.setRoom(null);
+        this.props.saveError('connect room', error);
+      },
+    );
+  }
+
+  public componentWillUnmount () {
+    this.unsubscribeRoom();
+  }
+
   public onRoomNameChange (event: React.ChangeEvent<HTMLInputElement>) {
     const el = event.currentTarget;
     const roomName = el.value;
@@ -215,7 +242,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     });
 
     const room: IRoom = {
-      ...this.room!,
+      ...this.state.room!,
       name: this.state.roomName,
       status: this.state.roomStatus,
     };
@@ -237,18 +264,30 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     this.setState({
       roomSaving: true,
     });
-    this.props.deleteRoom(this.room!);
+    this.props.deleteRoom(this.state.room!);
     appHistory.push('/rooms');
+  }
+
+  protected setRoom (room: Rooms.IRoom | null) {
+    this.setState({
+      room,
+      roomName: room ? room.name : '',
+      roomSaving: false,
+      roomStatus: room ? room.status : RoomStatus.draft,
+    });
   }
 }
 
 export default connect(
   (state: IState) => ({
+    pickRoom: (roomId: string) => Rooms.pickRoom(state, roomId),
     userProfile: state.currentUser0.profile,
     userRooms: Rooms.pickUserRooms(state),
   }),
   (dispatch: Dispatch) => ({
     deleteRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.deleteRoom }),
+    saveError: (location: string, error: ErrorLogs.AppError) =>
+      dispatch(ErrorLogs.add(location, error)),
     saveRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.saveRoom }),
   }),
 )(RoomSettingsPage);

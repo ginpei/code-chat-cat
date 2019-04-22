@@ -30,6 +30,7 @@ interface IRoomTextbookPageParams {
 }
 interface IRoomTextbookPageProps
   extends RouteComponentProps<IRoomTextbookPageParams> {
+  pickRoom: (roomId: string) => IRoom;
   userProfile: IUserProfile | null;
   saveError: (location: string, error: ErrorLogs.AppError) => void;
 }
@@ -38,7 +39,9 @@ function RoomTextbookPage (props: IRoomTextbookPageProps) {
   const roomId = props.match.params.id;
   const initialRoom = Rooms.emptyRoom;
 
-  const [room, setRoom] = useState<IRoom | null>(initialRoom);
+  const [room, setRoom] = useState<IRoom | null>(
+    props.pickRoom(roomId) || initialRoom,
+  );
   useEffect(() => Rooms.connectRoom(
     roomId,
     (v) => setRoom(v),
@@ -80,6 +83,7 @@ function RoomTextbookPage (props: IRoomTextbookPageProps) {
 
 export default connect(
   (state: IState) => ({
+    pickRoom: (roomId: string) => Rooms.pickRoom(state, roomId),
     userProfile: state.currentUser0.profile,
   }),
   (dispatch: Dispatch) => ({
