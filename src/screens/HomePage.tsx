@@ -112,7 +112,7 @@ export default connect(
     loggedIn: state.currentUser.loggedIn,
     userId: state.currentUser.id,
     userProfile: state.currentUser0.profile,
-    userRooms: state.userRooms,
+    userRooms: Rooms.pickUserRooms(state),
   }),
   (dispatch: Dispatch) => ({
     connectUserRooms: (userId: string) => Rooms.connectUserRooms(

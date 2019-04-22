@@ -10,8 +10,8 @@ export interface IState {
   currentUser: CurrentUser.ICurrentUserState;
   currentUser0: ICurrentUser;
   errorLogs: ErrorLogs.IErrorLog[];
+  rooms: Rooms.IRoomState;
   rooms0: IRoomState;
-  userRooms: Rooms.IRoom[];
 }
 
 export type Action =
@@ -19,7 +19,7 @@ export type Action =
   | CurrentUserAction
   | ErrorLogs.ErrorsAction
   | RoomsAction
-  | Rooms.UserRoomAction;
+  | Rooms.RoomsAction;
 export type Dispatch = (action: Action) => void;
 export type Store = ReduxStore<IState, Action>;
 
@@ -27,6 +27,6 @@ export default combineReducers<IState>({
   currentUser: CurrentUser.reduceCurrentUser,
   currentUser0: currentUser,
   errorLogs: ErrorLogs.reduceErrorLogs,
+  rooms: Rooms.reduceRooms,
   rooms0: rooms,
-  userRooms: Rooms.reduceUserRooms,
 });

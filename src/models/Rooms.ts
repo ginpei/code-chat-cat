@@ -1,5 +1,7 @@
+import { combineReducers } from 'redux';
 import firebase from '../middleware/firebase';
 import { noop } from '../misc';
+import { IState } from '../reducers';
 
 const collectionName = 'rooms';
 
@@ -25,6 +27,18 @@ export enum RoomStatus {
   active = 2, // public and listed
 }
 
+export interface IRoomState {
+  docs: IIdMap<IRoom>;
+  userRoomIds: string[];
+}
+
+interface IIdMap<T> { [id: string]: T; }
+
+const initialRoomState = Object.freeze<IRoomState>({
+  docs: {},
+  userRoomIds: [],
+});
+
 export const emptyRoom = Object.freeze<IRoom>({
   createdAt: new firebase.firestore.Timestamp(0, 0),
   id: '',
@@ -34,6 +48,16 @@ export const emptyRoom = Object.freeze<IRoom>({
   updatedAt: new firebase.firestore.Timestamp(0, 0),
   userId: '',
 });
+
+export function pickRoom (state: IState, roomId: string) {
+  const room = state.rooms.docs[roomId];
+  return room;
+}
+
+export function pickUserRooms (state: IState) {
+  const userRooms = state.rooms.userRoomIds.map((id) => pickRoom(state, id));
+  return userRooms;
+}
 
 // ----------------------------------------------------------------------------
 // actions
@@ -50,15 +74,16 @@ export function setUserRooms (rooms: IRoom[]): ISetUserRoomsAction {
   };
 }
 
-export type UserRoomAction =
+export type RoomsAction =
   | ISetUserRoomsAction;
 
 // ----------------------------------------------------------------------------
 // reducers
 
+/** @deprecated */
 export function reduceUserRooms (
   state: IRoom[] = [],
-  action: UserRoomAction,
+  action: RoomsAction,
 ): IRoom[] {
   switch (action.type) {
     case 'Rooms/setUserRooms':
@@ -67,6 +92,38 @@ export function reduceUserRooms (
       return state;
   }
 }
+
+export function reduceDocs (
+  state: IIdMap<IRoom> = {},
+  action: RoomsAction,
+): IIdMap<IRoom> {
+  switch (action.type) {
+    case 'Rooms/setUserRooms': {
+      const docs = { ...state };
+      action.rooms.forEach((v) => docs[v.id] = v);
+      return docs;
+    }
+    default:
+      return state;
+  }
+}
+
+export function reduceUserRoomIds (
+  state: string[] = [],
+  action: RoomsAction,
+): string[] {
+  switch (action.type) {
+    case 'Rooms/setUserRooms':
+      return action.rooms.map((v) => v.id);
+    default:
+      return state;
+  }
+}
+
+export const reduceRooms = combineReducers<IRoomState>({
+  docs: reduceDocs,
+  userRoomIds: reduceUserRoomIds,
+});
 
 // ----------------------------------------------------------------------------
 // connectors

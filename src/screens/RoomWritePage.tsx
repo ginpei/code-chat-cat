@@ -8,6 +8,7 @@ import RoomHeader from '../basics/RoomHeader';
 import TextbookContent from '../basics/TextbookContent';
 import syncScroll from '../functions/syncScroll';
 import { debounce } from '../misc';
+import * as Rooms from '../models/Rooms';
 import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
 import { IRoom, RoomsActionTypes } from '../reducers/rooms';
@@ -201,7 +202,7 @@ export default connect(
     firebaseUser: state.currentUser0.firebaseUser,
     loggedIn: state.currentUser0.loggedIn,
     userProfile: state.currentUser0.profile,
-    userRooms: state.userRooms,
+    userRooms: Rooms.pickUserRooms(state),
   }),
   (dispatch: Dispatch) => ({
     saveRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.saveRoom }),

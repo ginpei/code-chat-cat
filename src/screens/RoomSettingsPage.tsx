@@ -6,6 +6,7 @@ import Footer from '../basics/Footer';
 import RoomHeader from '../basics/RoomHeader';
 import { MainContainer } from '../complexes/DefaultLayout';
 import { appHistory } from '../misc';
+import * as Rooms from '../models/Rooms';
 import { RoomLink } from '../path';
 import { Dispatch, IState } from '../reducers';
 import { IUserProfile } from '../reducers/currentUser';
@@ -244,7 +245,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
 export default connect(
   (state: IState) => ({
     userProfile: state.currentUser0.profile,
-    userRooms: state.userRooms,
+    userRooms: Rooms.pickUserRooms(state),
   }),
   (dispatch: Dispatch) => ({
     deleteRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.deleteRoom }),
