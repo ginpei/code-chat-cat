@@ -7,16 +7,15 @@ import * as ErrorLogs from '../models/ErrorLogs';
 import * as Rooms from '../models/Rooms';
 import path, { RoomLink } from '../path';
 import { Dispatch, IState } from '../reducers';
-import { IRoom, RoomStatus } from '../reducers/rooms';
 
-function RoomItem ({ room }: { room: IRoom }) {
+function RoomItem ({ room }: { room: Rooms.IRoom }) {
   const { status, name } = room;
   return (
     <tr>
       <td>
-        {status === RoomStatus.draft && <span title="Draft">🔒</span>}
-        {status === RoomStatus.public && <span title="Public">✅</span>}
-        {status === RoomStatus.active && <span title="Active">🔥</span>}
+        {status === Rooms.RoomStatus.draft && <span title="Draft">🔒</span>}
+        {status === Rooms.RoomStatus.public && <span title="Public">✅</span>}
+        {status === Rooms.RoomStatus.active && <span title="Active">🔥</span>}
       </td>
       <td><RoomLink room={room} type="settings">💬 {name}</RoomLink></td>
       <td><RoomLink room={room}>📖 View</RoomLink></td>
@@ -29,7 +28,7 @@ function RoomItem ({ room }: { room: IRoom }) {
 interface IRoomListPageProps {
   connectUserRooms: (userId: string) => () => void;
   userId: string;
-  userRooms: IRoom[];
+  userRooms: Rooms.IRoom[];
 }
 
 class RoomListPage extends React.Component<IRoomListPageProps> {

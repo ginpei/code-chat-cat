@@ -12,7 +12,6 @@ import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
 import { RoomLink } from '../path';
 import { Dispatch, IState } from '../reducers';
-import { IRoom, RoomsActionTypes, RoomStatus } from '../reducers/rooms';
 import NotFoundPage from './NotFoundPage';
 
 const RoomStatusInputLabel = styled.label`
@@ -22,14 +21,14 @@ const RoomStatusInputLabel = styled.label`
 interface IRoomStatusInputProps {
   disabled: boolean;
   name: string;
-  onChange: (roomStatus: RoomStatus) => void;
-  type: RoomStatus;
-  value: RoomStatus;
+  onChange: (roomStatus: Rooms.RoomStatus) => void;
+  type: Rooms.RoomStatus;
+  value: Rooms.RoomStatus;
 }
 function RoomStatusInput (props: IRoomStatusInputProps) {
-  const sLabel = props.type === RoomStatus.draft
+  const sLabel = props.type === Rooms.RoomStatus.draft
     ? 'Draft'
-    : props.type === RoomStatus.public
+    : props.type === Rooms.RoomStatus.public
       ? 'Public'
       : 'Active';
 
@@ -51,17 +50,17 @@ function RoomStatusInput (props: IRoomStatusInputProps) {
 
 interface IRoomStatusInputGroupProps {
   disabled: boolean;
-  onChange: (roomStatus: RoomStatus) => void;
-  value: RoomStatus;
+  onChange: (roomStatus: Rooms.RoomStatus) => void;
+  value: Rooms.RoomStatus;
 }
 function RoomStatusInputGroup (props: IRoomStatusInputGroupProps) {
   const randomKey = String(Math.floor(Math.random() * 1000));
   const initialName = `RoomStatusInputGroup-${Date.now()}-${randomKey}`;
   const [name] = useState(initialName);
   const types = [
-    RoomStatus.draft,
-    RoomStatus.public,
-    RoomStatus.active,
+    Rooms.RoomStatus.draft,
+    Rooms.RoomStatus.public,
+    Rooms.RoomStatus.active,
   ];
   return (
     <>
@@ -89,18 +88,18 @@ interface IRoomSettingsPageParams {
 }
 interface IRoomSettingsPageProps
   extends RouteComponentProps<IRoomSettingsPageParams> {
-  pickRoom: (roomId: string) => IRoom;
-  removeRoom: (room: IRoom) => Promise<void>;
+  pickRoom: (roomId: string) => Rooms.IRoom;
+  removeRoom: (room: Rooms.IRoom) => Promise<void>;
   saveError: (location: string, error: ErrorLogs.AppError) => void;
-  saveRoom: (room: IRoom) => void;
+  saveRoom: (room: Rooms.IRoom) => void;
   userProfile: Profiles.IProfile | null;
-  userRooms: IRoom[];
+  userRooms: Rooms.IRoom[];
 }
 interface IRoomSettingsPageState {
-  room: IRoom | null;
+  room: Rooms.IRoom | null;
   roomName: string;
   roomSaving: boolean;
-  roomStatus: RoomStatus;
+  roomStatus: Rooms.RoomStatus;
 }
 
 class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSettingsPageState> {
@@ -117,7 +116,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
       room,
       roomName: room ? room.name : '',
       roomSaving: false,
-      roomStatus: room ? room.status : RoomStatus.draft,
+      roomStatus: room ? room.status : Rooms.RoomStatus.draft,
     };
     this.onRoomNameChange = this.onRoomNameChange.bind(this);
     this.onRoomActiveChange = this.onRoomActiveChange.bind(this);
@@ -228,7 +227,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     this.setState({ roomName });
   }
 
-  public onRoomActiveChange (roomStatus: RoomStatus) {
+  public onRoomActiveChange (roomStatus: Rooms.RoomStatus) {
     this.setState({ roomStatus });
   }
 
@@ -239,7 +238,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
       roomSaving: true,
     });
 
-    const room: IRoom = {
+    const room: Rooms.IRoom = {
       ...this.state.room!,
       name: this.state.roomName,
       status: this.state.roomStatus,
@@ -270,7 +269,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     this.setState({
       room,
       roomName: room ? room.name : '',
-      roomStatus: room ? room.status : RoomStatus.draft,
+      roomStatus: room ? room.status : Rooms.RoomStatus.draft,
     });
   }
 }
@@ -282,9 +281,9 @@ export default connect(
     userRooms: Rooms.pickUserRooms(state),
   }),
   (dispatch: Dispatch) => ({
-    removeRoom: (room: IRoom) => dispatch(Rooms.removeRoom(room)),
+    removeRoom: (room: Rooms.IRoom) => dispatch(Rooms.removeRoom(room)),
     saveError: (location: string, error: ErrorLogs.AppError) =>
       dispatch(ErrorLogs.add(location, error)),
-    saveRoom: (room: IRoom) => dispatch(Rooms.saveRoom(room)),
+    saveRoom: (room: Rooms.IRoom) => dispatch(Rooms.saveRoom(room)),
   }),
 )(RoomSettingsPage);

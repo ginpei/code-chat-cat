@@ -13,7 +13,6 @@ import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
 import path, { RoomLink } from '../path';
 import { Dispatch, IState } from '../reducers';
-import { IRoom } from '../reducers/rooms';
 
 const LogoImageContainer = styled.div`
   text-align: center;
@@ -25,7 +24,7 @@ const LogoImage = styled.img`
 `;
 
 interface IHomePageProps {
-  activeRooms: IRoom[];
+  activeRooms: Rooms.IRoom[];
   connectActiveRooms: (setReady: () => void) => () => void;
   connectUserRooms: (userId: string, setReady: () => void) => () => void;
   firebaseUser: firebase.User | null;

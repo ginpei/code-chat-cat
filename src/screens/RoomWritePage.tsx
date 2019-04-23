@@ -13,8 +13,6 @@ import * as ErrorLogs from '../models/ErrorLogs';
 import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
 import { Dispatch, IState } from '../reducers';
-import { IUserProfile } from '../reducers/currentUser';
-import { IRoom, RoomsActionTypes } from '../reducers/rooms';
 import NotFoundPage from './NotFoundPage';
 
 const EditorContainer = styled.div`
@@ -46,16 +44,16 @@ interface IRoomWritePageProps
   extends RouteComponentProps<IRoomWritePageParams> {
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
-  pickRoom: (roomId: string) => IRoom;
+  pickRoom: (roomId: string) => Rooms.IRoom;
   saveError: (location: string, error: ErrorLogs.AppError) => void;
-  saveRoom: (room: IRoom) => void;
+  saveRoom: (room: Rooms.IRoom) => void;
   userProfile: Profiles.IProfile | null;
-  userRooms: IRoom[];
+  userRooms: Rooms.IRoom[];
 }
 interface IRoomWritePageState {
   content: string;
   previewingContent: string;
-  room: IRoom | null;
+  room: Rooms.IRoom | null;
 }
 
 class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageState> {
@@ -162,7 +160,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     this.setContent(content);
   }
 
-  protected setRoom (room: IRoom | null) {
+  protected setRoom (room: Rooms.IRoom | null) {
     this.setState({ room });
     this.setContent(room ? room.textbookContent : '');
   }
@@ -237,6 +235,6 @@ export default connect(
   (dispatch: Dispatch) => ({
     saveError: (location: string, error: ErrorLogs.AppError) =>
       dispatch(ErrorLogs.add(location, error)),
-    saveRoom: (room: IRoom) => dispatch(Rooms.saveRoom(room)),
+    saveRoom: (room: Rooms.IRoom) => dispatch(Rooms.saveRoom(room)),
   }),
 )(RoomWritePage);

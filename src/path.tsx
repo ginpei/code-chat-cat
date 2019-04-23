@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { IRoom } from './reducers/rooms';
+import * as Rooms from './models/Rooms';
 
 type SimplePathBase =
   | 'home'
@@ -34,7 +34,7 @@ export function HomeLink () {
 }
 
 export function RoomLink (props: React.PropsWithChildren<{
-  room: IRoom;
+  room: Rooms.IRoom;
   type?: 'settings' | 'write';
 }>) {
   const base =

@@ -11,7 +11,6 @@ import * as ErrorLogs from '../models/ErrorLogs';
 import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
 import { Dispatch, IState } from '../reducers';
-import { IRoom } from '../reducers/rooms';
 import NotFoundPage from './NotFoundPage';
 
 const TextbookContainer = styled.div`
@@ -30,7 +29,7 @@ interface IRoomTextbookPageParams {
 }
 interface IRoomTextbookPageProps
   extends RouteComponentProps<IRoomTextbookPageParams> {
-  pickRoom: (roomId: string) => IRoom;
+  pickRoom: (roomId: string) => Rooms.IRoom;
   userProfile: Profiles.IProfile | null;
   saveError: (location: string, error: ErrorLogs.AppError) => void;
 }
@@ -39,7 +38,7 @@ function RoomTextbookPage (props: IRoomTextbookPageProps) {
   const roomId = props.match.params.id;
   const initialRoom = Rooms.emptyRoom;
 
-  const [room, setRoom] = useState<IRoom | null>(
+  const [room, setRoom] = useState<Rooms.IRoom | null>(
     props.pickRoom(roomId) || initialRoom,
   );
   useEffect(() => Rooms.connectRoom(
