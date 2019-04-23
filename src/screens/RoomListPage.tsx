@@ -5,7 +5,7 @@ import DefaultLayout from '../complexes/DefaultLayout';
 import { noop } from '../misc';
 import * as ErrorLogs from '../models/ErrorLogs';
 import * as Rooms from '../models/Rooms';
-import { Dispatch, IState } from '../models/Store';
+import { AppDispatch, AppState } from '../models/Store';
 import path, { RoomLink } from '../path';
 
 function RoomItem ({ room }: { room: Rooms.IRoom }) {
@@ -72,11 +72,11 @@ class RoomListPage extends React.Component<IRoomListPageProps> {
 }
 
 export default connect(
-  (state: IState) => ({
+  (state: AppState) => ({
     userId: state.currentUser.id,
     userRooms: Rooms.pickUserRooms(state),
   }),
-  (dispatch: Dispatch) => ({
+  (dispatch: AppDispatch) => ({
     connectUserRooms: (userId: string) => Rooms.connectUserRooms(
       userId,
       (rooms) => dispatch(Rooms.setUserRooms(rooms)),

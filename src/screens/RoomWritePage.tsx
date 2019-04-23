@@ -12,7 +12,7 @@ import { debounce, noop } from '../misc';
 import * as ErrorLogs from '../models/ErrorLogs';
 import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
-import { Dispatch, IState } from '../models/Store';
+import { AppDispatch, AppState } from '../models/Store';
 import NotFoundPage from './NotFoundPage';
 
 const EditorContainer = styled.div`
@@ -225,14 +225,14 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
 }
 
 export default connect(
-  (state: IState) => ({
+  (state: AppState) => ({
     firebaseUser: state.currentUser.firebaseUser,
     loggedIn: state.currentUser.loggedIn,
     pickRoom: (roomId: string) => Rooms.pickRoom(state, roomId),
     userProfile: state.currentUser.profile,
     userRooms: Rooms.pickUserRooms(state),
   }),
-  (dispatch: Dispatch) => ({
+  (dispatch: AppDispatch) => ({
     saveError: (location: string, error: ErrorLogs.AppError) =>
       dispatch(ErrorLogs.add(location, error)),
     saveRoom: (room: Rooms.IRoom) => dispatch(Rooms.saveRoom(room)),

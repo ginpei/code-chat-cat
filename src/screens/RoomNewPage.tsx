@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import DefaultLayout from '../complexes/DefaultLayout';
 import { appHistory } from '../misc';
 import * as Rooms from '../models/Rooms';
-import { Dispatch, IState } from '../models/Store';
+import { AppDispatch, AppState } from '../models/Store';
 
 const ErrorBlock = styled.div`
   border: 2px solid tomato;
@@ -106,10 +106,10 @@ class RoomNewPage extends React.Component<IRoomNewPageProps, IRoomNewPageState> 
 }
 
 export default connect(
-  (state: IState) => ({
+  (state: AppState) => ({
     userId: state.currentUser.id,
   }),
-  (dispatch: Dispatch) => ({
+  (dispatch: AppDispatch) => ({
     createRoom: (room: Rooms.IRoom) => dispatch(Rooms.createRoom(room)),
   }),
 )(RoomNewPage);

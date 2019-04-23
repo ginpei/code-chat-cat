@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import DefaultLayout from '../complexes/DefaultLayout';
 import * as CurrentUser from '../models/CurrentUser';
 import * as Profiles from '../models/Profiles';
-import { IState } from '../models/Store';
+import { AppState } from '../models/Store';
 import path from '../path';
 
 interface ISettingsPageProps {
@@ -118,7 +118,7 @@ class SettingsPage extends React.Component<ISettingsPageProps, ISettingsPageStat
 }
 
 export default connect(
-  (state: IState) => ({
+  (state: AppState) => ({
     currentUser: state.currentUser,
     userProfile: state.currentUser.profile,
   }),

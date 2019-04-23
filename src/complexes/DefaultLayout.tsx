@@ -6,7 +6,7 @@ import Header, { headerHeight } from '../basics/Header';
 import { IHeaderMenu } from '../basics/HeaderMenu';
 import Container from '../independents/Container';
 import * as Profiles from '../models/Profiles';
-import { IState } from '../models/Store';
+import { AppState } from '../models/Store';
 import path from '../path';
 
 export const MainContainer = styled(Container)`
@@ -69,7 +69,7 @@ function getAnonymousMenu (): IHeaderMenu[] {
 }
 
 export default connect(
-  (state: IState) => ({
+  (state: AppState) => ({
     userProfile: state.currentUser.profile,
   }),
 )(DefaultLayout);

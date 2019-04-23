@@ -5,7 +5,7 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { connect } from 'react-redux';
 import DefaultLayout from '../complexes/DefaultLayout';
 import { appHistory } from '../misc';
-import { Dispatch, IState } from '../models/Store';
+import { AppState } from '../models/Store';
 import { HomeLink } from '../path';
 
 interface ILoginPageProps {
@@ -45,7 +45,7 @@ function LoginPage (props: ILoginPageProps) {
 }
 
 export default connect(
-  (state: IState) => ({
+  (state: AppState) => ({
     loggedIn: state.currentUser.loggedIn,
   }),
 )(LoginPage);

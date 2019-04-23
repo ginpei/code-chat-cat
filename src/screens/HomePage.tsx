@@ -11,7 +11,7 @@ import LoadingView from '../independents/LoadingView';
 import * as ErrorLogs from '../models/ErrorLogs';
 import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
-import { Dispatch, IState } from '../models/Store';
+import { AppDispatch, AppState } from '../models/Store';
 import path, { RoomLink } from '../path';
 
 const LogoImageContainer = styled.div`
@@ -98,7 +98,7 @@ function HomePage (props: IHomePageProps) {
 }
 
 export default connect(
-  (state: IState) => ({
+  (state: AppState) => ({
     activeRooms: Rooms.pickActiveRooms(state),
     firebaseUser: state.currentUser.firebaseUser,
     loggedIn: state.currentUser.loggedIn,
@@ -106,7 +106,7 @@ export default connect(
     userProfile: state.currentUser.profile,
     userRooms: Rooms.pickUserRooms(state),
   }),
-  (dispatch: Dispatch) => ({
+  (dispatch: AppDispatch) => ({
     connectActiveRooms: (setReady: () => void) => Rooms.connectActiveRooms(
       (rooms) => dispatch(Rooms.setActiveRooms(rooms)),
       (error) => dispatch(ErrorLogs.add('connect active rooms', error)),

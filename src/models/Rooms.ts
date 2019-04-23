@@ -1,8 +1,7 @@
 import { combineReducers } from 'redux';
-import { ThunkAction } from 'redux-thunk';
 import firebase from '../middleware/firebase';
 import { noop } from '../misc';
-import { Dispatch, IState } from './Store';
+import { AppDispatch, AppState } from './Store';
 
 const collectionName = 'rooms';
 
@@ -52,21 +51,21 @@ export const emptyRoom = Object.freeze<IRoom>({
   userId: '',
 });
 
-export function pickRoom (state: IState, roomId: string) {
+export function pickRoom (state: AppState, roomId: string) {
   const room = state.rooms.docs[roomId];
   return room;
 }
 
-export function pickRoomsByIds (state: IState, roomIds: string[]) {
+export function pickRoomsByIds (state: AppState, roomIds: string[]) {
   const rooms = roomIds.map((id) => pickRoom(state, id));
   return rooms;
 }
 
-export function pickUserRooms (state: IState) {
+export function pickUserRooms (state: AppState) {
   return pickRoomsByIds(state, state.rooms.userRoomIds);
 }
 
-export function pickActiveRooms (state: IState) {
+export function pickActiveRooms (state: AppState) {
   return pickRoomsByIds(state, state.rooms.activeRoomIds);
 }
 
@@ -103,7 +102,7 @@ export function createRoom (room: IRoom) {
     throw new Error('Room must have name');
   }
 
-  return async (dispatch: Dispatch): Promise<IRoom> => {
+  return async (dispatch: AppDispatch): Promise<IRoom> => {
     const newRoom: IRoom = {
       ...room,
       createdAt: firebase.firestore.Timestamp.now(),
@@ -132,7 +131,7 @@ interface ISaveRoomAction {
 }
 
 export function saveRoom (room: IRoom) {
-  return (dispatch: Dispatch) => {
+  return (dispatch: AppDispatch) => {
     const roomValues = {
       ...room,
       createdAt: room.createdAt || firebase.firestore.Timestamp.now(),
@@ -159,7 +158,7 @@ export function removeRoom (room: IRoom) {
     throw new Error('Room must have ID');
   }
 
-  return (dispatch: Dispatch) => {
+  return (dispatch: AppDispatch) => {
     dispatch<IRemoveRoomAction>({
       room,
       type: 'Rooms/removeRoom',

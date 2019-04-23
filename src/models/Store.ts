@@ -6,29 +6,30 @@ import * as CurrentUser from './CurrentUser';
 import * as ErrorLogs from './ErrorLogs';
 import * as Rooms from './Rooms';
 
-export interface IState {
+// tslint:disable-next-line:interface-name
+export interface AppState {
   currentUser: CurrentUser.ICurrentUserState;
   errorLogs: ErrorLogs.IErrorLog[];
   rooms: Rooms.IRoomState;
 }
 
-export type Action =
+export type AppAction =
   | CurrentUser.CurrentUserAction
   | ErrorLogs.ErrorsAction
   | Rooms.RoomsAction;
-export type Dispatch = ThunkDispatch<IState, void, Action>;
-export type Store = ReduxStore<IState, Action>;
+export type AppDispatch = ThunkDispatch<AppState, void, AppAction>;
+export type AppStore = ReduxStore<AppState, AppAction>;
 
 export function createAppStore () {
-  const rootReducer = combineReducers<IState>({
+  const rootReducer = combineReducers<AppState>({
     currentUser: CurrentUser.reduceCurrentUser,
     errorLogs: ErrorLogs.reduceErrorLogs,
     rooms: Rooms.reduceRooms,
   });
 
-  const store = createStore<IState, Action, {}, {}>(
+  const store = createStore<AppState, AppAction, {}, {}>(
     rootReducer,
-    applyMiddleware<IState, Action>(thunk),
+    applyMiddleware<AppState, AppAction>(thunk),
   );
 
   return store;

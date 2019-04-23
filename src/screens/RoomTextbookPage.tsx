@@ -10,7 +10,7 @@ import LoadingView from '../independents/LoadingView';
 import * as ErrorLogs from '../models/ErrorLogs';
 import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
-import { Dispatch, IState } from '../models/Store';
+import { AppDispatch, AppState } from '../models/Store';
 import NotFoundPage from './NotFoundPage';
 
 const TextbookContainer = styled.div`
@@ -79,11 +79,11 @@ function RoomTextbookPage (props: IRoomTextbookPageProps) {
 }
 
 export default connect(
-  (state: IState) => ({
+  (state: AppState) => ({
     pickRoom: (roomId: string) => Rooms.pickRoom(state, roomId),
     userProfile: state.currentUser.profile,
   }),
-  (dispatch: Dispatch) => ({
+  (dispatch: AppDispatch) => ({
     saveError: (location: string, error: ErrorLogs.AppError) =>
       dispatch(ErrorLogs.add(location, error)),
   }),

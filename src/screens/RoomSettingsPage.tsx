@@ -10,7 +10,7 @@ import { appHistory, noop } from '../misc';
 import * as ErrorLogs from '../models/ErrorLogs';
 import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
-import { Dispatch, IState } from '../models/Store';
+import { AppDispatch, AppState } from '../models/Store';
 import { RoomLink } from '../path';
 import NotFoundPage from './NotFoundPage';
 
@@ -275,12 +275,12 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
 }
 
 export default connect(
-  (state: IState) => ({
+  (state: AppState) => ({
     pickRoom: (roomId: string) => Rooms.pickRoom(state, roomId),
     userProfile: state.currentUser.profile,
     userRooms: Rooms.pickUserRooms(state),
   }),
-  (dispatch: Dispatch) => ({
+  (dispatch: AppDispatch) => ({
     removeRoom: (room: Rooms.IRoom) => dispatch(Rooms.removeRoom(room)),
     saveError: (location: string, error: ErrorLogs.AppError) =>
       dispatch(ErrorLogs.add(location, error)),
