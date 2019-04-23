@@ -1,50 +1,103 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
 import App from './App';
-
-jest.mock('./models/users');
-jest.mock('./models/rooms');
+import * as CurrentUser from './models/CurrentUser';
+import * as Profiles from './models/Profiles';
 
 describe('<App>', () => {
   let wrapper: ShallowWrapper;
 
   describe('mount', () => {
-    let unsubscribeCurrentUser: jest.Mock;
-    let unsubscribeUserRooms: jest.Mock;
+    let connectAuth: jest.SpyInstance;
+    let unsubscribeAuth: jest.Mock;
 
     beforeEach(() => {
-      const users = require('./models/users');
-      unsubscribeCurrentUser = jest.fn();
-      users.initializeCurrentUser.mockReturnValue(unsubscribeCurrentUser);
+      connectAuth = jest.spyOn(CurrentUser, 'connectAuth');
+      unsubscribeAuth = jest.fn();
+    });
 
-      const rooms = require('./models/rooms');
-      unsubscribeUserRooms = jest.fn();
-      rooms.connectUserRooms.mockReturnValue(unsubscribeUserRooms);
-
-      wrapper = shallow(<App />);
+    afterEach(() => {
+      connectAuth.mockRestore();
     });
 
     describe('current user', () => {
+      beforeEach(() => {
+        connectAuth.mockReturnValue(unsubscribeAuth);
+
+        wrapper = shallow(<App />);
+      });
+
       it('connects', async () => {
-        const users = require('./models/users');
-        expect(users.initializeCurrentUser).toBeCalled();
+        expect(connectAuth).toBeCalled();
       });
 
       it('disconnects', async () => {
         wrapper.unmount();
-        expect(unsubscribeCurrentUser).toBeCalled();
+        expect(unsubscribeAuth).toBeCalled();
       });
     });
 
-    describe('user rooms', () => {
-      it('connects', async () => {
-        const rooms = require('./models/rooms');
-        expect(rooms.connectUserRooms).toBeCalled();
+    describe('profile', () => {
+      let connectProfile: jest.SpyInstance;
+      let unsubscribeProfiles: jest.Mock;
+
+      describe('while logged in', () => {
+        beforeEach(() => {
+          connectAuth.mockImplementation((onNext: (user: any) => void) => {
+            const user = {};
+            onNext(user);
+            return unsubscribeAuth;
+          });
+
+          connectProfile = jest.spyOn(Profiles, 'connectProfile');
+          unsubscribeProfiles = jest.fn();
+          connectProfile.mockReturnValue(unsubscribeProfiles);
+
+          wrapper = shallow(<App />);
+        });
+
+        afterEach(() => {
+          connectProfile.mockRestore();
+        });
+
+        it('connects', async () => {
+          expect(connectProfile).toBeCalled();
+        });
+
+        it('disconnects', async () => {
+          wrapper.unmount();
+          expect(unsubscribeProfiles).toBeCalled();
+        });
       });
 
-      it('disconnects', async () => {
-        wrapper.unmount();
-        expect(unsubscribeUserRooms).toBeCalled();
+      describe('while logged out', () => {
+        beforeEach(() => {
+          connectAuth.mockImplementation((onNext: (user: any) => void) => {
+            const user = null;
+            onNext(user);
+            return unsubscribeAuth;
+          });
+
+          connectProfile = jest.spyOn(Profiles, 'connectProfile');
+          unsubscribeProfiles = jest.fn();
+          connectProfile.mockReturnValue(unsubscribeProfiles);
+
+          wrapper = shallow(<App />);
+        });
+
+        afterEach(() => {
+          connectProfile.mockRestore();
+        });
+
+        it('connects', async () => {
+          expect(connectProfile).not.toBeCalled();
+        });
+
+        it('disconnects', async () => {
+          expect(() => {
+            wrapper.unmount();
+          }).not.toThrow();
+        });
       });
     });
   });

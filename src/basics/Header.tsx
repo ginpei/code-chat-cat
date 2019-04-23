@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import Container from '../basics/Container';
+import Container from '../independents/Container';
 import path from '../path';
 import HeaderMenu, { IHeaderMenu } from './HeaderMenu';
 

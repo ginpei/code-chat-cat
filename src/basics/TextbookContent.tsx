@@ -1,5 +1,5 @@
 import React from 'react';
-import Markdown from '../basics/Markdown';
+import Markdown from '../independents/Markdown';
 import './TextbookContent.css';
 
 function generateSeparatorHtml (published: boolean) {

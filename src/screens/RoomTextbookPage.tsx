@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
-import Container from '../basics/Container';
-import LoadingView from '../basics/LoadingView';
-import { headerHeight } from '../components/Header';
-import RoomHeader from '../components/RoomHeader';
-import TextbookContent from '../components/TextbookContent';
-import DefaultLayout from '../containers/DefaultLayout';
-import { store } from '../misc';
-import { connectActiveRooms } from '../models/rooms';
-import { IState } from '../reducers';
-import { IUserProfile } from '../reducers/currentUser';
-import { IRoom } from '../reducers/rooms';
+import { headerHeight } from '../basics/Header';
+import RoomHeader from '../basics/RoomHeader';
+import TextbookContent from '../basics/TextbookContent';
+import Container from '../independents/Container';
+import LoadingView from '../independents/LoadingView';
+import * as ErrorLogs from '../models/ErrorLogs';
+import * as Profiles from '../models/Profiles';
+import * as Rooms from '../models/Rooms';
+import { AppDispatch, AppState } from '../models/Store';
+import NotFoundPage from './NotFoundPage';
 
 const TextbookContainer = styled.div`
   height: calc(100vh - ${headerHeight}px);
@@ -30,76 +29,62 @@ interface IRoomTextbookPageParams {
 }
 interface IRoomTextbookPageProps
   extends RouteComponentProps<IRoomTextbookPageParams> {
-  activeRooms: IRoom[];
-  userProfile: IUserProfile | null;
-  userRooms: IRoom[];
+  pickRoom: (roomId: string) => Rooms.IRoom;
+  userProfile: Profiles.IProfile | null;
+  saveError: (location: string, error: ErrorLogs.AppError) => void;
 }
 
-class RoomTextbookPage extends React.Component<IRoomTextbookPageProps> {
-  protected get roomId () {
-    return this.props.match.params.id;
-  }
+function RoomTextbookPage (props: IRoomTextbookPageProps) {
+  const roomId = props.match.params.id;
+  const initialRoom = Rooms.emptyRoom;
 
-  protected get room () {
-    return (
-      this.props.activeRooms.find((v) => v.id === this.roomId) ||
-      this.props.userRooms.find((v) => v.id === this.roomId)
-    );
-  }
+  const [room, setRoom] = useState<Rooms.IRoom | null>(
+    props.pickRoom(roomId) || initialRoom,
+  );
+  useEffect(() => Rooms.connectRoom(
+    roomId,
+    (v) => setRoom(v),
+    (error) => {
+      setRoom(null);
+      props.saveError('connect room', error);
+    },
+  ), [roomId]);
 
-  public render () {
-    const { room } = this;
-
-    if (!room) {
-      return (
-        <DefaultLayout>
-          <h1>Room not found</h1>
-        </DefaultLayout>
-      );
-    }
-
-    return (
-      <div>
-        <RoomHeader
-          fullscreen={true}
-          room={room}
-          userProfile={this.props.userProfile}
-        />
-        <TextbookContainer>
-          <TextbookWrapper>
-            <TextbookContent content={room.textbookContent} />
-          </TextbookWrapper>
-        </TextbookContainer>
-      </div>
-    );
-  }
-}
-
-function Wrapper (props: IRoomTextbookPageProps) {
-  const [working, setWorking] = useState(false);
-  const [ready, setReady] = useState(false);
-
-  if (!working) {
-    // no need to unsubscribe
-    connectActiveRooms(store, () => setReady(true));
-    setWorking(true);
-  }
-
-  if (!ready) {
+  if (room === initialRoom) {
     return (
       <LoadingView/>
     );
   }
 
+  if (!room) {
+    return (
+      <NotFoundPage/>
+    );
+  }
+
   return (
-    <RoomTextbookPage {...props} />
+    <div>
+      <RoomHeader
+        fullscreen={true}
+        room={room}
+        userProfile={props.userProfile}
+      />
+      <TextbookContainer>
+        <TextbookWrapper>
+          <TextbookContent content={room.textbookContent} />
+        </TextbookWrapper>
+      </TextbookContainer>
+    </div>
   );
 }
 
 export default connect(
-  (state: IState) => ({
-    activeRooms: state.rooms.activeRooms,
+  (state: AppState) => ({
+    pickRoom: (roomId: string) => Rooms.pickRoom(state, roomId),
     userProfile: state.currentUser.profile,
-    userRooms: state.rooms.userRooms,
   }),
-)(Wrapper);
+  (dispatch: AppDispatch) => ({
+    saveError: (location: string, error: ErrorLogs.AppError) =>
+      dispatch(ErrorLogs.add(location, error)),
+  }),
+)(RoomTextbookPage);
