@@ -12,7 +12,6 @@ import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
 import { RoomLink } from '../path';
 import { Dispatch, IState } from '../reducers';
-import { IUserProfile } from '../reducers/currentUser';
 import { IRoom, RoomsActionTypes, RoomStatus } from '../reducers/rooms';
 import NotFoundPage from './NotFoundPage';
 
@@ -233,7 +232,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     this.setState({ roomStatus });
   }
 
-  public async onRoomSubmit (event: React.MouseEvent<HTMLFormElement>) {
+  public onRoomSubmit (event: React.MouseEvent<HTMLFormElement>) {
     event.preventDefault();
 
     this.setState({
