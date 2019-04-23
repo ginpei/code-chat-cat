@@ -1,5 +1,6 @@
 import { Store as ReduxStore } from 'redux';
 import { combineReducers } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 import * as CurrentUser from '../models/CurrentUser';
 import * as ErrorLogs from '../models/ErrorLogs';
 import * as Rooms from '../models/Rooms';
@@ -20,7 +21,7 @@ export type Action =
   | ErrorLogs.ErrorsAction
   | RoomsAction
   | Rooms.RoomsAction;
-export type Dispatch = (action: Action) => void;
+export type Dispatch = ThunkDispatch<IState, void, Action>;
 export type Store = ReduxStore<IState, Action>;
 
 export default combineReducers<IState>({

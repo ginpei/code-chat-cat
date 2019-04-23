@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
+import { ThunkAction } from 'redux-thunk';
 import firebase from '../middleware/firebase';
 import { noop } from '../misc';
-import { IState } from '../reducers';
+import { Dispatch, IState } from '../reducers';
 
 const collectionName = 'rooms';
 
@@ -89,10 +90,21 @@ interface ISaveRoomAction {
   type: 'Rooms/saveRoom';
 }
 
-export function saveRoom (room: IRoom): ISaveRoomAction {
-  return {
-    room,
-    type: 'Rooms/saveRoom',
+export function saveRoom (room: IRoom) {
+  return (dispatch: Dispatch) => {
+    const roomValues = {
+      ...room,
+      createdAt: room.createdAt || firebase.firestore.Timestamp.now(),
+      updatedAt: firebase.firestore.Timestamp.now(),
+    };
+
+    dispatch<ISaveRoomAction>({
+      room: roomValues,
+      type: 'Rooms/saveRoom',
+    });
+
+    const collRef = firebase.firestore().collection(collectionName);
+    return collRef.doc(roomValues.id).update(roomValues);
   };
 }
 
@@ -135,15 +147,7 @@ export function reduceDocs (
   switch (action.type) {
     case 'Rooms/saveRoom': {
       const docs = { ...state };
-      const room = {
-        ...action.room,
-        createdAt: action.room.createdAt || firebase.firestore.Timestamp.now(),
-        updatedAt: firebase.firestore.Timestamp.now(),
-      };
-      const collRef = firebase.firestore().collection(collectionName);
-      collRef.doc(room.id).update(room);
-
-      docs[room.id] = room;
+      docs[action.room.id] = action.room;
       return docs;
     }
     case 'Rooms/setActiveRooms':
