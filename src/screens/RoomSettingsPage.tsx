@@ -89,8 +89,8 @@ interface IRoomSettingsPageParams {
 }
 interface IRoomSettingsPageProps
   extends RouteComponentProps<IRoomSettingsPageParams> {
-  deleteRoom: (room: IRoom) => void;
   pickRoom: (roomId: string) => IRoom;
+  removeRoom: (room: IRoom) => Promise<void>;
   saveError: (location: string, error: ErrorLogs.AppError) => void;
   saveRoom: (room: IRoom) => void;
   userProfile: Profiles.IProfile | null;
@@ -262,7 +262,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     this.setState({
       roomSaving: true,
     });
-    this.props.deleteRoom(this.state.room!);
+    this.props.removeRoom(this.state.room!);
     appHistory.push('/rooms');
   }
 
@@ -282,7 +282,7 @@ export default connect(
     userRooms: Rooms.pickUserRooms(state),
   }),
   (dispatch: Dispatch) => ({
-    deleteRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.deleteRoom }),
+    removeRoom: (room: IRoom) => dispatch(Rooms.removeRoom(room)),
     saveError: (location: string, error: ErrorLogs.AppError) =>
       dispatch(ErrorLogs.add(location, error)),
     saveRoom: (room: IRoom) => dispatch(Rooms.saveRoom(room)),

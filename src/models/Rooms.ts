@@ -149,6 +149,27 @@ export function saveRoom (room: IRoom) {
   };
 }
 
+interface IRemoveRoomAction {
+  room: IRoom;
+  type: 'Rooms/removeRoom';
+}
+
+export function removeRoom (room: IRoom) {
+  if (!room.id) {
+    throw new Error('Room must have ID');
+  }
+
+  return (dispatch: Dispatch) => {
+    dispatch<IRemoveRoomAction>({
+      room,
+      type: 'Rooms/removeRoom',
+    });
+
+    const collRef = firebase.firestore().collection(collectionName);
+    return collRef.doc(room.id).delete();
+  };
+}
+
 interface ISetActiveRoomsAction {
   rooms: IRoom[];
   type: 'Rooms/setActiveRooms';
@@ -164,6 +185,7 @@ export function setActiveRooms (rooms: IRoom[]): ISetActiveRoomsAction {
 export type RoomsAction =
   | ISetUserRoomsAction
   | ICreateRoomAction
+  | IRemoveRoomAction
   | ISaveRoomAction
   | ISetActiveRoomsAction;
 
@@ -175,6 +197,16 @@ export function reduceActiveRoomIds (
   action: RoomsAction,
 ): string[] {
   switch (action.type) {
+    case 'Rooms/removeRoom': {
+      const index = state.findIndex((v) => v === action.room.id);
+      if (index > -1) {
+        const rooms = [...state];
+        rooms.splice(index, 1);
+        return rooms;
+      } else {
+        return state;
+      }
+    }
     case 'Rooms/setActiveRooms':
       return action.rooms.map((v) => v.id);
     default:
@@ -193,6 +225,11 @@ export function reduceDocs (
       docs[action.room.id] = action.room;
       return docs;
     }
+    case 'Rooms/removeRoom': {
+      const docs = { ...state };
+      delete docs[action.room.id];
+      return docs;
+    }
     case 'Rooms/setActiveRooms':
     case 'Rooms/setUserRooms': {
       const docs = { ...state };
@@ -209,6 +246,16 @@ export function reduceUserRoomIds (
   action: RoomsAction,
 ): string[] {
   switch (action.type) {
+    case 'Rooms/removeRoom': {
+      const index = state.findIndex((v) => v === action.room.id);
+      if (index > -1) {
+        const rooms = [...state];
+        rooms.splice(index, 1);
+        return rooms;
+      } else {
+        return state;
+      }
+    }
     case 'Rooms/setUserRooms':
       return action.rooms.map((v) => v.id);
     default:
