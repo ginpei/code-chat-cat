@@ -1,36 +1,36 @@
 import firebase from '../middleware/firebase';
-import { IRoom, IRoomRecord, RoomStatus } from '../reducers/rooms';
+import { IRoom, IRoomRecord } from '../reducers/rooms';
 import migrateRoom, { roomVersion } from './rooms.migration';
 
 const roomsRef = firebase.firestore().collection('/rooms');
 
-export function createRoom (
-  roomData: { name: string; userId: string; },
-) {
-  return new Promise<IRoom>(async (resolve, reject) => {
-    try {
-      const record: IRoomRecord = {
-        createdAt: firebase.firestore.Timestamp.now(),
-        modelVersion: roomVersion,
-        name: roomData.name,
-        status: RoomStatus.draft,
-        textbookContent: `# ${roomData.name}`,
-        updatedAt: firebase.firestore.Timestamp.now(),
-        userId: roomData.userId,
-      };
-      const docRef = await roomsRef.add(record);
+// export function createRoom (
+//   roomData: { name: string; userId: string; },
+// ) {
+//   return new Promise<IRoom>(async (resolve, reject) => {
+//     try {
+//       const record: IRoomRecord = {
+//         createdAt: firebase.firestore.Timestamp.now(),
+//         modelVersion: roomVersion,
+//         name: roomData.name,
+//         status: RoomStatus.draft,
+//         textbookContent: `# ${roomData.name}`,
+//         updatedAt: firebase.firestore.Timestamp.now(),
+//         userId: roomData.userId,
+//       };
+//       const docRef = await roomsRef.add(record);
 
-      const snapshot = await docRef.get();
-      const room = snapshotToRoom(snapshot);
-      if (!room) {
-        throw new Error('Failed to get room');
-      }
-      resolve(room);
-    } catch (error) {
-      reject(error);
-    }
-  });
-}
+//       const snapshot = await docRef.get();
+//       const room = snapshotToRoom(snapshot);
+//       if (!room) {
+//         throw new Error('Failed to get room');
+//       }
+//       resolve(room);
+//     } catch (error) {
+//       reject(error);
+//     }
+//   });
+// }
 
 // export async function updateRoom (room: IRoom): Promise<void> {
 //   const record = roomToRecord(room);

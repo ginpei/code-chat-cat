@@ -85,6 +85,47 @@ export function setUserRooms (rooms: IRoom[]): ISetUserRoomsAction {
   };
 }
 
+interface ICreateRoomAction {
+  room: IRoom;
+  type: 'Rooms/createRoom';
+}
+
+export function createRoom (room: IRoom) {
+  if (room.id) {
+    throw new Error('New room must not have ID');
+  }
+
+  if (!room.userId) {
+    throw new Error('Room must have user ID');
+  }
+
+  if (!room.name) {
+    throw new Error('Room must have name');
+  }
+
+  return async (dispatch: Dispatch): Promise<IRoom> => {
+    const newRoom: IRoom = {
+      ...room,
+      createdAt: firebase.firestore.Timestamp.now(),
+      status: room.status || RoomStatus.draft,
+      textbookContent: room.textbookContent || `# ${room.name}`,
+      updatedAt: firebase.firestore.Timestamp.now(),
+    };
+
+    const collRef = firebase.firestore().collection(collectionName);
+    const docRef = await collRef.add(newRoom);
+
+    newRoom.id = docRef.id;
+
+    dispatch<ICreateRoomAction>({
+      room: newRoom,
+      type: 'Rooms/createRoom',
+    });
+
+    return newRoom;
+  };
+}
+
 interface ISaveRoomAction {
   room: IRoom;
   type: 'Rooms/saveRoom';
@@ -122,6 +163,7 @@ export function setActiveRooms (rooms: IRoom[]): ISetActiveRoomsAction {
 
 export type RoomsAction =
   | ISetUserRoomsAction
+  | ICreateRoomAction
   | ISaveRoomAction
   | ISetActiveRoomsAction;
 
@@ -271,7 +313,7 @@ export function snapshotToRoom (
   const e = emptyRoom;
   return {
     createdAt: data.createdAt || e.createdAt,
-    id: data.id || e.id,
+    id: snapshot.id,
     name: data.name || e.name,
     status: data.status || e.status,
     textbookContent: data.textbookContent || e.textbookContent,

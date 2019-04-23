@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import DefaultLayout from '../complexes/DefaultLayout';
 import { appHistory } from '../misc';
-import { createRoom } from '../models/rooms0';
+import * as Rooms from '../models/Rooms';
 import { Dispatch, IState } from '../reducers';
 
 const ErrorBlock = styled.div`
@@ -14,6 +14,7 @@ const ErrorBlock = styled.div`
 `;
 
 interface IRoomNewPageProps {
+  createRoom: (room: Rooms.IRoom) => Promise<Rooms.IRoom>;
   userId: string;
 }
 interface IRoomNewPageState {
@@ -87,11 +88,12 @@ class RoomNewPage extends React.Component<IRoomNewPageProps, IRoomNewPageState> 
     });
 
     try {
-      const roomData = {
+      const roomData: Rooms.IRoom = {
+        ...Rooms.emptyRoom,
         name: this.state.roomName,
         userId: this.props.userId,
       };
-      const room = await createRoom(roomData);
+      const room = await this.props.createRoom(roomData);
       appHistory.push(`/rooms/${room.id}/settings`);
     } catch (error) {
       console.error(error);
@@ -106,5 +108,8 @@ class RoomNewPage extends React.Component<IRoomNewPageProps, IRoomNewPageState> 
 export default connect(
   (state: IState) => ({
     userId: state.currentUser.id,
+  }),
+  (dispatch: Dispatch) => ({
+    createRoom: (room: Rooms.IRoom) => dispatch(Rooms.createRoom(room)),
   }),
 )(RoomNewPage);
