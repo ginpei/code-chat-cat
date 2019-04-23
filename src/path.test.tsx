@@ -2,8 +2,8 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import firebase from 'firebase';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import * as Rooms from './models/Rooms';
 import path, { HomeLink, RoomLink } from './path';
-import { IRoom, RoomStatus } from './reducers/rooms';
 
 describe('path', () => {
   describe('path()', () => {
@@ -52,11 +52,11 @@ describe('path', () => {
   describe('<RoomLink>', () => {
     let wrapper: ShallowWrapper;
 
-    const room: IRoom = {
+    const room: Rooms.IRoom = {
       createdAt: firebase.firestore.Timestamp.now(),
       id: 'roomId123',
       name: 'Room Name',
-      status: RoomStatus.draft,
+      status: Rooms.RoomStatus.draft,
       textbookContent: '',
       updatedAt: firebase.firestore.Timestamp.now(),
       userId: 'userId123',

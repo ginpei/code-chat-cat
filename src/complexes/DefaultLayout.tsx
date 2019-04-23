@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import Container from '../basics/Container';
-import Footer from '../components/Footer';
-import Header, { headerHeight } from '../components/Header';
-import { IHeaderMenu } from '../components/HeaderMenu';
+import Footer from '../basics/Footer';
+import Header, { headerHeight } from '../basics/Header';
+import { IHeaderMenu } from '../basics/HeaderMenu';
+import Container from '../independents/Container';
+import * as Profiles from '../models/Profiles';
+import { AppState } from '../models/Store';
 import path from '../path';
-import { IState } from '../reducers';
-import { IUserProfile } from '../reducers/currentUser';
 
 export const MainContainer = styled(Container)`
   min-height: calc(100vh - ${headerHeight}px - 10rem);
@@ -15,7 +15,7 @@ export const MainContainer = styled(Container)`
 
 interface IDefaultLayoutProps {
   children: React.ReactNode;
-  userProfile: IUserProfile | null;
+  userProfile: Profiles.IProfile | null;
 }
 
 export function DefaultLayout (props: IDefaultLayoutProps) {
@@ -30,7 +30,7 @@ export function DefaultLayout (props: IDefaultLayoutProps) {
   );
 }
 
-export function getDefaultHeaderMenu (profile: IUserProfile | null) {
+export function getDefaultHeaderMenu (profile: Profiles.IProfile | null) {
   if (profile) {
     return getLoggedInMenu(profile);
   } else {
@@ -38,7 +38,7 @@ export function getDefaultHeaderMenu (profile: IUserProfile | null) {
   }
 }
 
-function getLoggedInMenu (profile: IUserProfile): IHeaderMenu[] {
+function getLoggedInMenu (profile: Profiles.IProfile): IHeaderMenu[] {
   return [
     {
       links: [
@@ -69,7 +69,7 @@ function getAnonymousMenu (): IHeaderMenu[] {
 }
 
 export default connect(
-  (state: IState) => ({
+  (state: AppState) => ({
     userProfile: state.currentUser.profile,
   }),
 )(DefaultLayout);

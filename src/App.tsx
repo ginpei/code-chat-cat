@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router';
-import LoadingView from './basics/LoadingView';
-import { appHistory, store } from './misc';
-import { connectUserRooms } from './models/rooms';
-import * as users from './models/users';
+import LoadingView from './independents/LoadingView';
+import { appHistory, noop } from './misc';
+import * as CurrentUser from './models/CurrentUser';
+import * as ErrorLogs from './models/ErrorLogs';
+import * as Profiles from './models/Profiles';
+import { createAppStore } from './models/Store';
 import HomePage from './screens/HomePage';
 import LoginPage from './screens/LoginPage';
 import LogoutPage from './screens/LogoutPage';
@@ -26,16 +28,15 @@ interface IAppState {
 }
 
 class App extends Component<IAppProps, IAppState> {
-  protected unsubscribeCurrentUser: () => void;
-  protected unsubscribeUserRooms: () => void;
+  protected unsubscribeAuth = noop;
+  protected unsubscribeProfile = noop;
+  protected store = createAppStore();
 
   constructor (props: IAppProps) {
     super(props);
     this.state = {
       ready: false,
     };
-    this.unsubscribeCurrentUser = () => undefined;
-    this.unsubscribeUserRooms = () => undefined;
   }
 
   public render () {
@@ -46,7 +47,7 @@ class App extends Component<IAppProps, IAppState> {
     }
 
     return (
-      <Provider store={store}>
+      <Provider store={this.store}>
         <Router history={appHistory}>
           <div className="App">
             <Switch>
@@ -69,23 +70,45 @@ class App extends Component<IAppProps, IAppState> {
     );
   }
 
-  public async componentDidMount () {
-    this.unsubscribeCurrentUser = await users.initializeCurrentUser(store);
-    this.unsubscribeUserRooms = await connectUserRooms(store);
-
-    const un = store.subscribe(() => {
-      const userReady = store.getState().currentUser.ready;
-      const roomReady = store.getState().rooms.ready;
-      if (userReady && roomReady) {
-        this.setState({ ready: true });
-        un();
-      }
-    });
+  public componentDidMount () {
+    this.connectCurrentUser();
   }
 
   public componentWillUnmount () {
-    this.unsubscribeCurrentUser();
-    this.unsubscribeUserRooms();
+    this.disconnectCurrentUser();
+  }
+
+  private connectCurrentUser () {
+    this.disconnectCurrentUser();
+    this.unsubscribeAuth = CurrentUser.connectAuth(
+      (user) => {
+        if (!user) {
+          return;
+        }
+        this.unsubscribeProfile = this.connectProfile(user);
+      },
+      (error) => this.saveError('auth error', error),
+      () => this.setState({ ready: true }),
+    );
+  }
+
+  private disconnectCurrentUser () {
+    this.unsubscribeProfile();
+    this.unsubscribeAuth();
+  }
+
+  private connectProfile (user: firebase.User) {
+    this.store.dispatch(CurrentUser.set(user));
+    const unsubscribeProfile = Profiles.connectProfile(
+      user ? user.uid : '',
+      (profile) => this.store.dispatch(CurrentUser.setProfile(profile)),
+      (error) => this.saveError('connect profile', error),
+    );
+    return unsubscribeProfile;
+  }
+
+  private saveError (location: string, error: ErrorLogs.AppError) {
+    this.store.dispatch(ErrorLogs.add(location, error));
   }
 }
 

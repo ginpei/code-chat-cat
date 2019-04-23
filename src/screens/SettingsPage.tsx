@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import DefaultLayout from '../containers/DefaultLayout';
-import * as users from '../models/users';
+import DefaultLayout from '../complexes/DefaultLayout';
+import * as CurrentUser from '../models/CurrentUser';
+import * as Profiles from '../models/Profiles';
+import { AppState } from '../models/Store';
 import path from '../path';
-import { Dispatch, IState } from '../reducers';
-import { ICurrentUser, IUserProfile } from '../reducers/currentUser';
 
 interface ISettingsPageProps {
-  currentUser: ICurrentUser;
-  userProfile: IUserProfile | null;
+  currentUser: CurrentUser.ICurrentUserState;
+  userProfile: Profiles.IProfile | null;
 }
 interface ISettingsPageState {
   ready: boolean;
@@ -101,8 +101,8 @@ class SettingsPage extends React.Component<ISettingsPageProps, ISettingsPageStat
       savingProfile: true,
     });
 
-    await users.saveUser({
-      ...this.props.currentUser.profile!,
+    await Profiles.saveProfile({
+      ...this.props.userProfile!,
       name: this.state.userName,
     });
     this.setState({
@@ -118,7 +118,7 @@ class SettingsPage extends React.Component<ISettingsPageProps, ISettingsPageStat
 }
 
 export default connect(
-  (state: IState) => ({
+  (state: AppState) => ({
     currentUser: state.currentUser,
     userProfile: state.currentUser.profile,
   }),
