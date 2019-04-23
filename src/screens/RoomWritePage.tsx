@@ -3,14 +3,17 @@ import React, { createRef } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import { headerHeight } from '../components/Header';
-import RoomHeader from '../components/RoomHeader';
-import TextbookContent from '../components/TextbookContent';
+import { headerHeight } from '../basics/Header';
+import RoomHeader from '../basics/RoomHeader';
+import TextbookContent from '../basics/TextbookContent';
 import syncScroll from '../functions/syncScroll';
-import { debounce } from '../misc';
-import { Dispatch, IState } from '../reducers';
-import { IUserProfile } from '../reducers/currentUser';
-import { IRoom, RoomsActionTypes } from '../reducers/rooms';
+import LoadingView from '../independents/LoadingView';
+import { debounce, noop } from '../misc';
+import * as ErrorLogs from '../models/ErrorLogs';
+import * as Profiles from '../models/Profiles';
+import * as Rooms from '../models/Rooms';
+import { AppDispatch, AppState } from '../models/Store';
+import NotFoundPage from './NotFoundPage';
 
 const EditorContainer = styled.div`
   display: grid;
@@ -41,34 +44,36 @@ interface IRoomWritePageProps
   extends RouteComponentProps<IRoomWritePageParams> {
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
-  saveRoom: (room: IRoom) => void;
-  userProfile: IUserProfile | null;
-  userRooms: IRoom[];
+  pickRoom: (roomId: string) => Rooms.IRoom;
+  saveError: (location: string, error: ErrorLogs.AppError) => void;
+  saveRoom: (room: Rooms.IRoom) => void;
+  userProfile: Profiles.IProfile | null;
+  userRooms: Rooms.IRoom[];
 }
 interface IRoomWritePageState {
   content: string;
   previewingContent: string;
+  room: Rooms.IRoom | null;
 }
 
 class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageState> {
   protected refInput = createRef<HTMLTextAreaElement>();
   protected refOutput = createRef<HTMLElement>();
   protected unsubscribeSyncScroll: (() => void) | null = null;
+  protected unsubscribeRoom = noop;
 
   protected get roomId () {
     return this.props.match.params.id;
   }
 
-  protected get room () {
-    return this.props.userRooms.find((v) => v.id === this.roomId) || null;
-  }
-
   constructor (props: IRoomWritePageProps) {
     super(props);
-    const content = this.room ? this.room.textbookContent : '';
+    const room = props.pickRoom(this.roomId) || Rooms.emptyRoom;
+    const content = room ? room.textbookContent : '';
     this.state = {
       content,
       previewingContent: content,
+      room,
     };
 
     this.onContentInput = this.onContentInput.bind(this);
@@ -85,15 +90,20 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
       );
     }
 
-    if (!this.room) {
+    const { room } = this.state;
+
+    if (!room) {
       return (
-        <div>
-          <p>404</p>
-        </div>
+        <NotFoundPage/>
       );
     }
 
-    const { room } = this;
+    if (!room.id) {
+      return (
+        <LoadingView/>
+      );
+    }
+
     const { content, previewingContent } = this.state;
 
     const roomName = room.name;
@@ -122,10 +132,20 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
   }
 
   public componentDidMount () {
+    this.unsubscribeRoom = Rooms.connectRoom(
+      this.roomId,
+      (room) => this.setRoom(room),
+      (error) => {
+        this.setRoom(null);
+        this.props.saveError('connect room', error);
+      },
+    );
+
     this.subscribeSyncScroll();
   }
 
   public componentWillUnmount () {
+    this.unsubscribeRoom();
     if (this.unsubscribeSyncScroll) {
       this.unsubscribeSyncScroll();
     }
@@ -140,7 +160,15 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     this.setContent(content);
   }
 
+  protected setRoom (room: Rooms.IRoom | null) {
+    this.setState({ room });
+    this.setContent(room ? room.textbookContent : '');
+  }
+
   protected setContent (content: string) {
+    if (content === this.state.content) {
+      return;
+    }
     this.setState({ content });
     this.setRenderingContent(content);
     this.saveContent();
@@ -157,7 +185,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
    * This method is debounce. See constructor.
    */
   protected saveContent () {
-    const { room } = this;
+    const { room } = this.state;
     if (!room) {
       return;
     }
@@ -197,13 +225,16 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
 }
 
 export default connect(
-  (state: IState) => ({
+  (state: AppState) => ({
     firebaseUser: state.currentUser.firebaseUser,
     loggedIn: state.currentUser.loggedIn,
+    pickRoom: (roomId: string) => Rooms.pickRoom(state, roomId),
     userProfile: state.currentUser.profile,
-    userRooms: state.rooms.userRooms,
+    userRooms: Rooms.pickUserRooms(state),
   }),
-  (dispatch: Dispatch) => ({
-    saveRoom: (room: IRoom) => dispatch({ room, type: RoomsActionTypes.saveRoom }),
+  (dispatch: AppDispatch) => ({
+    saveError: (location: string, error: ErrorLogs.AppError) =>
+      dispatch(ErrorLogs.add(location, error)),
+    saveRoom: (room: Rooms.IRoom) => dispatch(Rooms.saveRoom(room)),
   }),
 )(RoomWritePage);

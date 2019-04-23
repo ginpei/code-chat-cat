@@ -1,19 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import DefaultLayout from '../containers/DefaultLayout';
+import DefaultLayout from '../complexes/DefaultLayout';
+import { noop } from '../misc';
+import * as ErrorLogs from '../models/ErrorLogs';
+import * as Rooms from '../models/Rooms';
+import { AppDispatch, AppState } from '../models/Store';
 import path, { RoomLink } from '../path';
-import { IState } from '../reducers';
-import { IRoom, RoomStatus } from '../reducers/rooms';
 
-function RoomItem ({ room }: { room: IRoom }) {
+function RoomItem ({ room }: { room: Rooms.IRoom }) {
   const { status, name } = room;
   return (
     <tr>
       <td>
-        {status === RoomStatus.draft && <span title="Draft">🔒</span>}
-        {status === RoomStatus.public && <span title="Public">✅</span>}
-        {status === RoomStatus.active && <span title="Active">🔥</span>}
+        {status === Rooms.RoomStatus.draft && <span title="Draft">🔒</span>}
+        {status === Rooms.RoomStatus.public && <span title="Public">✅</span>}
+        {status === Rooms.RoomStatus.active && <span title="Active">🔥</span>}
       </td>
       <td><RoomLink room={room} type="settings">💬 {name}</RoomLink></td>
       <td><RoomLink room={room}>📖 View</RoomLink></td>
@@ -24,11 +26,14 @@ function RoomItem ({ room }: { room: IRoom }) {
 }
 
 interface IRoomListPageProps {
+  connectUserRooms: (userId: string) => () => void;
   userId: string;
-  userRooms: IRoom[];
+  userRooms: Rooms.IRoom[];
 }
 
 class RoomListPage extends React.Component<IRoomListPageProps> {
+  protected unsubscribeUserRooms = noop;
+
   public render () {
     const rooms = this.props.userRooms;
 
@@ -56,11 +61,26 @@ class RoomListPage extends React.Component<IRoomListPageProps> {
       </DefaultLayout>
     );
   }
+
+  public componentDidMount () {
+    this.unsubscribeUserRooms = this.props.connectUserRooms(this.props.userId);
+  }
+
+  public componentWillUnmount () {
+    this.unsubscribeUserRooms();
+  }
 }
 
 export default connect(
-  (state: IState) => ({
-    userId: state.currentUser.uid,
-    userRooms: state.rooms.userRooms,
+  (state: AppState) => ({
+    userId: state.currentUser.id,
+    userRooms: Rooms.pickUserRooms(state),
+  }),
+  (dispatch: AppDispatch) => ({
+    connectUserRooms: (userId: string) => Rooms.connectUserRooms(
+      userId,
+      (rooms) => dispatch(Rooms.setUserRooms(rooms)),
+      (error) => dispatch(ErrorLogs.add('connect user rooms', error)),
+    ),
   }),
 )(RoomListPage);
