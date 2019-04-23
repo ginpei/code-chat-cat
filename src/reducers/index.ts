@@ -3,7 +3,6 @@ import { ThunkDispatch } from 'redux-thunk';
 import * as CurrentUser from '../models/CurrentUser';
 import * as ErrorLogs from '../models/ErrorLogs';
 import * as Rooms from '../models/Rooms';
-import { CurrentUserAction } from './currentUser';
 
 export interface IState {
   currentUser: CurrentUser.ICurrentUserState;
@@ -13,7 +12,6 @@ export interface IState {
 
 export type Action =
   | CurrentUser.CurrentUserAction
-  | CurrentUserAction
   | ErrorLogs.ErrorsAction
   | Rooms.RoomsAction;
 export type Dispatch = ThunkDispatch<IState, void, Action>;
