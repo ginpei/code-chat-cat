@@ -10,8 +10,8 @@ import { appHistory, noop } from '../misc';
 import * as ErrorLogs from '../models/ErrorLogs';
 import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
+import { Dispatch, IState } from '../models/Store';
 import { RoomLink } from '../path';
-import { Dispatch, IState } from '../reducers';
 import NotFoundPage from './NotFoundPage';
 
 const RoomStatusInputLabel = styled.label`

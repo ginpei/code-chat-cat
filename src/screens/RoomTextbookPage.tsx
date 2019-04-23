@@ -10,7 +10,7 @@ import LoadingView from '../independents/LoadingView';
 import * as ErrorLogs from '../models/ErrorLogs';
 import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
-import { Dispatch, IState } from '../reducers';
+import { Dispatch, IState } from '../models/Store';
 import NotFoundPage from './NotFoundPage';
 
 const TextbookContainer = styled.div`

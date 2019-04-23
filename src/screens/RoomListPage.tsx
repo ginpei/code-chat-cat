@@ -5,8 +5,8 @@ import DefaultLayout from '../complexes/DefaultLayout';
 import { noop } from '../misc';
 import * as ErrorLogs from '../models/ErrorLogs';
 import * as Rooms from '../models/Rooms';
+import { Dispatch, IState } from '../models/Store';
 import path, { RoomLink } from '../path';
-import { Dispatch, IState } from '../reducers';
 
 function RoomItem ({ room }: { room: Rooms.IRoom }) {
   const { status, name } = room;

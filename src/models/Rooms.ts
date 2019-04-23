@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import firebase from '../middleware/firebase';
 import { noop } from '../misc';
-import { Dispatch, IState } from '../reducers';
+import { Dispatch, IState } from './Store';
 
 const collectionName = 'rooms';
 

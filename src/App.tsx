@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router';
 import LoadingView from './independents/LoadingView';
-import { appHistory, noop, store } from './misc';
+import { appHistory, noop } from './misc';
 import * as CurrentUser from './models/CurrentUser';
 import * as ErrorLogs from './models/ErrorLogs';
 import * as Profiles from './models/Profiles';
+import { createAppStore } from './models/Store';
 import HomePage from './screens/HomePage';
 import LoginPage from './screens/LoginPage';
 import LogoutPage from './screens/LogoutPage';
@@ -29,6 +30,7 @@ interface IAppState {
 class App extends Component<IAppProps, IAppState> {
   protected unsubscribeAuth = noop;
   protected unsubscribeProfile = noop;
+  protected store = createAppStore();
 
   constructor (props: IAppProps) {
     super(props);
@@ -45,7 +47,7 @@ class App extends Component<IAppProps, IAppState> {
     }
 
     return (
-      <Provider store={store}>
+      <Provider store={this.store}>
         <Router history={appHistory}>
           <div className="App">
             <Switch>
@@ -96,17 +98,17 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   private connectProfile (user: firebase.User) {
-    store.dispatch(CurrentUser.set(user));
+    this.store.dispatch(CurrentUser.set(user));
     const unsubscribeProfile = Profiles.connectProfile(
       user ? user.uid : '',
-      (profile) => store.dispatch(CurrentUser.setProfile(profile)),
+      (profile) => this.store.dispatch(CurrentUser.setProfile(profile)),
       (error) => this.saveError('connect profile', error),
     );
     return unsubscribeProfile;
   }
 
   private saveError (location: string, error: ErrorLogs.AppError) {
-    store.dispatch(ErrorLogs.add(location, error));
+    this.store.dispatch(ErrorLogs.add(location, error));
   }
 }
 

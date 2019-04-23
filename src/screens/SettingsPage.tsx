@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import DefaultLayout from '../complexes/DefaultLayout';
 import * as CurrentUser from '../models/CurrentUser';
 import * as Profiles from '../models/Profiles';
+import { IState } from '../models/Store';
 import path from '../path';
-import { IState } from '../reducers';
 
 interface ISettingsPageProps {
   currentUser: CurrentUser.ICurrentUserState;

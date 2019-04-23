@@ -5,8 +5,8 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { connect } from 'react-redux';
 import DefaultLayout from '../complexes/DefaultLayout';
 import { appHistory } from '../misc';
+import { Dispatch, IState } from '../models/Store';
 import { HomeLink } from '../path';
-import { Dispatch, IState } from '../reducers';
 
 interface ILoginPageProps {
   loggedIn: boolean;

@@ -6,8 +6,8 @@ import Header, { headerHeight } from '../basics/Header';
 import { IHeaderMenu } from '../basics/HeaderMenu';
 import Container from '../independents/Container';
 import * as Profiles from '../models/Profiles';
+import { IState } from '../models/Store';
 import path from '../path';
-import { IState } from '../reducers';
 
 export const MainContainer = styled(Container)`
   min-height: calc(100vh - ${headerHeight}px - 10rem);

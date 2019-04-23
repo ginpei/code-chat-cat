@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import DefaultLayout from '../complexes/DefaultLayout';
 import { appHistory } from '../misc';
 import * as Rooms from '../models/Rooms';
-import { Dispatch, IState } from '../reducers';
+import { Dispatch, IState } from '../models/Store';
 
 const ErrorBlock = styled.div`
   border: 2px solid tomato;
