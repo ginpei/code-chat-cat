@@ -187,6 +187,7 @@ export function reduceDocs (
   action: RoomsAction,
 ): IIdMap<IRoom> {
   switch (action.type) {
+    case 'Rooms/createRoom':
     case 'Rooms/saveRoom': {
       const docs = { ...state };
       docs[action.room.id] = action.room;
