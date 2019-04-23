@@ -70,7 +70,7 @@ class App extends Component<IAppProps, IAppState> {
     );
   }
 
-  public async componentDidMount () {
+  public componentDidMount () {
     this.connectCurrentUser();
   }
 
