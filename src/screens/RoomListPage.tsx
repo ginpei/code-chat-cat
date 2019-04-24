@@ -8,18 +8,58 @@ import * as Rooms from '../models/Rooms';
 import { AppDispatch, AppState } from '../models/Store';
 import path, { RoomLink } from '../path';
 
+function DraftIcon () {
+  return <span role="img" aria-label="Lock" title="Draft">🔒</span>;
+}
+
+function PublicIcon () {
+  return <span role="img" aria-label="White Heavy Check Mark" title="Public">✅</span>;
+}
+
+function ActiveIcon () {
+  return <span role="img" aria-label="Fire" title="Active">🔥</span>;
+}
+
+function SpeechBalloonEmoji () {
+  return <span role="img" aria-label="Speech Balloon">💬</span>;
+}
+
+function OpenBookEmoji () {
+  return <span role="img" aria-label="Open Book">📖</span>;
+}
+
+function MemoEmoji () {
+  return <span role="img" aria-label="Memo">📝</span>;
+}
+
 function RoomItem ({ room }: { room: Rooms.IRoom }) {
   const { status, name } = room;
   return (
     <tr>
       <td>
-        {status === Rooms.RoomStatus.draft && <span title="Draft">🔒</span>}
-        {status === Rooms.RoomStatus.public && <span title="Public">✅</span>}
-        {status === Rooms.RoomStatus.active && <span title="Active">🔥</span>}
+        {status === Rooms.RoomStatus.draft && <DraftIcon/>}
+        {status === Rooms.RoomStatus.public && <PublicIcon/>}
+        {status === Rooms.RoomStatus.active && <ActiveIcon/>}
       </td>
-      <td><RoomLink room={room} type="settings">💬 {name}</RoomLink></td>
-      <td><RoomLink room={room}>📖 View</RoomLink></td>
-      <td><RoomLink room={room} type="write">📝 Write</RoomLink></td>
+      <td>
+        <RoomLink room={room} type="settings">
+          <SpeechBalloonEmoji/>
+          {' '}
+          {name}
+        </RoomLink>
+      </td>
+      <td>
+        <RoomLink room={room}>
+          <OpenBookEmoji/>
+          {' View'}
+        </RoomLink>
+      </td>
+      <td>
+        <RoomLink room={room} type="write">
+          <MemoEmoji/>
+          {' Write'}
+        </RoomLink>
+      </td>
       <td>{String(room.updatedAt && room.updatedAt.toDate())}</td>
     </tr>
   );
@@ -43,7 +83,14 @@ class RoomListPage extends React.Component<IRoomListPageProps> {
         <p>
           <Link to={path('room-new')}>Create new room</Link>
         </p>
-        <p>🔒 Draft / ✅ Public room / 🔥 Active room</p>
+        <p>
+          <DraftIcon/>
+          {' Draft / '}
+          <PublicIcon/>
+          {' Public room / '}
+          <ActiveIcon/>
+          {' Active room'}
+        </p>
         {rooms.length < 1 ? (
           <p>No rooms found.</p>
         ) : (

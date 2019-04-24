@@ -106,8 +106,6 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
 
     const { content, previewingContent } = this.state;
 
-    const roomName = room.name;
-
     return (
       <div>
         <RoomHeader

@@ -253,7 +253,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
   }
 
   public onRoomDeleteClick (event: React.MouseEvent<HTMLButtonElement>) {
-    const ok = confirm('Are you sure you want to delete this room?');
+    const ok = window.confirm('Are you sure you want to delete this room?');
     if (!ok) {
       return;
     }

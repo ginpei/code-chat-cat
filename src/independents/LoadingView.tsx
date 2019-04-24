@@ -45,7 +45,9 @@ export default function LoadingView () {
   return (
     <Wrapper>
       <CatContainer>
-        <WalkingCat>🐈</WalkingCat>
+        <WalkingCat>
+          <span role="img" aria-label="Cat">🐈</span>
+        </WalkingCat>
       </CatContainer>
     </Wrapper>
   );

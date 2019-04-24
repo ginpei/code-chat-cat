@@ -35,12 +35,6 @@ export interface IRoomState {
 
 interface IIdMap<T> { [id: string]: T; }
 
-const initialRoomState = Object.freeze<IRoomState>({
-  activeRoomIds: [],
-  docs: {},
-  userRoomIds: [],
-});
-
 export const emptyRoom = Object.freeze<IRoom>({
   createdAt: new firebase.firestore.Timestamp(0, 0),
   id: '',
