@@ -167,7 +167,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     if (content === this.state.content) {
       return;
     }
-    this.setState({ content });
+    this.updateContent(content);
     this.setRenderingContent(content);
     this.saveContent();
   }
@@ -215,9 +215,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     // This won't reflect remote modification to your screen.
 
     if (this.state.content === '') {
-      this.setState({
-        content,
-      });
+      this.setState({ content });
     }
   }
 }
