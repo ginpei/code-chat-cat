@@ -1,9 +1,9 @@
-import firebase from 'firebase/app';
 import firebaseui from 'firebaseui';
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { connect } from 'react-redux';
 import DefaultLayout from '../complexes/DefaultLayout';
+import firebase from '../middleware/firebase';
 import { appHistory } from '../misc';
 import { AppState } from '../models/Store';
 import { HomeLink } from '../path';
