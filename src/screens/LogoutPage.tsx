@@ -6,8 +6,10 @@ import { HomeLink } from '../path';
 export default function LogoutPage () {
   const [done, setDone] = useState(false);
 
-  CurrentUser.logOut()
-    .then(() => setDone(true));
+  if (!done) {
+    CurrentUser.logOut()
+      .then(() => setDone(true));
+  }
 
   return (
     <DefaultLayout>
