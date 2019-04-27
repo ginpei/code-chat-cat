@@ -3,7 +3,7 @@ import EnzymeAdapter from 'enzyme-adapter-react-16';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
-jest.mock('firebase', () => {
+jest.mock('./middleware/firebase', () => {
   const firebaseMock = require('firebase-mock'); // no types are defined
   const firebase = new firebaseMock.MockFirebaseSdk();
 
