@@ -10,9 +10,10 @@ export interface IErrorLog {
   occurredAt: number;
 }
 
-export function createLog (error: AppError): IErrorLog {
+function createLog (error: AppError): IErrorLog {
   const occurredAt = Date.now();
-  const id = `${occurredAt}${String(Math.random()).slice(2)}`;
+  const random = String(Math.random()).slice(2);
+  const id = `${occurredAt}${random}`;
   return { error, id, occurredAt };
 }
 
