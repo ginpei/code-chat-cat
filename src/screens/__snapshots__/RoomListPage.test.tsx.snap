@@ -23,30 +23,42 @@ ShallowWrapper {
     userRooms={
       Array [
         Object {
-          "createdAt": Object {},
+          "createdAt": Object {
+            "toDate": [Function],
+          },
           "id": "",
           "name": "Draft room",
           "status": 0,
           "textbookContent": "",
-          "updatedAt": Object {},
+          "updatedAt": Object {
+            "toDate": [Function],
+          },
           "userId": "",
         },
         Object {
-          "createdAt": Object {},
+          "createdAt": Object {
+            "toDate": [Function],
+          },
           "id": "",
           "name": "Public room",
           "status": 1,
           "textbookContent": "",
-          "updatedAt": Object {},
+          "updatedAt": Object {
+            "toDate": [Function],
+          },
           "userId": "",
         },
         Object {
-          "createdAt": Object {},
+          "createdAt": Object {
+            "toDate": [Function],
+          },
           "id": "",
           "name": "Active room",
           "status": 2,
           "textbookContent": "",
-          "updatedAt": Object {},
+          "updatedAt": Object {
+            "toDate": [Function],
+          },
           "userId": "",
         },
       ]
@@ -96,12 +108,16 @@ ShallowWrapper {
             <RoomListItem
               room={
                 Object {
-                  "createdAt": Object {},
+                  "createdAt": Object {
+                    "toDate": [Function],
+                  },
                   "id": "",
                   "name": "Draft room",
                   "status": 0,
                   "textbookContent": "",
-                  "updatedAt": Object {},
+                  "updatedAt": Object {
+                    "toDate": [Function],
+                  },
                   "userId": "",
                 }
               }
@@ -109,12 +125,16 @@ ShallowWrapper {
             <RoomListItem
               room={
                 Object {
-                  "createdAt": Object {},
+                  "createdAt": Object {
+                    "toDate": [Function],
+                  },
                   "id": "",
                   "name": "Public room",
                   "status": 1,
                   "textbookContent": "",
-                  "updatedAt": Object {},
+                  "updatedAt": Object {
+                    "toDate": [Function],
+                  },
                   "userId": "",
                 }
               }
@@ -122,12 +142,16 @@ ShallowWrapper {
             <RoomListItem
               room={
                 Object {
-                  "createdAt": Object {},
+                  "createdAt": Object {
+                    "toDate": [Function],
+                  },
                   "id": "",
                   "name": "Active room",
                   "status": 2,
                   "textbookContent": "",
-                  "updatedAt": Object {},
+                  "updatedAt": Object {
+                    "toDate": [Function],
+                  },
                   "userId": "",
                 }
               }
@@ -245,12 +269,16 @@ ShallowWrapper {
             <RoomListItem
               room={
                 Object {
-                  "createdAt": Object {},
+                  "createdAt": Object {
+                    "toDate": [Function],
+                  },
                   "id": "",
                   "name": "Draft room",
                   "status": 0,
                   "textbookContent": "",
-                  "updatedAt": Object {},
+                  "updatedAt": Object {
+                    "toDate": [Function],
+                  },
                   "userId": "",
                 }
               }
@@ -258,12 +286,16 @@ ShallowWrapper {
             <RoomListItem
               room={
                 Object {
-                  "createdAt": Object {},
+                  "createdAt": Object {
+                    "toDate": [Function],
+                  },
                   "id": "",
                   "name": "Public room",
                   "status": 1,
                   "textbookContent": "",
-                  "updatedAt": Object {},
+                  "updatedAt": Object {
+                    "toDate": [Function],
+                  },
                   "userId": "",
                 }
               }
@@ -271,12 +303,16 @@ ShallowWrapper {
             <RoomListItem
               room={
                 Object {
-                  "createdAt": Object {},
+                  "createdAt": Object {
+                    "toDate": [Function],
+                  },
                   "id": "",
                   "name": "Active room",
                   "status": 2,
                   "textbookContent": "",
-                  "updatedAt": Object {},
+                  "updatedAt": Object {
+                    "toDate": [Function],
+                  },
                   "userId": "",
                 }
               }
@@ -293,12 +329,16 @@ ShallowWrapper {
               <RoomListItem
                 room={
                   Object {
-                    "createdAt": Object {},
+                    "createdAt": Object {
+                      "toDate": [Function],
+                    },
                     "id": "",
                     "name": "Draft room",
                     "status": 0,
                     "textbookContent": "",
-                    "updatedAt": Object {},
+                    "updatedAt": Object {
+                      "toDate": [Function],
+                    },
                     "userId": "",
                   }
                 }
@@ -306,12 +346,16 @@ ShallowWrapper {
               <RoomListItem
                 room={
                   Object {
-                    "createdAt": Object {},
+                    "createdAt": Object {
+                      "toDate": [Function],
+                    },
                     "id": "",
                     "name": "Public room",
                     "status": 1,
                     "textbookContent": "",
-                    "updatedAt": Object {},
+                    "updatedAt": Object {
+                      "toDate": [Function],
+                    },
                     "userId": "",
                   }
                 }
@@ -319,12 +363,16 @@ ShallowWrapper {
               <RoomListItem
                 room={
                   Object {
-                    "createdAt": Object {},
+                    "createdAt": Object {
+                      "toDate": [Function],
+                    },
                     "id": "",
                     "name": "Active room",
                     "status": 2,
                     "textbookContent": "",
-                    "updatedAt": Object {},
+                    "updatedAt": Object {
+                      "toDate": [Function],
+                    },
                     "userId": "",
                   }
                 }
@@ -339,12 +387,16 @@ ShallowWrapper {
               "nodeType": "function",
               "props": Object {
                 "room": Object {
-                  "createdAt": Object {},
+                  "createdAt": Object {
+                    "toDate": [Function],
+                  },
                   "id": "",
                   "name": "Draft room",
                   "status": 0,
                   "textbookContent": "",
-                  "updatedAt": Object {},
+                  "updatedAt": Object {
+                    "toDate": [Function],
+                  },
                   "userId": "",
                 },
               },
@@ -358,12 +410,16 @@ ShallowWrapper {
               "nodeType": "function",
               "props": Object {
                 "room": Object {
-                  "createdAt": Object {},
+                  "createdAt": Object {
+                    "toDate": [Function],
+                  },
                   "id": "",
                   "name": "Public room",
                   "status": 1,
                   "textbookContent": "",
-                  "updatedAt": Object {},
+                  "updatedAt": Object {
+                    "toDate": [Function],
+                  },
                   "userId": "",
                 },
               },
@@ -377,12 +433,16 @@ ShallowWrapper {
               "nodeType": "function",
               "props": Object {
                 "room": Object {
-                  "createdAt": Object {},
+                  "createdAt": Object {
+                    "toDate": [Function],
+                  },
                   "id": "",
                   "name": "Active room",
                   "status": 2,
                   "textbookContent": "",
-                  "updatedAt": Object {},
+                  "updatedAt": Object {
+                    "toDate": [Function],
+                  },
                   "userId": "",
                 },
               },
@@ -441,12 +501,16 @@ ShallowWrapper {
               <RoomListItem
                 room={
                   Object {
-                    "createdAt": Object {},
+                    "createdAt": Object {
+                      "toDate": [Function],
+                    },
                     "id": "",
                     "name": "Draft room",
                     "status": 0,
                     "textbookContent": "",
-                    "updatedAt": Object {},
+                    "updatedAt": Object {
+                      "toDate": [Function],
+                    },
                     "userId": "",
                   }
                 }
@@ -454,12 +518,16 @@ ShallowWrapper {
               <RoomListItem
                 room={
                   Object {
-                    "createdAt": Object {},
+                    "createdAt": Object {
+                      "toDate": [Function],
+                    },
                     "id": "",
                     "name": "Public room",
                     "status": 1,
                     "textbookContent": "",
-                    "updatedAt": Object {},
+                    "updatedAt": Object {
+                      "toDate": [Function],
+                    },
                     "userId": "",
                   }
                 }
@@ -467,12 +535,16 @@ ShallowWrapper {
               <RoomListItem
                 room={
                   Object {
-                    "createdAt": Object {},
+                    "createdAt": Object {
+                      "toDate": [Function],
+                    },
                     "id": "",
                     "name": "Active room",
                     "status": 2,
                     "textbookContent": "",
-                    "updatedAt": Object {},
+                    "updatedAt": Object {
+                      "toDate": [Function],
+                    },
                     "userId": "",
                   }
                 }
@@ -590,12 +662,16 @@ ShallowWrapper {
               <RoomListItem
                 room={
                   Object {
-                    "createdAt": Object {},
+                    "createdAt": Object {
+                      "toDate": [Function],
+                    },
                     "id": "",
                     "name": "Draft room",
                     "status": 0,
                     "textbookContent": "",
-                    "updatedAt": Object {},
+                    "updatedAt": Object {
+                      "toDate": [Function],
+                    },
                     "userId": "",
                   }
                 }
@@ -603,12 +679,16 @@ ShallowWrapper {
               <RoomListItem
                 room={
                   Object {
-                    "createdAt": Object {},
+                    "createdAt": Object {
+                      "toDate": [Function],
+                    },
                     "id": "",
                     "name": "Public room",
                     "status": 1,
                     "textbookContent": "",
-                    "updatedAt": Object {},
+                    "updatedAt": Object {
+                      "toDate": [Function],
+                    },
                     "userId": "",
                   }
                 }
@@ -616,12 +696,16 @@ ShallowWrapper {
               <RoomListItem
                 room={
                   Object {
-                    "createdAt": Object {},
+                    "createdAt": Object {
+                      "toDate": [Function],
+                    },
                     "id": "",
                     "name": "Active room",
                     "status": 2,
                     "textbookContent": "",
-                    "updatedAt": Object {},
+                    "updatedAt": Object {
+                      "toDate": [Function],
+                    },
                     "userId": "",
                   }
                 }
@@ -638,12 +722,16 @@ ShallowWrapper {
                 <RoomListItem
                   room={
                     Object {
-                      "createdAt": Object {},
+                      "createdAt": Object {
+                        "toDate": [Function],
+                      },
                       "id": "",
                       "name": "Draft room",
                       "status": 0,
                       "textbookContent": "",
-                      "updatedAt": Object {},
+                      "updatedAt": Object {
+                        "toDate": [Function],
+                      },
                       "userId": "",
                     }
                   }
@@ -651,12 +739,16 @@ ShallowWrapper {
                 <RoomListItem
                   room={
                     Object {
-                      "createdAt": Object {},
+                      "createdAt": Object {
+                        "toDate": [Function],
+                      },
                       "id": "",
                       "name": "Public room",
                       "status": 1,
                       "textbookContent": "",
-                      "updatedAt": Object {},
+                      "updatedAt": Object {
+                        "toDate": [Function],
+                      },
                       "userId": "",
                     }
                   }
@@ -664,12 +756,16 @@ ShallowWrapper {
                 <RoomListItem
                   room={
                     Object {
-                      "createdAt": Object {},
+                      "createdAt": Object {
+                        "toDate": [Function],
+                      },
                       "id": "",
                       "name": "Active room",
                       "status": 2,
                       "textbookContent": "",
-                      "updatedAt": Object {},
+                      "updatedAt": Object {
+                        "toDate": [Function],
+                      },
                       "userId": "",
                     }
                   }
@@ -684,12 +780,16 @@ ShallowWrapper {
                 "nodeType": "function",
                 "props": Object {
                   "room": Object {
-                    "createdAt": Object {},
+                    "createdAt": Object {
+                      "toDate": [Function],
+                    },
                     "id": "",
                     "name": "Draft room",
                     "status": 0,
                     "textbookContent": "",
-                    "updatedAt": Object {},
+                    "updatedAt": Object {
+                      "toDate": [Function],
+                    },
                     "userId": "",
                   },
                 },
@@ -703,12 +803,16 @@ ShallowWrapper {
                 "nodeType": "function",
                 "props": Object {
                   "room": Object {
-                    "createdAt": Object {},
+                    "createdAt": Object {
+                      "toDate": [Function],
+                    },
                     "id": "",
                     "name": "Public room",
                     "status": 1,
                     "textbookContent": "",
-                    "updatedAt": Object {},
+                    "updatedAt": Object {
+                      "toDate": [Function],
+                    },
                     "userId": "",
                   },
                 },
@@ -722,12 +826,16 @@ ShallowWrapper {
                 "nodeType": "function",
                 "props": Object {
                   "room": Object {
-                    "createdAt": Object {},
+                    "createdAt": Object {
+                      "toDate": [Function],
+                    },
                     "id": "",
                     "name": "Active room",
                     "status": 2,
                     "textbookContent": "",
-                    "updatedAt": Object {},
+                    "updatedAt": Object {
+                      "toDate": [Function],
+                    },
                     "userId": "",
                   },
                 },

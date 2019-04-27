@@ -39,7 +39,7 @@ export default function RoomListItem (props: IRoomListItemProp) {
           {' Write'}
         </RoomLink>
       </td>
-      <td>{String(room.updatedAt && room.updatedAt.toDate())}</td>
+      <td>{String(room.updatedAt.toDate())}</td>
     </tr>
   );
 }
