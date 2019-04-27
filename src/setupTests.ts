@@ -9,7 +9,11 @@ jest.mock('./middleware/firebase', () => {
 
   if (!firebase.firestore.Timestamp) {
     // tslint:disable-next-line:only-arrow-functions no-empty
-    firebase.firestore.Timestamp = function () {} as any;
+    firebase.firestore.Timestamp = function () {
+      return {
+        toDate: () => new Date(),
+      };
+    } as any;
     firebase.firestore.Timestamp.now = () => ({}) as any;
   }
 
