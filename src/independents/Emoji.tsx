@@ -22,11 +22,8 @@ interface IEmojiProps extends ISpanProps {
 }
 
 export default function Emoji (props: IEmojiProps) {
-  const { label } = props;
+  const { label, ...spanProps } = props;
   const emoji = getEmojiChar(label);
-
-  const spanProps = { ...props };
-  delete spanProps.label;
 
   return (
     <span
