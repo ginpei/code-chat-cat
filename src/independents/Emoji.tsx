@@ -39,23 +39,3 @@ export default function Emoji (props: IEmojiProps) {
 export function LockEmoji (props: ISpanProps) {
   return <Emoji {...props} label="Lock" />;
 }
-
-export function CheckEmoji (props: ISpanProps) {
-  return <Emoji {...props} label="White Heavy Check Mark" />;
-}
-
-export function FireEmoji (props: ISpanProps) {
-  return <Emoji {...props} label="Fire" />;
-}
-
-export function SpeechBalloonEmoji (props: ISpanProps) {
-  return <Emoji {...props} label="Speech Balloon" />;
-}
-
-export function OpenBookEmoji (props: ISpanProps) {
-  return <Emoji {...props} label="Open Book" />;
-}
-
-export function MemoEmoji (props: ISpanProps) {
-  return <Emoji {...props} label="Memo" />;
-}
