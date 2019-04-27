@@ -1,6 +1,5 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
-import { noop } from '../misc';
 import { emptyRoom, IRoom, RoomStatus } from '../models/Rooms';
 import RoomListItem from './RoomListItem';
 
