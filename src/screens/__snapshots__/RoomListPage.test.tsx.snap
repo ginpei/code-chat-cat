@@ -23,41 +23,47 @@ ShallowWrapper {
     userRooms={
       Array [
         Object {
-          "createdAt": Object {
-            "toDate": [Function],
+          "createdAt": Timestamp {
+            "nanoseconds": 0,
+            "seconds": 0,
           },
           "id": "",
           "name": "Draft room",
           "status": 0,
           "textbookContent": "",
-          "updatedAt": Object {
-            "toDate": [Function],
+          "updatedAt": Timestamp {
+            "nanoseconds": 0,
+            "seconds": 0,
           },
           "userId": "",
         },
         Object {
-          "createdAt": Object {
-            "toDate": [Function],
+          "createdAt": Timestamp {
+            "nanoseconds": 0,
+            "seconds": 0,
           },
           "id": "",
           "name": "Public room",
           "status": 1,
           "textbookContent": "",
-          "updatedAt": Object {
-            "toDate": [Function],
+          "updatedAt": Timestamp {
+            "nanoseconds": 0,
+            "seconds": 0,
           },
           "userId": "",
         },
         Object {
-          "createdAt": Object {
-            "toDate": [Function],
+          "createdAt": Timestamp {
+            "nanoseconds": 0,
+            "seconds": 0,
           },
           "id": "",
           "name": "Active room",
           "status": 2,
           "textbookContent": "",
-          "updatedAt": Object {
-            "toDate": [Function],
+          "updatedAt": Timestamp {
+            "nanoseconds": 0,
+            "seconds": 0,
           },
           "userId": "",
         },
@@ -108,15 +114,17 @@ ShallowWrapper {
             <RoomListItem
               room={
                 Object {
-                  "createdAt": Object {
-                    "toDate": [Function],
+                  "createdAt": Timestamp {
+                    "nanoseconds": 0,
+                    "seconds": 0,
                   },
                   "id": "",
                   "name": "Draft room",
                   "status": 0,
                   "textbookContent": "",
-                  "updatedAt": Object {
-                    "toDate": [Function],
+                  "updatedAt": Timestamp {
+                    "nanoseconds": 0,
+                    "seconds": 0,
                   },
                   "userId": "",
                 }
@@ -125,15 +133,17 @@ ShallowWrapper {
             <RoomListItem
               room={
                 Object {
-                  "createdAt": Object {
-                    "toDate": [Function],
+                  "createdAt": Timestamp {
+                    "nanoseconds": 0,
+                    "seconds": 0,
                   },
                   "id": "",
                   "name": "Public room",
                   "status": 1,
                   "textbookContent": "",
-                  "updatedAt": Object {
-                    "toDate": [Function],
+                  "updatedAt": Timestamp {
+                    "nanoseconds": 0,
+                    "seconds": 0,
                   },
                   "userId": "",
                 }
@@ -142,15 +152,17 @@ ShallowWrapper {
             <RoomListItem
               room={
                 Object {
-                  "createdAt": Object {
-                    "toDate": [Function],
+                  "createdAt": Timestamp {
+                    "nanoseconds": 0,
+                    "seconds": 0,
                   },
                   "id": "",
                   "name": "Active room",
                   "status": 2,
                   "textbookContent": "",
-                  "updatedAt": Object {
-                    "toDate": [Function],
+                  "updatedAt": Timestamp {
+                    "nanoseconds": 0,
+                    "seconds": 0,
                   },
                   "userId": "",
                 }
@@ -269,15 +281,17 @@ ShallowWrapper {
             <RoomListItem
               room={
                 Object {
-                  "createdAt": Object {
-                    "toDate": [Function],
+                  "createdAt": Timestamp {
+                    "nanoseconds": 0,
+                    "seconds": 0,
                   },
                   "id": "",
                   "name": "Draft room",
                   "status": 0,
                   "textbookContent": "",
-                  "updatedAt": Object {
-                    "toDate": [Function],
+                  "updatedAt": Timestamp {
+                    "nanoseconds": 0,
+                    "seconds": 0,
                   },
                   "userId": "",
                 }
@@ -286,15 +300,17 @@ ShallowWrapper {
             <RoomListItem
               room={
                 Object {
-                  "createdAt": Object {
-                    "toDate": [Function],
+                  "createdAt": Timestamp {
+                    "nanoseconds": 0,
+                    "seconds": 0,
                   },
                   "id": "",
                   "name": "Public room",
                   "status": 1,
                   "textbookContent": "",
-                  "updatedAt": Object {
-                    "toDate": [Function],
+                  "updatedAt": Timestamp {
+                    "nanoseconds": 0,
+                    "seconds": 0,
                   },
                   "userId": "",
                 }
@@ -303,15 +319,17 @@ ShallowWrapper {
             <RoomListItem
               room={
                 Object {
-                  "createdAt": Object {
-                    "toDate": [Function],
+                  "createdAt": Timestamp {
+                    "nanoseconds": 0,
+                    "seconds": 0,
                   },
                   "id": "",
                   "name": "Active room",
                   "status": 2,
                   "textbookContent": "",
-                  "updatedAt": Object {
-                    "toDate": [Function],
+                  "updatedAt": Timestamp {
+                    "nanoseconds": 0,
+                    "seconds": 0,
                   },
                   "userId": "",
                 }
@@ -329,15 +347,17 @@ ShallowWrapper {
               <RoomListItem
                 room={
                   Object {
-                    "createdAt": Object {
-                      "toDate": [Function],
+                    "createdAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "id": "",
                     "name": "Draft room",
                     "status": 0,
                     "textbookContent": "",
-                    "updatedAt": Object {
-                      "toDate": [Function],
+                    "updatedAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "userId": "",
                   }
@@ -346,15 +366,17 @@ ShallowWrapper {
               <RoomListItem
                 room={
                   Object {
-                    "createdAt": Object {
-                      "toDate": [Function],
+                    "createdAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "id": "",
                     "name": "Public room",
                     "status": 1,
                     "textbookContent": "",
-                    "updatedAt": Object {
-                      "toDate": [Function],
+                    "updatedAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "userId": "",
                   }
@@ -363,15 +385,17 @@ ShallowWrapper {
               <RoomListItem
                 room={
                   Object {
-                    "createdAt": Object {
-                      "toDate": [Function],
+                    "createdAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "id": "",
                     "name": "Active room",
                     "status": 2,
                     "textbookContent": "",
-                    "updatedAt": Object {
-                      "toDate": [Function],
+                    "updatedAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "userId": "",
                   }
@@ -387,15 +411,17 @@ ShallowWrapper {
               "nodeType": "function",
               "props": Object {
                 "room": Object {
-                  "createdAt": Object {
-                    "toDate": [Function],
+                  "createdAt": Timestamp {
+                    "nanoseconds": 0,
+                    "seconds": 0,
                   },
                   "id": "",
                   "name": "Draft room",
                   "status": 0,
                   "textbookContent": "",
-                  "updatedAt": Object {
-                    "toDate": [Function],
+                  "updatedAt": Timestamp {
+                    "nanoseconds": 0,
+                    "seconds": 0,
                   },
                   "userId": "",
                 },
@@ -410,15 +436,17 @@ ShallowWrapper {
               "nodeType": "function",
               "props": Object {
                 "room": Object {
-                  "createdAt": Object {
-                    "toDate": [Function],
+                  "createdAt": Timestamp {
+                    "nanoseconds": 0,
+                    "seconds": 0,
                   },
                   "id": "",
                   "name": "Public room",
                   "status": 1,
                   "textbookContent": "",
-                  "updatedAt": Object {
-                    "toDate": [Function],
+                  "updatedAt": Timestamp {
+                    "nanoseconds": 0,
+                    "seconds": 0,
                   },
                   "userId": "",
                 },
@@ -433,15 +461,17 @@ ShallowWrapper {
               "nodeType": "function",
               "props": Object {
                 "room": Object {
-                  "createdAt": Object {
-                    "toDate": [Function],
+                  "createdAt": Timestamp {
+                    "nanoseconds": 0,
+                    "seconds": 0,
                   },
                   "id": "",
                   "name": "Active room",
                   "status": 2,
                   "textbookContent": "",
-                  "updatedAt": Object {
-                    "toDate": [Function],
+                  "updatedAt": Timestamp {
+                    "nanoseconds": 0,
+                    "seconds": 0,
                   },
                   "userId": "",
                 },
@@ -501,15 +531,17 @@ ShallowWrapper {
               <RoomListItem
                 room={
                   Object {
-                    "createdAt": Object {
-                      "toDate": [Function],
+                    "createdAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "id": "",
                     "name": "Draft room",
                     "status": 0,
                     "textbookContent": "",
-                    "updatedAt": Object {
-                      "toDate": [Function],
+                    "updatedAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "userId": "",
                   }
@@ -518,15 +550,17 @@ ShallowWrapper {
               <RoomListItem
                 room={
                   Object {
-                    "createdAt": Object {
-                      "toDate": [Function],
+                    "createdAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "id": "",
                     "name": "Public room",
                     "status": 1,
                     "textbookContent": "",
-                    "updatedAt": Object {
-                      "toDate": [Function],
+                    "updatedAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "userId": "",
                   }
@@ -535,15 +569,17 @@ ShallowWrapper {
               <RoomListItem
                 room={
                   Object {
-                    "createdAt": Object {
-                      "toDate": [Function],
+                    "createdAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "id": "",
                     "name": "Active room",
                     "status": 2,
                     "textbookContent": "",
-                    "updatedAt": Object {
-                      "toDate": [Function],
+                    "updatedAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "userId": "",
                   }
@@ -662,15 +698,17 @@ ShallowWrapper {
               <RoomListItem
                 room={
                   Object {
-                    "createdAt": Object {
-                      "toDate": [Function],
+                    "createdAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "id": "",
                     "name": "Draft room",
                     "status": 0,
                     "textbookContent": "",
-                    "updatedAt": Object {
-                      "toDate": [Function],
+                    "updatedAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "userId": "",
                   }
@@ -679,15 +717,17 @@ ShallowWrapper {
               <RoomListItem
                 room={
                   Object {
-                    "createdAt": Object {
-                      "toDate": [Function],
+                    "createdAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "id": "",
                     "name": "Public room",
                     "status": 1,
                     "textbookContent": "",
-                    "updatedAt": Object {
-                      "toDate": [Function],
+                    "updatedAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "userId": "",
                   }
@@ -696,15 +736,17 @@ ShallowWrapper {
               <RoomListItem
                 room={
                   Object {
-                    "createdAt": Object {
-                      "toDate": [Function],
+                    "createdAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "id": "",
                     "name": "Active room",
                     "status": 2,
                     "textbookContent": "",
-                    "updatedAt": Object {
-                      "toDate": [Function],
+                    "updatedAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "userId": "",
                   }
@@ -722,15 +764,17 @@ ShallowWrapper {
                 <RoomListItem
                   room={
                     Object {
-                      "createdAt": Object {
-                        "toDate": [Function],
+                      "createdAt": Timestamp {
+                        "nanoseconds": 0,
+                        "seconds": 0,
                       },
                       "id": "",
                       "name": "Draft room",
                       "status": 0,
                       "textbookContent": "",
-                      "updatedAt": Object {
-                        "toDate": [Function],
+                      "updatedAt": Timestamp {
+                        "nanoseconds": 0,
+                        "seconds": 0,
                       },
                       "userId": "",
                     }
@@ -739,15 +783,17 @@ ShallowWrapper {
                 <RoomListItem
                   room={
                     Object {
-                      "createdAt": Object {
-                        "toDate": [Function],
+                      "createdAt": Timestamp {
+                        "nanoseconds": 0,
+                        "seconds": 0,
                       },
                       "id": "",
                       "name": "Public room",
                       "status": 1,
                       "textbookContent": "",
-                      "updatedAt": Object {
-                        "toDate": [Function],
+                      "updatedAt": Timestamp {
+                        "nanoseconds": 0,
+                        "seconds": 0,
                       },
                       "userId": "",
                     }
@@ -756,15 +802,17 @@ ShallowWrapper {
                 <RoomListItem
                   room={
                     Object {
-                      "createdAt": Object {
-                        "toDate": [Function],
+                      "createdAt": Timestamp {
+                        "nanoseconds": 0,
+                        "seconds": 0,
                       },
                       "id": "",
                       "name": "Active room",
                       "status": 2,
                       "textbookContent": "",
-                      "updatedAt": Object {
-                        "toDate": [Function],
+                      "updatedAt": Timestamp {
+                        "nanoseconds": 0,
+                        "seconds": 0,
                       },
                       "userId": "",
                     }
@@ -780,15 +828,17 @@ ShallowWrapper {
                 "nodeType": "function",
                 "props": Object {
                   "room": Object {
-                    "createdAt": Object {
-                      "toDate": [Function],
+                    "createdAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "id": "",
                     "name": "Draft room",
                     "status": 0,
                     "textbookContent": "",
-                    "updatedAt": Object {
-                      "toDate": [Function],
+                    "updatedAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "userId": "",
                   },
@@ -803,15 +853,17 @@ ShallowWrapper {
                 "nodeType": "function",
                 "props": Object {
                   "room": Object {
-                    "createdAt": Object {
-                      "toDate": [Function],
+                    "createdAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "id": "",
                     "name": "Public room",
                     "status": 1,
                     "textbookContent": "",
-                    "updatedAt": Object {
-                      "toDate": [Function],
+                    "updatedAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "userId": "",
                   },
@@ -826,15 +878,17 @@ ShallowWrapper {
                 "nodeType": "function",
                 "props": Object {
                   "room": Object {
-                    "createdAt": Object {
-                      "toDate": [Function],
+                    "createdAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "id": "",
                     "name": "Active room",
                     "status": 2,
                     "textbookContent": "",
-                    "updatedAt": Object {
-                      "toDate": [Function],
+                    "updatedAt": Timestamp {
+                      "nanoseconds": 0,
+                      "seconds": 0,
                     },
                     "userId": "",
                   },
