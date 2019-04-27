@@ -3,7 +3,12 @@ import Emoji from '../independents/Emoji';
 import * as Rooms from '../models/Rooms';
 import { RoomLink } from '../path';
 
-export default function RoomListItem ({ room }: { room: Rooms.IRoom }) {
+interface IRoomListItemProp extends React.ComponentPropsWithRef<'tr'> {
+  room: Rooms.IRoom;
+}
+
+export default function RoomListItem (props: IRoomListItemProp) {
+  const { room, ...restProps } = props;
   const { status, name } = room;
 
   const icon = status === Rooms.RoomStatus.draft
@@ -13,7 +18,7 @@ export default function RoomListItem ({ room }: { room: Rooms.IRoom }) {
       : <Emoji title="Active" label="Fire" />;
 
   return (
-    <tr>
+    <tr {...restProps}>
       <td>{icon}</td>
       <td>
         <RoomLink room={room} type="settings">
