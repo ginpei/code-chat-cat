@@ -2,61 +2,41 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DefaultLayout from '../complexes/DefaultLayout';
+import Emoji from '../independents/Emoji';
 import { noop } from '../misc';
 import * as ErrorLogs from '../models/ErrorLogs';
 import * as Rooms from '../models/Rooms';
 import { AppDispatch, AppState } from '../models/Store';
 import path, { RoomLink } from '../path';
 
-function DraftIcon () {
-  return <span role="img" aria-label="Lock" title="Draft">🔒</span>;
-}
-
-function PublicIcon () {
-  return <span role="img" aria-label="White Heavy Check Mark" title="Public">✅</span>;
-}
-
-function ActiveIcon () {
-  return <span role="img" aria-label="Fire" title="Active">🔥</span>;
-}
-
-function SpeechBalloonEmoji () {
-  return <span role="img" aria-label="Speech Balloon">💬</span>;
-}
-
-function OpenBookEmoji () {
-  return <span role="img" aria-label="Open Book">📖</span>;
-}
-
-function MemoEmoji () {
-  return <span role="img" aria-label="Memo">📝</span>;
-}
-
 function RoomItem ({ room }: { room: Rooms.IRoom }) {
   const { status, name } = room;
+
+  const icon = status === Rooms.RoomStatus.draft
+    ? <Emoji title="Draft" label="Lock" />
+    : status === Rooms.RoomStatus.public
+      ? <Emoji title="Public" label="White Heavy Check Mark" />
+      : <Emoji title="Active" label="Fire" />;
+
   return (
     <tr>
-      <td>
-        {status === Rooms.RoomStatus.draft && <DraftIcon/>}
-        {status === Rooms.RoomStatus.public && <PublicIcon/>}
-        {status === Rooms.RoomStatus.active && <ActiveIcon/>}
-      </td>
+      <td>{icon}</td>
       <td>
         <RoomLink room={room} type="settings">
-          <SpeechBalloonEmoji/>
+          <Emoji label="Speech Balloon" />
           {' '}
           {name}
         </RoomLink>
       </td>
       <td>
         <RoomLink room={room}>
-          <OpenBookEmoji/>
+          <Emoji label="Open Book" />
           {' View'}
         </RoomLink>
       </td>
       <td>
         <RoomLink room={room} type="write">
-          <MemoEmoji/>
+          <Emoji label="Memo" />
           {' Write'}
         </RoomLink>
       </td>
@@ -84,11 +64,11 @@ class RoomListPage extends React.Component<IRoomListPageProps> {
           <Link to={path('room-new')}>Create new room</Link>
         </p>
         <p>
-          <DraftIcon/>
+          <Emoji label="Lock" />
           {' Draft / '}
-          <PublicIcon/>
+          <Emoji label="White Heavy Check Mark" />
           {' Public room / '}
-          <ActiveIcon/>
+          <Emoji label="Fire" />
           {' Active room'}
         </p>
         {rooms.length < 1 ? (
