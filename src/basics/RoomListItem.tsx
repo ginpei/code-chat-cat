@@ -3,7 +3,7 @@ import Emoji from '../independents/Emoji';
 import * as Rooms from '../models/Rooms';
 import { RoomLink } from '../path';
 
-export default function RoomItem ({ room }: { room: Rooms.IRoom }) {
+export default function RoomListItem ({ room }: { room: Rooms.IRoom }) {
   const { status, name } = room;
 
   const icon = status === Rooms.RoomStatus.draft

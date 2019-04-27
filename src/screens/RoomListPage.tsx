@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import RoomItem from '../basics/RoomListItem';
+import RoomListItem from '../basics/RoomListItem';
 import DefaultLayout from '../complexes/DefaultLayout';
 import Emoji from '../independents/Emoji';
 import { noop } from '../misc';
@@ -42,7 +42,7 @@ class RoomListPage extends React.Component<IRoomListPageProps> {
           <table>
             <tbody>
               {rooms.map((room) => (
-                <RoomItem
+                <RoomListItem
                   key={room.id}
                   room={room}
                 />

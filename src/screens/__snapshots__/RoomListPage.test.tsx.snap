@@ -93,7 +93,7 @@ ShallowWrapper {
         </p>,
         <table>
           <tbody>
-            <RoomItem
+            <RoomListItem
               room={
                 Object {
                   "createdAt": Object {},
@@ -106,7 +106,7 @@ ShallowWrapper {
                 }
               }
             />
-            <RoomItem
+            <RoomListItem
               room={
                 Object {
                   "createdAt": Object {},
@@ -119,7 +119,7 @@ ShallowWrapper {
                 }
               }
             />
-            <RoomItem
+            <RoomListItem
               room={
                 Object {
                   "createdAt": Object {},
@@ -242,7 +242,7 @@ ShallowWrapper {
         "nodeType": "host",
         "props": Object {
           "children": <tbody>
-            <RoomItem
+            <RoomListItem
               room={
                 Object {
                   "createdAt": Object {},
@@ -255,7 +255,7 @@ ShallowWrapper {
                 }
               }
             />
-            <RoomItem
+            <RoomListItem
               room={
                 Object {
                   "createdAt": Object {},
@@ -268,7 +268,7 @@ ShallowWrapper {
                 }
               }
             />
-            <RoomItem
+            <RoomListItem
               room={
                 Object {
                   "createdAt": Object {},
@@ -290,7 +290,7 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": Array [
-              <RoomItem
+              <RoomListItem
                 room={
                   Object {
                     "createdAt": Object {},
@@ -303,7 +303,7 @@ ShallowWrapper {
                   }
                 }
               />,
-              <RoomItem
+              <RoomListItem
                 room={
                   Object {
                     "createdAt": Object {},
@@ -316,7 +316,7 @@ ShallowWrapper {
                   }
                 }
               />,
-              <RoomItem
+              <RoomListItem
                 room={
                   Object {
                     "createdAt": Object {},
@@ -438,7 +438,7 @@ ShallowWrapper {
           </p>,
           <table>
             <tbody>
-              <RoomItem
+              <RoomListItem
                 room={
                   Object {
                     "createdAt": Object {},
@@ -451,7 +451,7 @@ ShallowWrapper {
                   }
                 }
               />
-              <RoomItem
+              <RoomListItem
                 room={
                   Object {
                     "createdAt": Object {},
@@ -464,7 +464,7 @@ ShallowWrapper {
                   }
                 }
               />
-              <RoomItem
+              <RoomListItem
                 room={
                   Object {
                     "createdAt": Object {},
@@ -587,7 +587,7 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": <tbody>
-              <RoomItem
+              <RoomListItem
                 room={
                   Object {
                     "createdAt": Object {},
@@ -600,7 +600,7 @@ ShallowWrapper {
                   }
                 }
               />
-              <RoomItem
+              <RoomListItem
                 room={
                   Object {
                     "createdAt": Object {},
@@ -613,7 +613,7 @@ ShallowWrapper {
                   }
                 }
               />
-              <RoomItem
+              <RoomListItem
                 room={
                   Object {
                     "createdAt": Object {},
@@ -635,7 +635,7 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": Array [
-                <RoomItem
+                <RoomListItem
                   room={
                     Object {
                       "createdAt": Object {},
@@ -648,7 +648,7 @@ ShallowWrapper {
                     }
                   }
                 />,
-                <RoomItem
+                <RoomListItem
                   room={
                     Object {
                       "createdAt": Object {},
@@ -661,7 +661,7 @@ ShallowWrapper {
                     }
                   }
                 />,
-                <RoomItem
+                <RoomListItem
                   room={
                     Object {
                       "createdAt": Object {},

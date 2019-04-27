@@ -57,7 +57,7 @@ describe('<RoomListPage>', () => {
     });
 
     it('renders each row', () => {
-      expect(wrapper.find('RoomItem')).toHaveLength(3);
+      expect(wrapper.find('RoomListItem')).toHaveLength(3);
     });
 
     it('matches to snapshot', () => {
