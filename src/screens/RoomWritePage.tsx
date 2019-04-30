@@ -160,7 +160,11 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
 
   protected setRoom (room: Rooms.IRoom | null) {
     this.setState({ room });
-    this.setContent(room ? room.textbookContent : '');
+
+    // update only when it is initial
+    if (this.state.content === '') {
+      this.setContent(room ? room.textbookContent : '');
+    }
   }
 
   protected setContent (content: string) {
