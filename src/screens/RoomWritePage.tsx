@@ -51,7 +51,7 @@ interface IRoomWritePageProps
   userRooms: Rooms.IRoom[];
 }
 interface IRoomWritePageState {
-  content: string;
+  editingContent: string;
   previewingContent: string;
   room: Rooms.IRoom | null;
 }
@@ -71,7 +71,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     const room = props.pickRoom(this.roomId) || Rooms.emptyRoom;
     const content = room ? room.textbookContent : '';
     this.state = {
-      content,
+      editingContent: content,
       previewingContent: content,
       room,
     };
@@ -104,7 +104,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
       );
     }
 
-    const { content, previewingContent } = this.state;
+    const { editingContent: content, previewingContent } = this.state;
 
     return (
       <div>
@@ -162,16 +162,16 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     this.setState({ room });
 
     // update only when it is initial
-    if (this.state.content === '') {
+    if (this.state.editingContent === '') {
       this.setContent(room ? room.textbookContent : '');
     }
   }
 
   protected setContent (content: string) {
-    if (content === this.state.content) {
+    if (content === this.state.editingContent) {
       return;
     }
-    this.setState({ content });
+    this.setState({ editingContent: content });
     this.setRenderingContent(content);
     this.saveContent();
   }
@@ -194,7 +194,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
 
     this.props.saveRoom({
       ...room,
-      textbookContent: this.state.content,
+      textbookContent: this.state.editingContent,
     });
   }
 
@@ -218,9 +218,9 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     // Just update current content to the value from server.
     // This won't reflect remote modification to your screen.
 
-    if (this.state.content === '') {
+    if (this.state.editingContent === '') {
       this.setState({
-        content,
+        editingContent: content,
       });
     }
   }
