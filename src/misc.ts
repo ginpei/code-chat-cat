@@ -17,7 +17,15 @@ export function debounce<F extends Function> (fn: F, delay: number): F {
   } as any;
 }
 
+let tmResetTitle = 0;
+
+export function resetTitle () {
+  tmResetTitle = window.setTimeout(() => setTitle(), 100);
+}
+
 export function setTitle (...titles: string[]) {
+  clearTimeout(tmResetTitle);
+
   const appName = 'Code Chat Cat';
   const fullTitle = [...titles, appName].join(' - ');
   document.title = fullTitle;

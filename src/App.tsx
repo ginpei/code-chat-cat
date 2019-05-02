@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router';
 import LoadingView from './independents/LoadingView';
-import { appHistory, noop, setTitle } from './misc';
+import { appHistory, noop, resetTitle } from './misc';
 import * as CurrentUser from './models/CurrentUser';
 import * as ErrorLogs from './models/ErrorLogs';
 import * as Profiles from './models/Profiles';
@@ -82,7 +82,7 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   private connectHistory () {
-    this.disconnectHistory = appHistory.listen(() => setTitle());
+    this.disconnectHistory = appHistory.listen(() => resetTitle());
   }
 
   private connectCurrentUser () {
