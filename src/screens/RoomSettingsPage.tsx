@@ -6,7 +6,7 @@ import Footer from '../basics/Footer';
 import RoomHeader from '../basics/RoomHeader';
 import { MainContainer } from '../complexes/DefaultLayout';
 import LoadingView from '../independents/LoadingView';
-import { appHistory, noop } from '../misc';
+import { appHistory, noop, setTitle } from '../misc';
 import * as ErrorLogs from '../models/ErrorLogs';
 import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
@@ -271,6 +271,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
       roomName: room ? room.name : '',
       roomStatus: room ? room.status : Rooms.RoomStatus.draft,
     });
+    setTitle('Settings', room ? room.name : '...');
   }
 }
 

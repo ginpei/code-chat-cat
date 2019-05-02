@@ -7,6 +7,7 @@ import RoomHeader from '../basics/RoomHeader';
 import TextbookContent from '../basics/TextbookContent';
 import Container from '../independents/Container';
 import LoadingView from '../independents/LoadingView';
+import { setTitle } from '../misc';
 import * as ErrorLogs from '../models/ErrorLogs';
 import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
@@ -49,6 +50,10 @@ function RoomTextbookPage (props: IRoomTextbookPageProps) {
       props.saveError('connect room', error);
     },
   ), [roomId]);
+
+  useEffect(() => {
+    setTitle(room ? room.name : '...');
+  }, [room && room.name]);
 
   if (room === initialRoom) {
     return (

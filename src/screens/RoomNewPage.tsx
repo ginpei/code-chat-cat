@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import DefaultLayout from '../complexes/DefaultLayout';
-import { appHistory } from '../misc';
+import { appHistory, setTitle } from '../misc';
 import * as Rooms from '../models/Rooms';
 import { AppDispatch, AppState } from '../models/Store';
 
@@ -73,6 +73,10 @@ class RoomNewPage extends React.Component<IRoomNewPageProps, IRoomNewPageState> 
         </form>
       </DefaultLayout>
     );
+  }
+
+  public componentDidMount () {
+    setTitle('Create new room');
   }
 
   public onRoomNameChange (event: React.ChangeEvent<HTMLInputElement>) {

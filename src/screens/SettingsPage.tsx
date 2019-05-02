@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DefaultLayout from '../complexes/DefaultLayout';
+import { setTitle } from '../misc';
 import * as CurrentUser from '../models/CurrentUser';
 import * as Profiles from '../models/Profiles';
 import { AppState } from '../models/Store';
@@ -81,6 +82,7 @@ class SettingsPage extends React.Component<ISettingsPageProps, ISettingsPageStat
   }
 
   public componentDidMount () {
+    setTitle('Settings');
     const wait = () => {
       if (this.props.currentUser.ready && !this.state.ready) {
         const profile = this.props.userProfile;

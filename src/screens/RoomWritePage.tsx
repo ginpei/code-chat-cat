@@ -8,7 +8,7 @@ import RoomHeader from '../basics/RoomHeader';
 import TextbookContent from '../basics/TextbookContent';
 import syncScroll from '../functions/syncScroll';
 import LoadingView from '../independents/LoadingView';
-import { debounce, noop } from '../misc';
+import { debounce, noop, setTitle } from '../misc';
 import * as ErrorLogs from '../models/ErrorLogs';
 import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
@@ -160,6 +160,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
 
   protected setRoom (room: Rooms.IRoom | null) {
     this.setState({ room });
+    setTitle('Write', room ? `${room.name}` : '...');
 
     // update only when it is initial
     if (this.state.editingContent === '') {

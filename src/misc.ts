@@ -16,3 +16,9 @@ export function debounce<F extends Function> (fn: F, delay: number): F {
     tm  = window.setTimeout(() => fn.apply(this, args), delay);
   } as any;
 }
+
+export function setTitle (...titles: string[]) {
+  const appName = 'Code Chat Cat';
+  const fullTitle = [...titles, appName].join(' - ');
+  document.title = fullTitle;
+}

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router';
 import LoadingView from './independents/LoadingView';
-import { appHistory, noop } from './misc';
+import { appHistory, noop, setTitle } from './misc';
 import * as CurrentUser from './models/CurrentUser';
 import * as ErrorLogs from './models/ErrorLogs';
 import * as Profiles from './models/Profiles';
@@ -28,6 +28,7 @@ interface IAppState {
 }
 
 class App extends Component<IAppProps, IAppState> {
+  protected disconnectHistory = noop;
   protected unsubscribeAuth = noop;
   protected unsubscribeProfile = noop;
   protected store = createAppStore();
@@ -71,11 +72,17 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public componentDidMount () {
+    this.connectHistory();
     this.connectCurrentUser();
   }
 
   public componentWillUnmount () {
+    this.disconnectHistory();
     this.disconnectCurrentUser();
+  }
+
+  private connectHistory () {
+    this.disconnectHistory = appHistory.listen(() => setTitle());
   }
 
   private connectCurrentUser () {

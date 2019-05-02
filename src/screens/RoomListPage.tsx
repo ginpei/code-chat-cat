@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import RoomListItem from '../basics/RoomListItem';
 import DefaultLayout from '../complexes/DefaultLayout';
 import Emoji from '../independents/Emoji';
-import { noop } from '../misc';
+import { noop, setTitle } from '../misc';
 import * as ErrorLogs from '../models/ErrorLogs';
 import * as Rooms from '../models/Rooms';
 import { AppDispatch, AppState } from '../models/Store';
@@ -55,6 +55,7 @@ class RoomListPage extends React.Component<IRoomListPageProps> {
   }
 
   public componentDidMount () {
+    setTitle('Room list');
     this.unsubscribeUserRooms = this.props.connectUserRooms(this.props.userId);
   }
 
