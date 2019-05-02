@@ -111,7 +111,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
 
   constructor (props: IRoomSettingsPageProps) {
     super(props);
-    const room = props.pickRoom(this.roomId) || Rooms.emptyRoom;
+    const room = props.pickRoom(this.roomId);
     this.state = {
       room,
       roomName: room ? room.name : '',
@@ -207,6 +207,8 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
   }
 
   public componentDidMount () {
+    this.updateTitle();
+
     this.unsubscribeRoom = Rooms.connectRoom(
       this.roomId,
       (room) => this.setRoom(room),
@@ -265,13 +267,17 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     appHistory.push('/rooms');
   }
 
+  protected updateTitle () {
+    const { room } = this.state;
+    setTitle('Settings', room ? room.name : '...');
+  }
+
   protected setRoom (room: Rooms.IRoom | null) {
     this.setState({
       room,
       roomName: room ? room.name : '',
       roomStatus: room ? room.status : Rooms.RoomStatus.draft,
-    });
-    setTitle('Settings', room ? room.name : '...');
+    }, () => this.updateTitle());
   }
 }
 

@@ -68,7 +68,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
 
   constructor (props: IRoomWritePageProps) {
     super(props);
-    const room = props.pickRoom(this.roomId) || Rooms.emptyRoom;
+    const room = props.pickRoom(this.roomId);
     const content = room ? room.textbookContent : '';
     this.state = {
       editingContent: content,
@@ -130,6 +130,8 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
   }
 
   public componentDidMount () {
+    this.updateTitle();
+
     this.unsubscribeRoom = Rooms.connectRoom(
       this.roomId,
       (room) => this.setRoom(room),
@@ -158,9 +160,14 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     this.setContent(content);
   }
 
+  protected updateTitle () {
+    const { room } = this.state;
+    setTitle('Write', room ? room.name : '...');
+  }
+
   protected setRoom (room: Rooms.IRoom | null) {
     this.setState({ room });
-    setTitle('Write', room ? `${room.name}` : '...');
+    this.updateTitle();
 
     // update only when it is initial
     if (this.state.editingContent === '') {
