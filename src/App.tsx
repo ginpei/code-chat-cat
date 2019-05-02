@@ -89,9 +89,7 @@ class App extends Component<IAppProps, IAppState> {
     this.disconnectCurrentUser();
     this.unsubscribeAuth = CurrentUser.connectAuth(
       (user) => {
-        if (!user) {
-          return;
-        }
+        this.unsubscribeProfile();
         this.unsubscribeProfile = this.connectProfile(user);
       },
       (error) => this.saveError('auth error', error),
@@ -104,8 +102,13 @@ class App extends Component<IAppProps, IAppState> {
     this.unsubscribeAuth();
   }
 
-  private connectProfile (user: firebase.User) {
+  private connectProfile (user: firebase.User | null) {
     this.store.dispatch(CurrentUser.set(user));
+
+    if (!user) {
+      return noop;
+    }
+
     const unsubscribeProfile = Profiles.connectProfile(
       user ? user.uid : '',
       (profile) => this.store.dispatch(CurrentUser.setProfile(profile)),
