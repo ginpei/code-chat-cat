@@ -92,6 +92,7 @@ interface IRoomSettingsPageProps
   removeRoom: (room: Rooms.IRoom) => Promise<void>;
   saveError: (location: string, error: ErrorLogs.AppError) => void;
   saveRoom: (room: Rooms.IRoom) => void;
+  storeRoom: (room: Rooms.IRoom) => void;
   userProfile: Profiles.IProfile | null;
   userRooms: Rooms.IRoom[];
 }
@@ -278,6 +279,10 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
       roomName: room ? room.name : '',
       roomStatus: room ? room.status : Rooms.RoomStatus.draft,
     }, () => this.updateTitle());
+
+    if (room) {
+      this.props.storeRoom(room);
+    }
   }
 }
 
@@ -292,5 +297,6 @@ export default connect(
     saveError: (location: string, error: ErrorLogs.AppError) =>
       dispatch(ErrorLogs.add(location, error)),
     saveRoom: (room: Rooms.IRoom) => dispatch(Rooms.saveRoom(room)),
+    storeRoom: (room: Rooms.IRoom) => dispatch(Rooms.storeRoom(room)),
   }),
 )(RoomSettingsPage);

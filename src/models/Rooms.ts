@@ -142,6 +142,18 @@ export function saveRoom (room: IRoom) {
   };
 }
 
+interface IStoreRoomAction {
+  room: IRoom;
+  type: 'Rooms/storeRoom';
+}
+
+export function storeRoom (room: IRoom): IStoreRoomAction {
+  return {
+    room,
+    type: 'Rooms/storeRoom',
+  };
+}
+
 interface IRemoveRoomAction {
   room: IRoom;
   type: 'Rooms/removeRoom';
@@ -178,6 +190,7 @@ export function setActiveRooms (rooms: IRoom[]): ISetActiveRoomsAction {
 export type RoomsAction =
   | ISetUserRoomsAction
   | ICreateRoomAction
+  | IStoreRoomAction
   | IRemoveRoomAction
   | ISaveRoomAction
   | ISetActiveRoomsAction;
@@ -213,7 +226,9 @@ export function reduceDocs (
 ): IIdMap<IRoom> {
   switch (action.type) {
     case 'Rooms/createRoom':
-    case 'Rooms/saveRoom': {
+    case 'Rooms/saveRoom':
+    case 'Rooms/storeRoom': {
+      console.log('# set', action.type, action.room);
       const docs = { ...state };
       docs[action.room.id] = action.room;
       return docs;

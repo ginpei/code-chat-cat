@@ -33,6 +33,7 @@ interface IRoomTextbookPageProps
   pickRoom: (roomId: string) => Rooms.IRoom;
   userProfile: Profiles.IProfile | null;
   saveError: (location: string, error: ErrorLogs.AppError) => void;
+  storeRoom: (room: Rooms.IRoom) => void;
 }
 
 function RoomTextbookPage (props: IRoomTextbookPageProps) {
@@ -44,7 +45,12 @@ function RoomTextbookPage (props: IRoomTextbookPageProps) {
   );
   useEffect(() => Rooms.connectRoom(
     roomId,
-    (v) => setRoom(v),
+    (v) => {
+      setRoom(v);
+      if (v) {
+        props.storeRoom(v);
+      }
+    },
     (error) => {
       setRoom(null);
       props.saveError('connect room', error);
@@ -91,5 +97,6 @@ export default connect(
   (dispatch: AppDispatch) => ({
     saveError: (location: string, error: ErrorLogs.AppError) =>
       dispatch(ErrorLogs.add(location, error)),
+    storeRoom: (room: Rooms.IRoom) => dispatch(Rooms.storeRoom(room)),
   }),
 )(RoomTextbookPage);
