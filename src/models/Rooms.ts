@@ -228,7 +228,6 @@ export function reduceDocs (
     case 'Rooms/createRoom':
     case 'Rooms/saveRoom':
     case 'Rooms/storeRoom': {
-      console.log('# set', action.type, action.room);
       const docs = { ...state };
       docs[action.room.id] = action.room;
       return docs;
