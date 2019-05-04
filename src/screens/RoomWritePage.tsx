@@ -77,8 +77,8 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     };
 
     this.onContentInput = this.onContentInput.bind(this);
-    // this.setRenderingContent = debounce(this.setRenderingContent, 500);
-    this.saveContent = debounce(this.saveContent, 500);
+    this.setRenderingContent = debounce(this.setRenderingContent, 500);
+    this.saveContent = debounce(this.saveContent, 3000);
   }
 
   public render () {
