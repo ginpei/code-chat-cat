@@ -40,16 +40,38 @@ const EditorOutput = styled.article`
 interface IRoomWritePageParams {
   id: string;
 }
-interface IRoomWritePageProps
-  extends RouteComponentProps<IRoomWritePageParams> {
+
+interface IRoomWritePageStateProps {
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
   pickRoom: (roomId: string) => Rooms.IRoom;
-  saveError: (location: string, error: ErrorLogs.AppError) => void;
-  saveRoom: (room: Rooms.IRoom) => void;
   userProfile: Profiles.IProfile | null;
   userRooms: Rooms.IRoom[];
 }
+
+const mapStateToProps = (state: AppState): IRoomWritePageStateProps => ({
+  firebaseUser: state.currentUser.firebaseUser,
+  loggedIn: state.currentUser.loggedIn,
+  pickRoom: (roomId: string) => Rooms.pickRoom(state, roomId),
+  userProfile: state.currentUser.profile,
+  userRooms: Rooms.pickUserRooms(state),
+});
+
+interface IRoomWritePageDispatchProps {
+  saveError: (location: string, error: ErrorLogs.AppError) => void;
+  saveRoom: (room: Rooms.IRoom) => void;
+}
+
+const mapDispatchToProps = (dispatch: AppDispatch): IRoomWritePageDispatchProps => ({
+  saveError: (location: string, error: ErrorLogs.AppError) => dispatch(ErrorLogs.add(location, error)),
+  saveRoom: (room: Rooms.IRoom) => dispatch(Rooms.saveRoom(room)),
+});
+
+type IRoomWritePageProps =
+  & RouteComponentProps<IRoomWritePageParams>
+  & IRoomWritePageStateProps
+  & IRoomWritePageDispatchProps;
+
 interface IRoomWritePageState {
   editingContent: string;
   previewingContent: string;
@@ -235,16 +257,6 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
 }
 
 export default connect(
-  (state: AppState) => ({
-    firebaseUser: state.currentUser.firebaseUser,
-    loggedIn: state.currentUser.loggedIn,
-    pickRoom: (roomId: string) => Rooms.pickRoom(state, roomId),
-    userProfile: state.currentUser.profile,
-    userRooms: Rooms.pickUserRooms(state),
-  }),
-  (dispatch: AppDispatch) => ({
-    saveError: (location: string, error: ErrorLogs.AppError) =>
-      dispatch(ErrorLogs.add(location, error)),
-    saveRoom: (room: Rooms.IRoom) => dispatch(Rooms.saveRoom(room)),
-  }),
+  mapStateToProps,
+  mapDispatchToProps,
 )(RoomWritePage);
