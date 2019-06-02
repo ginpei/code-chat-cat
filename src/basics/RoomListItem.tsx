@@ -1,5 +1,6 @@
 import React from 'react';
 import Emoji from '../independents/Emoji';
+import { getReadableElapse } from '../misc';
 import * as Rooms from '../models/Rooms';
 import { RoomLink } from '../path';
 
@@ -39,7 +40,7 @@ export default function RoomListItem (props: IRoomListItemProp) {
           {' Write'}
         </RoomLink>
       </td>
-      <td>{String(room.updatedAt.toDate())}</td>
+      <td>{getReadableElapse(room.updatedAt.toMillis())}</td>
     </tr>
   );
 }
