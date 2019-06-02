@@ -315,7 +315,8 @@ export function connectUserRooms (
   }
 
   const collRef = firebase.firestore().collection(collectionName)
-    .where('userId', '==', userId);
+    .where('userId', '==', userId)
+    .orderBy('updatedAt', 'desc');
   const unsubscribe = collRef.onSnapshot(
     (snapshot) => {
       const rooms = snapshot.docs.map((v) => snapshotToRoom(v));

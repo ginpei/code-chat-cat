@@ -203,6 +203,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     }
     this.setState({ editingContent: content });
     this.setRenderingContent(content);
+    this.setDirty();
     this.saveContent();
   }
 
@@ -211,6 +212,17 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
    */
   protected setRenderingContent (previewingContent: string) {
     this.setState({ previewingContent });
+  }
+
+  protected setDirty () {
+    window.onbeforeunload = (event) => {
+      event.preventDefault();
+      event.returnValue = ''; // for Chrome
+    };
+  }
+
+  protected unsetDirty () {
+    window.onbeforeunload = null;
   }
 
   /**
@@ -226,6 +238,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
       ...room,
       textbookContent: this.state.editingContent,
     });
+    this.unsetDirty();
   }
 
   protected subscribeSyncScroll () {
