@@ -17,7 +17,7 @@
     "@types/styled-components": "^4.1.8",
     "@types/webpack-env": "^1.13.7",
     "enzyme": "^3.9.0",
-    "enzyme-adapter-react-16": "^1.10.0",
+    "enzyme-adapter-react-16": "^1.13.2",
     "firebase": "^6.1.0",
     "firebase-mock": "^2.2.10",
     "highlight.js": "^9.14.2",
