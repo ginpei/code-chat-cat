@@ -1,6 +1,6 @@
 {
   "name": "code-chat-cat",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "dependencies": {
     "@types/enzyme-adapter-react-16": "^1.0.5",

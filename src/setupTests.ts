@@ -12,6 +12,7 @@ jest.mock('./middleware/firebase', () => {
     firebase.firestore.Timestamp = function () {
       return {
         toDate: () => new Date(),
+        toMillis: () => 0,
       };
     } as any;
     firebase.firestore.Timestamp.now = () => ({}) as any;
