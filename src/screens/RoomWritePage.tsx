@@ -86,7 +86,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
 
   constructor (props: IRoomWritePageProps) {
     super(props);
-    const room = props.pickRoom(this.roomId);
+    const room = props.pickRoom(this.roomId) || Rooms.emptyRoom;
     const content = room ? room.textbookContent : '';
     this.state = {
       editingContent: content,
