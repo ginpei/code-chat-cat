@@ -43,18 +43,14 @@ interface IRoomWritePageParams {
 
 interface IRoomWritePageStateProps {
   firebaseUser: firebase.User | null;
-  loggedIn: boolean;
   pickRoom: (roomId: string) => Rooms.IRoom;
   userProfile: Profiles.IProfile | null;
-  userRooms: Rooms.IRoom[];
 }
 
 const mapStateToProps = (state: AppState): IRoomWritePageStateProps => ({
   firebaseUser: state.currentUser.firebaseUser,
-  loggedIn: state.currentUser.loggedIn,
   pickRoom: (roomId: string) => Rooms.pickRoom(state, roomId),
   userProfile: state.currentUser.profile,
-  userRooms: Rooms.pickUserRooms(state),
 });
 
 interface IRoomWritePageDispatchProps {
