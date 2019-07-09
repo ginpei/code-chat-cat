@@ -31,9 +31,9 @@ interface IRoomTextbookPageParams {
 interface IRoomTextbookPageProps
   extends RouteComponentProps<IRoomTextbookPageParams> {
   pickRoom: (roomId: string) => Rooms.IRoom;
-  userProfile: Profiles.IProfile | null;
   saveError: (location: string, error: ErrorLogs.AppError) => void;
   storeRoom: (room: Rooms.IRoom) => void;
+  userProfile: Profiles.IProfile | null;
 }
 
 function RoomTextbookPage (props: IRoomTextbookPageProps) {
