@@ -1,4 +1,4 @@
-import firebaseui from 'firebaseui';
+import * as firebaseui from 'firebaseui';
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { connect } from 'react-redux';
