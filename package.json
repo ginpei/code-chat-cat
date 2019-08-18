@@ -38,6 +38,7 @@
     "typescript": "3.3.3333"
   },
   "scripts": {
+    "lint": "npx eslint src --ext .ts,.tsx",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

@@ -34,8 +34,8 @@ describe('path', () => {
       });
 
       it('settings', () => {
-        expect(path('room-settings', { id: 'roomId123' })).
-          toBe('/rooms/roomId123/settings');
+        expect(path('room-settings', { id: 'roomId123' }))
+          .toBe('/rooms/roomId123/settings');
       });
     });
   });

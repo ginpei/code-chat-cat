@@ -35,16 +35,18 @@ interface IHomePageProps {
 }
 
 function HomePage (props: IHomePageProps) {
+  const { connectActiveRooms, connectUserRooms } = props;
+
   const [activeRoomsReady, setActiveRoomsReady] = useState(false);
-  useEffect(() => props.connectActiveRooms(
+  useEffect(() => connectActiveRooms(
     () => setActiveRoomsReady(true),
-  ), []);
+  ), [connectActiveRooms]);
 
   const [userRoomsReady, setUserRoomsReady] = useState(false);
-  useEffect(() => props.connectUserRooms(
+  useEffect(() => connectUserRooms(
     props.userId,
     () => setUserRoomsReady(true),
-  ), [props.userId]);
+  ), [connectUserRooms, props.userId]);
 
   if (!activeRoomsReady || !userRoomsReady) {
     return (
