@@ -4,7 +4,7 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Footer from '../basics/Footer';
 import Header from '../basics/Header';
-import { IUserProfile } from '../reducers/currentUser';
+import * as Profiles from '../models/Profiles';
 import { DefaultLayout } from './DefaultLayout';
 
 describe('<Header>', () => {
@@ -36,11 +36,10 @@ describe('<Header>', () => {
 
   describe('logged in user', () => {
     beforeEach(() => {
-      const profile: IUserProfile = {
-        createdAt: firebase.firestore.Timestamp.now(),
+      const profile: Profiles.IProfile = {
         id: 'user-id-123',
+        message: 'user-message',
         name: 'user-name',
-        updatedAt: firebase.firestore.Timestamp.now(),
       };
       wrapper = mount((
         <BrowserRouter>
