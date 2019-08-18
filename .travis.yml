@@ -6,7 +6,6 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 script:
-  - npx tsc src/
   - npm test -- --coverage
 before_deploy:
   - npm run build
