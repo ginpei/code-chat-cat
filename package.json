@@ -34,7 +34,7 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.2.1",
-    "typescript": "3.3.3333"
+    "typescript": "^3.5.3"
   },
   "scripts": {
     "lint": "npx eslint src --ext .ts,.tsx",
