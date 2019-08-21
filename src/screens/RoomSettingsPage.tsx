@@ -97,6 +97,7 @@ interface IRoomSettingsPageProps
   userRooms: Rooms.IRoom[];
 }
 interface IRoomSettingsPageState {
+  initialized: boolean;
   room: Rooms.IRoom | null;
   roomName: string;
   roomSaving: boolean;
@@ -114,6 +115,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     super(props);
     const room = props.pickRoom(this.roomId);
     this.state = {
+      initialized: false,
       room,
       roomName: room ? room.name : '',
       roomSaving: false,
@@ -126,7 +128,13 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
   }
 
   public render () {
-    const { room } = this.state;
+    const { initialized, room } = this.state;
+
+    if (!initialized) {
+      return (
+        <LoadingView/>
+      );
+    }
 
     if (!room) {
       return (
@@ -217,6 +225,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
         this.setRoom(null);
         this.props.saveError('connect room', error);
       },
+      () => this.setState({ initialized: true }),
     );
   }
 
