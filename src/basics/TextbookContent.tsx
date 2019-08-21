@@ -37,7 +37,7 @@ interface ITextbookContentProps {
 }
 
 export default class TextbookContent extends React.Component<
-  ITextbookContentProps
+ITextbookContentProps
 > {
   protected get modifiedContent () {
     const { editing = false, content } = this.props;

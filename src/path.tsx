@@ -41,8 +41,8 @@ export function RoomLink (props: React.PropsWithChildren<{
     props.type === 'write'
       ? 'room-write'
       : props.type === 'settings'
-      ? 'room-settings'
-      : 'room';
+        ? 'room-settings'
+        : 'room';
   const { id } = props.room;
   const children = props.children || props.room.name;
   return <Link to={path(base, { id })}>{children}</Link>;
