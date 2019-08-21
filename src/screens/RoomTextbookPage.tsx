@@ -37,6 +37,7 @@ interface IRoomTextbookPageProps
 }
 
 function RoomTextbookPage (props: IRoomTextbookPageProps) {
+  const { saveError, storeRoom } = props;
   const roomId = props.match.params.id;
   const initialRoom = Rooms.emptyRoom;
 
@@ -48,18 +49,19 @@ function RoomTextbookPage (props: IRoomTextbookPageProps) {
     (v) => {
       setRoom(v);
       if (v) {
-        props.storeRoom(v);
+        storeRoom(v);
       }
     },
     (error) => {
       setRoom(null);
-      props.saveError('connect room', error);
+      saveError('connect room', error);
     },
-  ), [roomId]);
+  ), [roomId, storeRoom, saveError]);
 
+  const roomName = room ? room.name : '';
   useEffect(() => {
-    setTitle(room ? room.name : '...');
-  }, [room && room.name]);
+    setTitle(roomName || '...');
+  }, [roomName]);
 
   if (room === initialRoom) {
     return (

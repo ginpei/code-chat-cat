@@ -1,5 +1,4 @@
 import { mount, ReactWrapper } from 'enzyme';
-import firebase from 'firebase';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Footer from '../basics/Footer';

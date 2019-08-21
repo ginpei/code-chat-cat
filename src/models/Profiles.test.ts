@@ -1,4 +1,3 @@
-import { noop } from '../misc';
 import * as Profiles from './Profiles';
 
 jest.mock('firebase');
