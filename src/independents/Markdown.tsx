@@ -42,7 +42,7 @@ export default class Markdown extends React.Component<IMarkdownProps> {
     return this.mdit.render(this.props.content);
   }
 
-  constructor (props: IMarkdownProps) {
+  public constructor (props: IMarkdownProps) {
     super(props);
     this.mdit.use(markdownItAnchor, {
       permalink: true,

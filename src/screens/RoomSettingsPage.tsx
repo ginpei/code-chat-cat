@@ -111,7 +111,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     return this.props.match.params.id;
   }
 
-  constructor (props: IRoomSettingsPageProps) {
+  public constructor (props: IRoomSettingsPageProps) {
     super(props);
     const room = props.pickRoom(this.roomId);
     this.state = {

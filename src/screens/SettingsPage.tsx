@@ -19,7 +19,7 @@ interface ISettingsPageState {
 }
 
 class SettingsPage extends React.Component<ISettingsPageProps, ISettingsPageState> {
-  constructor (props: ISettingsPageProps) {
+  public constructor (props: ISettingsPageProps) {
     super(props);
     this.state = {
       ready: false,

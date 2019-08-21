@@ -26,7 +26,7 @@ interface IRoomNewPageState {
 class RoomNewPage extends React.Component<IRoomNewPageProps, IRoomNewPageState> {
   // protected unsubscribe: (() => void) | null = null;
 
-  constructor (props: IRoomNewPageProps) {
+  public constructor (props: IRoomNewPageProps) {
     super(props);
     this.state = {
       errorMessage: '',

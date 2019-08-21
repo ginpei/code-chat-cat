@@ -33,7 +33,7 @@ class App extends Component<IAppProps, IAppState> {
   protected unsubscribeProfile = noop;
   protected store = createAppStore();
 
-  constructor (props: IAppProps) {
+  public constructor (props: IAppProps) {
     super(props);
     this.state = {
       ready: false,

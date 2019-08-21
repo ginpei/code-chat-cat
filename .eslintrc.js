@@ -4,7 +4,6 @@ module.exports = {
   extends: './.eslintrc.ideal.js',
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/explicit-member-accessibility': 'off',
     '@typescript-eslint/indent': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/member-delimiter-style': 'off',
