@@ -114,12 +114,14 @@ export default connect(
       (error) => dispatch(ErrorLogs.add('connect active rooms', error)),
       () => setReady(),
     ),
-    connectUserRooms: (userId: string, setReady: () => void) =>
-      Rooms.connectUserRooms(
-        userId,
-        (rooms) => dispatch(Rooms.setUserRooms(rooms)),
-        (error) => dispatch(ErrorLogs.add('connect user rooms', error)),
-        () => setReady(),
-      ),
+    connectUserRooms: (
+      userId: string,
+      setReady: () => void,
+    ) => Rooms.connectUserRooms(
+      userId,
+      (rooms) => dispatch(Rooms.setUserRooms(rooms)),
+      (error) => dispatch(ErrorLogs.add('connect user rooms', error)),
+      () => setReady(),
+    ),
   }),
 )(HomePage);

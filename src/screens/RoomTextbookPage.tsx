@@ -97,8 +97,9 @@ export default connect(
     userProfile: state.currentUser.profile,
   }),
   (dispatch: AppDispatch) => ({
-    saveError: (location: string, error: ErrorLogs.AppError) =>
-      dispatch(ErrorLogs.add(location, error)),
+    saveError: (location: string, error: ErrorLogs.AppError) => dispatch(
+      ErrorLogs.add(location, error),
+    ),
     storeRoom: (room: Rooms.Room) => dispatch(Rooms.storeRoom(room)),
   }),
 )(RoomTextbookPage);

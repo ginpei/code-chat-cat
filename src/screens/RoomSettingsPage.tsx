@@ -303,8 +303,9 @@ export default connect(
   }),
   (dispatch: AppDispatch) => ({
     removeRoom: (room: Rooms.Room) => dispatch(Rooms.removeRoom(room)),
-    saveError: (location: string, error: ErrorLogs.AppError) =>
-      dispatch(ErrorLogs.add(location, error)),
+    saveError: (location: string, error: ErrorLogs.AppError) => dispatch(
+      ErrorLogs.add(location, error),
+    ),
     saveRoom: (room: Rooms.Room) => dispatch(Rooms.saveRoom(room)),
     storeRoom: (room: Rooms.Room) => dispatch(Rooms.storeRoom(room)),
   }),
