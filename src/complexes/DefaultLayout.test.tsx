@@ -35,7 +35,7 @@ describe('<Header>', () => {
 
   describe('logged in user', () => {
     beforeEach(() => {
-      const profile: Profiles.IProfile = {
+      const profile: Profiles.Profile = {
         id: 'user-id-123',
         message: 'user-message',
         name: 'user-name',
