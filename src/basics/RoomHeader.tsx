@@ -53,10 +53,9 @@ interface Props {
 
 export default function RoomHeader (props: Props) {
   const { userProfile, room } = props;
-  const menus =
-    userProfile
-      ? getLoggedInMenu(userProfile, room)
-      : getAnonymousMenu();
+  const menus = userProfile
+    ? getLoggedInMenu(userProfile, room)
+    : getAnonymousMenu();
 
   return (
     <div>

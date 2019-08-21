@@ -21,7 +21,6 @@ module.exports = {
     'no-nested-ternary': 'off',
     'no-param-reassign': 'off',
     'no-return-assign': 'off',
-    'operator-linebreak': 'off',
     'quote-props': 'off',
     'react/button-has-type': 'off',
     'react/destructuring-assignment': 'off',

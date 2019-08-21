@@ -43,9 +43,7 @@ export function connectProfile (
   const userRef = firebase.firestore().collection(collectionName).doc(userId);
   const unsubscribeNotes = userRef.onSnapshot(
     (snapshot) => {
-      const profile =
-        snapshotToProfile(snapshot)
-        || getInitialProfile(userId);
+      const profile = snapshotToProfile(snapshot) || getInitialProfile(userId);
       onNext(profile);
       onEach();
     },
