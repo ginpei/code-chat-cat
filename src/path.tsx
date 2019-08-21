@@ -9,12 +9,12 @@ type SimplePathBase =
   | 'logout'
   | 'room-list'
   | 'room-new';
-export default function path (base: SimplePathBase): string;
-export default function path (
+function path (base: SimplePathBase): string;
+function path (
   base: 'room' | 'room-write' | 'room-settings',
   params: { id: string },
 ): string;
-export default function path (base: string, params?: any): string {
+function path (base: string, params?: any): string {
   switch (base) {
     case 'home': return '/';
     case 'login': return '/login';
@@ -28,6 +28,7 @@ export default function path (base: string, params?: any): string {
     default: throw new Error(`Unknown path: ${base}`);
   }
 }
+export default path;
 
 export function HomeLink () {
   return <Link to={path('home')}>Home</Link>;
