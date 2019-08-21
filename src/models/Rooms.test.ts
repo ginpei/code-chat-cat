@@ -3,8 +3,8 @@ import * as Rooms from './Rooms';
 jest.mock('firebase');
 
 describe('Rooms', () => {
-  let state: Rooms.IRoomState;
-  let result: Rooms.IRoomState;
+  let state: Rooms.RoomState;
+  let result: Rooms.RoomState;
 
   afterEach(() => {
     state = {

@@ -3,9 +3,9 @@ import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
 import path from '../path';
 import Header from './Header';
-import { IHeaderMenu } from './HeaderMenu';
+import { HeaderMenuGroup } from './HeaderMenu';
 
-function getLoggedInMenu (profile: Profiles.IProfile, room: Rooms.IRoom): IHeaderMenu[] {
+function getLoggedInMenu (profile: Profiles.Profile, room: Rooms.Room): HeaderMenuGroup[] {
   return [
     {
       links: [
@@ -33,7 +33,7 @@ function getLoggedInMenu (profile: Profiles.IProfile, room: Rooms.IRoom): IHeade
   ];
 }
 
-function getAnonymousMenu (): IHeaderMenu[] {
+function getAnonymousMenu (): HeaderMenuGroup[] {
   return [
     {
       links: [
@@ -45,13 +45,13 @@ function getAnonymousMenu (): IHeaderMenu[] {
   ];
 }
 
-interface IRoomHeaderProps {
+interface Props {
   fullscreen?: boolean;
-  room: Rooms.IRoom;
-  userProfile: Profiles.IProfile | null;
+  room: Rooms.Room;
+  userProfile: Profiles.Profile | null;
 }
 
-export default function RoomHeader (props: IRoomHeaderProps) {
+export default function RoomHeader (props: Props) {
   const { userProfile, room } = props;
   const menus =
     userProfile

@@ -8,18 +8,18 @@ import * as Profiles from '../models/Profiles';
 import { AppState } from '../models/Store';
 import path from '../path';
 
-interface ISettingsPageProps {
-  currentUser: CurrentUser.ICurrentUserState;
-  userProfile: Profiles.IProfile | null;
+interface Props {
+  currentUser: CurrentUser.CurrentUserState;
+  userProfile: Profiles.Profile | null;
 }
-interface ISettingsPageState {
+interface State {
   ready: boolean;
   savingProfile: boolean;
   userName: string;
 }
 
-class SettingsPage extends React.Component<ISettingsPageProps, ISettingsPageState> {
-  public constructor (props: ISettingsPageProps) {
+class SettingsPage extends React.Component<Props, State> {
+  public constructor (props: Props) {
     super(props);
     this.state = {
       ready: false,

@@ -13,11 +13,11 @@ const MarkdownBlock = styled.div.attrs({
   className: 'Markdown-Container',
 })``;
 
-interface IMarkdownProps {
+interface Props {
   content: string;
 }
 
-export default class Markdown extends React.Component<IMarkdownProps> {
+export default class Markdown extends React.Component<Props> {
   protected mdit = new MarkdownIt({
     highlight: (text, language) => {
       if (language && hljs.getLanguage(language)) {
@@ -42,7 +42,7 @@ export default class Markdown extends React.Component<IMarkdownProps> {
     return this.mdit.render(this.props.content);
   }
 
-  public constructor (props: IMarkdownProps) {
+  public constructor (props: Props) {
     super(props);
     this.mdit.use(markdownItAnchor, {
       permalink: true,

@@ -8,11 +8,11 @@ import { appHistory, setTitle } from '../misc';
 import { AppState } from '../models/Store';
 import { HomeLink } from '../path';
 
-interface ILoginPageProps {
+interface Props {
   loggedIn: boolean;
 }
 
-function LoginPage (props: ILoginPageProps) {
+function LoginPage (props: Props) {
   setTitle('Login');
 
   if (props.loggedIn) {

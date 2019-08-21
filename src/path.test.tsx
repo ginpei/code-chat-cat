@@ -52,7 +52,7 @@ describe('path', () => {
   describe('<RoomLink>', () => {
     let wrapper: ShallowWrapper;
 
-    const room: Rooms.IRoom = {
+    const room: Rooms.Room = {
       createdAt: firebase.firestore.Timestamp.now(),
       id: 'roomId123',
       name: 'Room Name',

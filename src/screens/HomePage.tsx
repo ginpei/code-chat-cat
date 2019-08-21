@@ -23,18 +23,18 @@ const LogoImage = styled.img`
   }
 `;
 
-interface IHomePageProps {
-  activeRooms: Rooms.IRoom[];
+interface Props {
+  activeRooms: Rooms.Room[];
   connectActiveRooms: (setReady: () => void) => () => void;
   connectUserRooms: (userId: string, setReady: () => void) => () => void;
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
   userId: string;
-  userProfile: Profiles.IProfile | null;
-  userRooms: Rooms.IRoom[];
+  userProfile: Profiles.Profile | null;
+  userRooms: Rooms.Room[];
 }
 
-function HomePage (props: IHomePageProps) {
+function HomePage (props: Props) {
   const { connectActiveRooms, connectUserRooms } = props;
 
   const [activeRoomsReady, setActiveRoomsReady] = useState(false);

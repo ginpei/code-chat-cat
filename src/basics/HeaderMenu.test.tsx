@@ -1,6 +1,6 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
-import HeaderMenu, { IHeaderMenu } from './HeaderMenu';
+import HeaderMenu, { HeaderMenuGroup } from './HeaderMenu';
 
 describe('<HeaderMenu>', () => {
   let wrapper: ShallowWrapper;
@@ -17,7 +17,7 @@ describe('<HeaderMenu>', () => {
 
   describe('specified menu items', () => {
     beforeEach(() => {
-      const menus: IHeaderMenu[] = [
+      const menus: HeaderMenuGroup[] = [
         {
           links: [
             { href: '/path1-1', title: 'link1-1' },

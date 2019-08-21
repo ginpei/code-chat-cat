@@ -37,44 +37,44 @@ const EditorOutput = styled.article`
   padding: 1rem;
 `;
 
-interface IRoomWritePageParams {
+interface PageParams {
   id: string;
 }
 
-interface IRoomWritePageStateProps {
+interface StateProps {
   firebaseUser: firebase.User | null;
-  pickRoom: (roomId: string) => Rooms.IRoom;
-  userProfile: Profiles.IProfile | null;
+  pickRoom: (roomId: string) => Rooms.Room;
+  userProfile: Profiles.Profile | null;
 }
 
-const mapStateToProps = (state: AppState): IRoomWritePageStateProps => ({
+const mapStateToProps = (state: AppState): StateProps => ({
   firebaseUser: state.currentUser.firebaseUser,
   pickRoom: (roomId: string) => Rooms.pickRoom(state, roomId),
   userProfile: state.currentUser.profile,
 });
 
-interface IRoomWritePageDispatchProps {
+interface DispatchProps {
   saveError: (location: string, error: ErrorLogs.AppError) => void;
-  saveRoom: (room: Rooms.IRoom) => void;
+  saveRoom: (room: Rooms.Room) => void;
 }
 
-const mapDispatchToProps = (dispatch: AppDispatch): IRoomWritePageDispatchProps => ({
+const mapDispatchToProps = (dispatch: AppDispatch): DispatchProps => ({
   saveError: (location: string, error: ErrorLogs.AppError) => dispatch(ErrorLogs.add(location, error)),
-  saveRoom: (room: Rooms.IRoom) => dispatch(Rooms.saveRoom(room)),
+  saveRoom: (room: Rooms.Room) => dispatch(Rooms.saveRoom(room)),
 });
 
-type IRoomWritePageProps =
-  & RouteComponentProps<IRoomWritePageParams>
-  & IRoomWritePageStateProps
-  & IRoomWritePageDispatchProps;
+type Props =
+  & RouteComponentProps<PageParams>
+  & StateProps
+  & DispatchProps;
 
-interface IRoomWritePageState {
+interface State {
   editingContent: string;
   previewingContent: string;
-  room: Rooms.IRoom | null;
+  room: Rooms.Room | null;
 }
 
-class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageState> {
+class RoomWritePage extends React.Component<Props, State> {
   protected refInput = createRef<HTMLTextAreaElement>();
   protected refOutput = createRef<HTMLElement>();
   protected unsubscribeSyncScroll: (() => void) | null = null;
@@ -84,7 +84,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     return this.props.match.params.id;
   }
 
-  public constructor (props: IRoomWritePageProps) {
+  public constructor (props: Props) {
     super(props);
     const room = props.pickRoom(this.roomId) || Rooms.emptyRoom;
     const content = room ? room.textbookContent : '';
@@ -183,7 +183,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     setTitle('Write', room ? room.name : '...');
   }
 
-  protected setRoom (room: Rooms.IRoom | null) {
+  protected setRoom (room: Rooms.Room | null) {
     this.setState({ room });
     this.updateTitle();
 

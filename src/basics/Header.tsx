@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Container from '../independents/Container';
 import path from '../path';
-import HeaderMenu, { IHeaderMenu } from './HeaderMenu';
+import HeaderMenu, { HeaderMenuGroup } from './HeaderMenu';
 
 export const headerHeight = 12 * 1.6;
 
@@ -33,11 +33,11 @@ export const FullscreenContainer = styled.div`
   padding: 0 1rem;
 `;
 
-interface IInnerContainerProps {
+interface InnerContainerProps {
   children: React.ReactNode;
   fullscreen?: boolean;
 }
-function InnerContainer (props: IInnerContainerProps) {
+function InnerContainer (props: InnerContainerProps) {
   if (props.fullscreen) {
     return (
       <FullscreenContainer>{props.children}</FullscreenContainer>
@@ -49,15 +49,15 @@ function InnerContainer (props: IInnerContainerProps) {
   );
 }
 
-interface IHeaderProps {
-  menus?: IHeaderMenu[];
+interface Props {
+  menus?: HeaderMenuGroup[];
   title?: string;
   titleHref?: string;
   fullscreen?: boolean;
 }
 
-export default class Header extends React.Component<IHeaderProps> {
-  public static defaultProps: Partial<IHeaderProps> = {
+export default class Header extends React.Component<Props> {
+  public static defaultProps: Partial<Props> = {
     fullscreen: false,
   };
 

@@ -10,13 +10,13 @@ import * as Rooms from '../models/Rooms';
 import { AppDispatch, AppState } from '../models/Store';
 import path from '../path';
 
-interface IRoomListPageProps {
+interface Props {
   connectUserRooms: (userId: string) => () => void;
   userId: string;
-  userRooms: Rooms.IRoom[];
+  userRooms: Rooms.Room[];
 }
 
-class RoomListPage extends React.Component<IRoomListPageProps> {
+class RoomListPage extends React.Component<Props> {
   protected unsubscribeUserRooms = noop;
 
   public render () {

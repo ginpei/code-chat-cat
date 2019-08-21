@@ -1,11 +1,11 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
-import { emptyRoom, IRoom, RoomStatus } from '../models/Rooms';
+import { emptyRoom, Room, RoomStatus } from '../models/Rooms';
 import RoomListItem from './RoomListItem';
 
 describe('<RoomListItem>', () => {
   let wrapper: ShallowWrapper;
-  let room: IRoom;
+  let room: Room;
 
   beforeEach(() => {
     room = { ...emptyRoom };

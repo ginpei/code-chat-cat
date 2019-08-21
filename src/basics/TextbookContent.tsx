@@ -31,13 +31,13 @@ function buildPublishedContent (content: string) {
   return modified;
 }
 
-interface ITextbookContentProps {
+interface Props {
   editing?: boolean;
   content: string;
 }
 
 export default class TextbookContent extends React.Component<
-ITextbookContentProps
+Props
 > {
   protected get modifiedContent () {
     const { editing = false, content } = this.props;

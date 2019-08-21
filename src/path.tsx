@@ -34,7 +34,7 @@ export function HomeLink () {
 }
 
 export function RoomLink (props: React.PropsWithChildren<{
-  room: Rooms.IRoom;
+  room: Rooms.Room;
   type?: 'settings' | 'write';
 }>) {
   const base =

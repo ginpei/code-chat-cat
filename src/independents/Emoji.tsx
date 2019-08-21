@@ -17,11 +17,11 @@ export function getEmojiChar (label: EmojiLabel) {
 
 type ISpanProps = React.ComponentPropsWithRef<'span'>;
 
-interface IEmojiProps extends ISpanProps {
+interface Props extends ISpanProps {
   label: EmojiLabel;
 }
 
-export default function Emoji (props: IEmojiProps) {
+export default function Emoji (props: Props) {
   const { label, ...spanProps } = props;
   const emoji = getEmojiChar(label);
 

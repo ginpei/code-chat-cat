@@ -8,9 +8,9 @@ import * as Rooms from './Rooms';
 
 // tslint:disable-next-line:interface-name
 export interface AppState {
-  currentUser: CurrentUser.ICurrentUserState;
-  errorLogs: ErrorLogs.IErrorLog[];
-  rooms: Rooms.IRoomState;
+  currentUser: CurrentUser.CurrentUserState;
+  errorLogs: ErrorLogs.ErrorLog[];
+  rooms: Rooms.RoomState;
 }
 
 export type AppAction =

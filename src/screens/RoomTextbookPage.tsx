@@ -25,23 +25,23 @@ const TextbookWrapper = styled(Container)`
   padding: 0.01px 1rem;
 `;
 
-interface IRoomTextbookPageParams {
+interface PageParams {
   id: string;
 }
-interface IRoomTextbookPageProps
-  extends RouteComponentProps<IRoomTextbookPageParams> {
-  pickRoom: (roomId: string) => Rooms.IRoom;
+interface Props
+  extends RouteComponentProps<PageParams> {
+  pickRoom: (roomId: string) => Rooms.Room;
   saveError: (location: string, error: ErrorLogs.AppError) => void;
-  storeRoom: (room: Rooms.IRoom) => void;
-  userProfile: Profiles.IProfile | null;
+  storeRoom: (room: Rooms.Room) => void;
+  userProfile: Profiles.Profile | null;
 }
 
-function RoomTextbookPage (props: IRoomTextbookPageProps) {
+function RoomTextbookPage (props: Props) {
   const { saveError, storeRoom } = props;
   const roomId = props.match.params.id;
   const initialRoom = Rooms.emptyRoom;
 
-  const [room, setRoom] = useState<Rooms.IRoom | null>(
+  const [room, setRoom] = useState<Rooms.Room | null>(
     props.pickRoom(roomId) || initialRoom,
   );
   useEffect(() => Rooms.connectRoom(
@@ -99,6 +99,6 @@ export default connect(
   (dispatch: AppDispatch) => ({
     saveError: (location: string, error: ErrorLogs.AppError) =>
       dispatch(ErrorLogs.add(location, error)),
-    storeRoom: (room: Rooms.IRoom) => dispatch(Rooms.storeRoom(room)),
+    storeRoom: (room: Rooms.Room) => dispatch(Rooms.storeRoom(room)),
   }),
 )(RoomTextbookPage);

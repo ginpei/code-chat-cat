@@ -4,13 +4,13 @@ export type AppError =
   | Error
   | firebase.auth.Error;
 
-export interface IErrorLog {
+export interface ErrorLog {
   error: AppError;
   id: string;
   occurredAt: number;
 }
 
-function createLog (error: AppError): IErrorLog {
+function createLog (error: AppError): ErrorLog {
   const occurredAt = Date.now();
   const random = String(Math.random()).slice(2);
   const id = `${occurredAt}${random}`;
@@ -20,12 +20,12 @@ function createLog (error: AppError): IErrorLog {
 // ----------------------------------------------------------------------------
 // actions
 
-interface IAddAction {
-  log: IErrorLog;
+interface AddAction {
+  log: ErrorLog;
   type: 'ErrorLogs/add';
 }
 
-export function add (location: string, error: AppError): IAddAction {
+export function add (location: string, error: AppError): AddAction {
   console.error(`[${location}]`, error); // TODO
   return {
     log: createLog(error),
@@ -33,27 +33,27 @@ export function add (location: string, error: AppError): IAddAction {
   };
 }
 
-interface IClearAction {
+interface ClearAction {
   type: 'ErrorLogs/clear';
 }
 
-export function clear (): IClearAction {
+export function clear (): ClearAction {
   return {
     type: 'ErrorLogs/clear',
   };
 }
 
 export type ErrorsAction =
-  | IAddAction
-  | IClearAction;
+  | AddAction
+  | ClearAction;
 
 // ----------------------------------------------------------------------------
 // reducers
 
 export function reduceErrorLogs (
-  state: IErrorLog[] = [],
+  state: ErrorLog[] = [],
   action: ErrorsAction,
-): IErrorLog[] {
+): ErrorLog[] {
   switch (action.type) {
     case 'ErrorLogs/add': {
       const logs = [...state];

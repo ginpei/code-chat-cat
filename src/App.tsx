@@ -21,19 +21,19 @@ import SettingsPage from './screens/SettingsPage';
 import TermsPage from './screens/TermsPage';
 
 // tslint:disable:no-empty-interface
-interface IAppProps {
+interface Props {
 }
-interface IAppState {
+interface State {
   ready: boolean;
 }
 
-class App extends Component<IAppProps, IAppState> {
+class App extends Component<Props, State> {
   protected disconnectHistory = noop;
   protected unsubscribeAuth = noop;
   protected unsubscribeProfile = noop;
   protected store = createAppStore();
 
-  public constructor (props: IAppProps) {
+  public constructor (props: Props) {
     super(props);
     this.state = {
       ready: false,

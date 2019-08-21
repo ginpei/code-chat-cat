@@ -6,19 +6,19 @@ const collectionName = 'profiles';
 // ----------------------------------------------------------------------------
 // states
 
-export interface IProfile {
+export interface Profile {
   id: string;
   message: string;
   name: string;
 }
 
-export const emptyProfile: Readonly<IProfile> = Object.freeze({
+export const emptyProfile: Readonly<Profile> = Object.freeze({
   id: '',
   message: '',
   name: '',
 });
 
-export function getInitialProfile (userId: string): IProfile {
+export function getInitialProfile (userId: string): Profile {
   return {
     ...emptyProfile,
     id: userId,
@@ -31,7 +31,7 @@ export function getInitialProfile (userId: string): IProfile {
 
 export function connectProfile (
   userId: string,
-  onNext: (profile: IProfile) => void,
+  onNext: (profile: Profile) => void,
   onError: (error: Error) => void = noop,
   onEach: () => void = noop,
 ): () => void {
@@ -57,14 +57,14 @@ export function connectProfile (
   return unsubscribeNotes;
 }
 
-export function saveProfile (profile: IProfile) {
+export function saveProfile (profile: Profile) {
   const userRef = firebase.firestore().collection(collectionName).doc(profile.id);
   return userRef.set(profile);
 }
 
 export function snapshotToProfile (
   snapshot: firebase.firestore.DocumentSnapshot,
-): IProfile | null {
+): Profile | null {
   const data = snapshot.data();
   if (!data) {
     return null;

@@ -61,21 +61,21 @@ const MenuItem = styled(Link)`
   }
 `;
 
-export interface IHeaderLink {
+export interface HeaderLink {
   title: string;
   href: string;
 }
-export interface IHeaderMenu {
+export interface HeaderMenuGroup {
   name: string;
-  links: IHeaderLink[];
+  links: HeaderLink[];
 }
 
-interface IHeaderMenuProps {
-  menus?: IHeaderMenu[];
+interface Props {
+  menus?: HeaderMenuGroup[];
 }
 
-export default class HeaderMenu extends React.Component<IHeaderMenuProps> {
-  public static defaultProps: Partial<IHeaderMenuProps> = {
+export default class HeaderMenu extends React.Component<Props> {
+  public static defaultProps: Partial<Props> = {
     menus: [],
   };
 

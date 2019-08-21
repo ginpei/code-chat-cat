@@ -5,16 +5,16 @@ import * as Profiles from './Profiles';
 // ----------------------------------------------------------------------------
 // states
 
-export interface ICurrentUserState {
+export interface CurrentUserState {
   firebaseUser: firebase.User | null;
   id: string;
   loggedIn: boolean;
   name: string;
-  profile: Profiles.IProfile | null;
+  profile: Profiles.Profile | null;
   ready: boolean;
 }
 
-const initialState: ICurrentUserState = {
+const initialState: CurrentUserState = {
   firebaseUser: null,
   id: '',
   loggedIn: false,
@@ -26,19 +26,19 @@ const initialState: ICurrentUserState = {
 // ----------------------------------------------------------------------------
 // actions
 
-interface ISetCurrentUserAction {
+interface SetCurrentUserAction {
   user: firebase.User | null;
   type: 'CURRENT_USER_SET';
 }
 
-export function set (user: firebase.User | null): ISetCurrentUserAction {
+export function set (user: firebase.User | null): SetCurrentUserAction {
   return {
     type: 'CURRENT_USER_SET',
     user,
   };
 }
 
-function setCurrentUser (user: firebase.User | null): ICurrentUserState {
+function setCurrentUser (user: firebase.User | null): CurrentUserState {
   if (!user) {
     return {
       ...initialState,
@@ -56,12 +56,12 @@ function setCurrentUser (user: firebase.User | null): ICurrentUserState {
   };
 }
 
-interface ISetCurrentUserProfileAction {
-  profile: Profiles.IProfile;
+interface SetCurrentUserProfileAction {
+  profile: Profiles.Profile;
   type: 'CURRENT_USER_SET_PROFILE';
 }
 
-export function setProfile (profile: Profiles.IProfile): ISetCurrentUserProfileAction {
+export function setProfile (profile: Profiles.Profile): SetCurrentUserProfileAction {
   return {
     profile,
     type: 'CURRENT_USER_SET_PROFILE',
@@ -69,8 +69,8 @@ export function setProfile (profile: Profiles.IProfile): ISetCurrentUserProfileA
 }
 
 export type CurrentUserAction =
-  | ISetCurrentUserAction
-  | ISetCurrentUserProfileAction;
+  | SetCurrentUserAction
+  | SetCurrentUserProfileAction;
 
 // ----------------------------------------------------------------------------
 // reducers
@@ -78,7 +78,7 @@ export type CurrentUserAction =
 export function reduceCurrentUser (
   state = initialState,
   action: CurrentUserAction,
-): ICurrentUserState {
+): CurrentUserState {
   switch (action.type) {
     case 'CURRENT_USER_SET':
       return setCurrentUser(action.user);
