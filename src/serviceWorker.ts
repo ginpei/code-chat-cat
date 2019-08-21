@@ -20,7 +20,6 @@ const isLocalhost = Boolean(
     ),
 );
 
-// tslint:disable-next-line:interface-name
 interface Config {
   onSuccess?: (registration: ServiceWorkerRegistration) => void;
   onUpdate?: (registration: ServiceWorkerRegistration) => void;

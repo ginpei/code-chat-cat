@@ -9,7 +9,6 @@ jest.mock('./middleware/firebase', () => {
   const firebase = new firebaseMock.MockFirebaseSdk();
 
   if (!firebase.firestore.Timestamp) {
-    // tslint:disable-next-line:only-arrow-functions no-empty
     firebase.firestore.Timestamp = function Timestamp () {
       return {
         toDate: () => new Date(),

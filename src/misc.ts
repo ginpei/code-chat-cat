@@ -8,7 +8,6 @@ export function sleep (ms: number) {
 
 export const appHistory = createBrowserHistory();
 
-// tslint:disable-next-line:ban-types
 export function debounce<F extends Function> (fn: F, delay: number): F {
   let tm = 0;
   // eslint-disable-next-line func-names

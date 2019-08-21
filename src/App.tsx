@@ -20,7 +20,6 @@ import RoomWritePage from './screens/RoomWritePage';
 import SettingsPage from './screens/SettingsPage';
 import TermsPage from './screens/TermsPage';
 
-// tslint:disable:no-empty-interface
 interface Props {
 }
 interface State {

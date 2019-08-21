@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import './Markdown.css';
 
 // html-to-react does not have type definition
-// tslint:disable-next-line:no-var-requires
 const HtmlToReactParser = require('html-to-react').Parser;
 
 const MarkdownBlock = styled.div.attrs({

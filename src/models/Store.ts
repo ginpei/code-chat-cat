@@ -6,7 +6,6 @@ import * as CurrentUser from './CurrentUser';
 import * as ErrorLogs from './ErrorLogs';
 import * as Rooms from './Rooms';
 
-// tslint:disable-next-line:interface-name
 export interface AppState {
   currentUser: CurrentUser.CurrentUserState;
   errorLogs: ErrorLogs.ErrorLog[];
