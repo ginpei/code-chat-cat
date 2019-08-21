@@ -28,13 +28,21 @@ const TextbookWrapper = styled(Container)`
 interface PageParams {
   id: string;
 }
-interface Props
-  extends RouteComponentProps<PageParams> {
+
+type StateProps = {
   pickRoom: (roomId: string) => Rooms.Room;
+  userProfile: Profiles.Profile | null;
+};
+
+type DispatchProps = {
   saveError: (location: string, error: ErrorLogs.AppError) => void;
   storeRoom: (room: Rooms.Room) => void;
-  userProfile: Profiles.Profile | null;
-}
+};
+
+type Props =
+  & RouteComponentProps<PageParams>
+  & StateProps
+  & DispatchProps;
 
 function RoomTextbookPage (props: Props) {
   const { saveError, storeRoom } = props;
@@ -91,8 +99,8 @@ function RoomTextbookPage (props: Props) {
   );
 }
 
-export default connect(
-  (state: AppState) => ({
+export default connect<StateProps, DispatchProps, {}, AppState>(
+  (state) => ({
     pickRoom: (roomId: string) => Rooms.pickRoom(state, roomId),
     userProfile: state.currentUser.profile,
   }),

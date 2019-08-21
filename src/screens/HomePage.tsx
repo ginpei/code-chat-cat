@@ -23,16 +23,23 @@ const LogoImage = styled.img`
   }
 `;
 
-interface Props {
+type StateProps = {
   activeRooms: Rooms.Room[];
-  connectActiveRooms: (setReady: () => void) => () => void;
-  connectUserRooms: (userId: string, setReady: () => void) => () => void;
   firebaseUser: firebase.User | null;
   loggedIn: boolean;
   userId: string;
   userProfile: Profiles.Profile | null;
   userRooms: Rooms.Room[];
-}
+};
+
+type DispatchProps = {
+  connectActiveRooms: (setReady: () => void) => () => void;
+  connectUserRooms: (userId: string, setReady: () => void) => () => void;
+};
+
+type Props =
+  & StateProps
+  & DispatchProps;
 
 function HomePage (props: Props) {
   const { connectActiveRooms, connectUserRooms } = props;
@@ -99,8 +106,8 @@ function HomePage (props: Props) {
   );
 }
 
-export default connect(
-  (state: AppState) => ({
+export default connect<StateProps, DispatchProps, {}, AppState>(
+  (state) => ({
     activeRooms: Rooms.pickActiveRooms(state),
     firebaseUser: state.currentUser.firebaseUser,
     loggedIn: state.currentUser.loggedIn,
@@ -109,15 +116,12 @@ export default connect(
     userRooms: Rooms.pickUserRooms(state),
   }),
   (dispatch: AppDispatch) => ({
-    connectActiveRooms: (setReady: () => void) => Rooms.connectActiveRooms(
+    connectActiveRooms: (setReady) => Rooms.connectActiveRooms(
       (rooms) => dispatch(Rooms.setActiveRooms(rooms)),
       (error) => dispatch(ErrorLogs.add('connect active rooms', error)),
       () => setReady(),
     ),
-    connectUserRooms: (
-      userId: string,
-      setReady: () => void,
-    ) => Rooms.connectUserRooms(
+    connectUserRooms: (userId, setReady) => Rooms.connectUserRooms(
       userId,
       (rooms) => dispatch(Rooms.setUserRooms(rooms)),
       (error) => dispatch(ErrorLogs.add('connect user rooms', error)),

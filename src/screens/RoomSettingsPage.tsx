@@ -83,20 +83,29 @@ const DangerZone = styled.div`
   padding: 1rem;
 `;
 
-interface PageParams {
+type PageParams = {
   id: string;
-}
-interface Props
-  extends RouteComponentProps<PageParams> {
+};
+
+type StateProps = {
   pickRoom: (roomId: string) => Rooms.Room;
+  userProfile: Profiles.Profile | null;
+  userRooms: Rooms.Room[];
+};
+
+type DispatchProps = {
   removeRoom: (room: Rooms.Room) => Promise<void>;
   saveError: (location: string, error: ErrorLogs.AppError) => void;
   saveRoom: (room: Rooms.Room) => void;
   storeRoom: (room: Rooms.Room) => void;
-  userProfile: Profiles.Profile | null;
-  userRooms: Rooms.Room[];
-}
-interface State {
+};
+
+type Props =
+  & RouteComponentProps<PageParams>
+  & StateProps
+  & DispatchProps;
+
+type State = {
   initialized: boolean;
   room: Rooms.Room | null;
   roomName: string;
@@ -295,8 +304,8 @@ class RoomSettingsPage extends React.Component<Props, State> {
   }
 }
 
-export default connect(
-  (state: AppState) => ({
+export default connect<StateProps, DispatchProps, {}, AppState>(
+  (state) => ({
     pickRoom: (roomId: string) => Rooms.pickRoom(state, roomId),
     userProfile: state.currentUser.profile,
     userRooms: Rooms.pickUserRooms(state),
