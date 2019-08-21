@@ -11,7 +11,6 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
     '@typescript-eslint/no-var-requires': 'off',
-    'class-methods-use-this': 'off',
     'func-names': 'off',
     'global-require': 'off',
     'implicit-arrow-linebreak': 'off',

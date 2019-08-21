@@ -15,6 +15,18 @@ import * as Rooms from '../models/Rooms';
 import { AppDispatch, AppState } from '../models/Store';
 import NotFoundPage from './NotFoundPage';
 
+
+function setDirty () {
+  window.onbeforeunload = (event) => {
+    event.preventDefault();
+    event.returnValue = ''; // for Chrome
+  };
+}
+
+function unsetDirty () {
+  window.onbeforeunload = null;
+}
+
 const EditorContainer = styled.div`
   display: grid;
   grid-template: "input output" 100% / 1fr 1fr;
@@ -199,7 +211,7 @@ class RoomWritePage extends React.Component<Props, State> {
     }
     this.setState({ editingContent: content });
     this.setRenderingContent(content);
-    this.setDirty();
+    setDirty();
     this.saveContent();
   }
 
@@ -208,17 +220,6 @@ class RoomWritePage extends React.Component<Props, State> {
    */
   protected setRenderingContent (previewingContent: string) {
     this.setState({ previewingContent });
-  }
-
-  protected setDirty () {
-    window.onbeforeunload = (event) => {
-      event.preventDefault();
-      event.returnValue = ''; // for Chrome
-    };
-  }
-
-  protected unsetDirty () {
-    window.onbeforeunload = null;
   }
 
   /**
@@ -234,7 +235,7 @@ class RoomWritePage extends React.Component<Props, State> {
       ...room,
       textbookContent: this.state.editingContent,
     });
-    this.unsetDirty();
+    unsetDirty();
   }
 
   protected subscribeSyncScroll () {
