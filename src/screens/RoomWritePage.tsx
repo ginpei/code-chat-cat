@@ -17,7 +17,7 @@ import NotFoundPage from './NotFoundPage';
 
 
 function setDirty () {
-  window.onbeforeunload = (event) => {
+  window.onbeforeunload = (event: BeforeUnloadEvent) => {
     event.preventDefault();
     event.returnValue = ''; // for Chrome
   };
