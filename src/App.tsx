@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { Route, Router, Switch } from 'react-router';
+import { Route, Router, Switch } from 'react-router-dom';
 import LoadingView from './independents/LoadingView';
 import { appHistory, noop, resetTitle } from './misc';
 import * as CurrentUser from './models/CurrentUser';
