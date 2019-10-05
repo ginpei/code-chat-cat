@@ -15,7 +15,7 @@
     "@types/react-router-dom": "^4.3.5",
     "@types/redux-thunk": "^2.1.0",
     "@types/styled-components": "^4.1.19",
-    "@types/webpack-env": "^1.13.7",
+    "@types/webpack-env": "^1.14.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "eslint-config-airbnb": "^18.0.1",
