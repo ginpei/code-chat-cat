@@ -22,7 +22,7 @@
     "firebase": "^6.6.2",
     "firebase-mock": "^2.2.10",
     "firebaseui": "^4.2.0",
-    "highlight.js": "^9.14.2",
+    "highlight.js": "^9.15.10",
     "history": "^4.10.1",
     "html-to-react": "^1.4.2",
     "markdown-it": "^10.0.0",
