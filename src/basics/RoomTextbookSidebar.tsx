@@ -1,18 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Room } from '../models/Rooms';
-
-const SectionSummary = styled.summary`
-  font-weight: bold;
-  margin: 0 0 1rem;
-`;
-
-const SidebarSection: React.FC<{ heading: string }> = (props) => (
-  <details>
-    <SectionSummary>{props.heading}</SectionSummary>
-    {props.children}
-  </details>
-);
+import SidebarSection from './RoomSidebarSection';
 
 const RoomTextbookSidebarOuter = styled.div`
   padding-bottom: 5em;
