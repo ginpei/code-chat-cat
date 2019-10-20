@@ -5,6 +5,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { headerHeight } from '../basics/Header';
 import RoomHeader from '../basics/RoomHeader';
+import RoomWriteSidebar from '../basics/RoomWriteSidebar';
 import TextbookContent from '../basics/TextbookContent';
 import syncScroll from '../functions/syncScroll';
 import LoadingView from '../independents/LoadingView';
@@ -29,8 +30,15 @@ function unsetDirty () {
 
 const EditorContainer = styled.div`
   display: grid;
-  grid-template: "input output" 100% / 1fr 1fr;
+  grid-template: "sidebar input output" 100% / 300px 1fr 1fr;
   height: calc(100vh - ${headerHeight}px);
+`;
+
+const SidebarFrame = styled.div`
+  background-color: #f9f9f9;
+  border-right: solid 0.2rem #036;
+  box-shadow: 0px 0 10px #0003;
+  overflow-y: scroll;
 `;
 
 const EditorInput = styled.textarea`
@@ -146,6 +154,9 @@ class RoomWritePage extends React.Component<Props, State> {
           userProfile={this.props.userProfile}
         />
         <EditorContainer>
+          <SidebarFrame>
+            <RoomWriteSidebar room={room} />
+          </SidebarFrame>
           <EditorInput
             ref={this.refInput}
             onChange={this.onContentInput}
