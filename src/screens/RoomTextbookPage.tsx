@@ -4,6 +4,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 import { headerHeight } from '../basics/Header';
 import RoomHeader from '../basics/RoomHeader';
+import RoomTextbookSidebar from '../basics/RoomTextbookSidebar';
 import TextbookContent from '../basics/TextbookContent';
 import Container from '../independents/Container';
 import LoadingView from '../independents/LoadingView';
@@ -15,9 +16,27 @@ import { AppDispatch, AppState } from '../models/Store';
 import NotFoundPage from './NotFoundPage';
 
 const TextbookContainer = styled.div`
+  display: flex;
   height: calc(100vh - ${headerHeight}px);
-  overflow-y: scroll;
+  overflow: hidden;
 `;
+
+const sidebarWidth = 300;
+
+const SidebarFrame = styled.div`
+  background-color: #f9f9f9;
+  border-right: solid 2px #036;
+  box-shadow: 0px 0 10px #0003;
+  overflow-y: scroll;
+  padding: 1rem;
+  width: ${sidebarWidth}px;
+`;
+
+const MainFrame = styled.div`
+  overflow-y: scroll;
+  width: 100%;
+`;
+
 const TextbookWrapper = styled(Container)`
   background-color: snow;
   box-shadow: 0 0 10px #0003;
@@ -91,9 +110,14 @@ function RoomTextbookPage (props: Props) {
         userProfile={props.userProfile}
       />
       <TextbookContainer>
-        <TextbookWrapper>
-          <TextbookContent content={room.textbookContent} />
-        </TextbookWrapper>
+        <SidebarFrame>
+          <RoomTextbookSidebar room={room} />
+        </SidebarFrame>
+        <MainFrame>
+          <TextbookWrapper>
+            <TextbookContent content={room.textbookContent} />
+          </TextbookWrapper>
+        </MainFrame>
       </TextbookContainer>
     </div>
   );
