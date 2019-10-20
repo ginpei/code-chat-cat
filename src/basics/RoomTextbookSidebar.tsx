@@ -44,7 +44,7 @@ const RoomTextbookSidebar: React.FC<Props> = (props) => {
               }}
             >
               <a
-                href={`#${getHashFromText(heading.content)}`}
+                href={`#${slugify(heading.content)}`}
               >
                 {heading.content}
               </a>
@@ -70,8 +70,9 @@ function getActiveTextbookHeadings(room: Room) {
   return indexedHeadings;
 }
 
-function getHashFromText(text: string) {
-  return text.replace(/ /g, '-');
+function slugify(s: string) {
+  // see https://github.com/valeriangalliat/markdown-it-anchor/blob/v5.2.5/index.js#L1
+  return encodeURIComponent(String(s).trim().toLowerCase().replace(/\s+/g, '-'));
 }
 
 export default RoomTextbookSidebar;

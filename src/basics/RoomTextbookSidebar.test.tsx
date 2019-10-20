@@ -12,7 +12,7 @@ describe('<RoomTextbookSidebar>', () => {
         textbookContent: `
 # Heading 1
 ## H e a d i n g 2
-### Heading 3
+### Hi \`~!@#$%^&*()_+[]{}|;':",./<>? Hey Ho Symbols!
         `.trim(),
       } as Room;
       wrapper = mount((
@@ -29,7 +29,13 @@ describe('<RoomTextbookSidebar>', () => {
     });
 
     it('links to headings replacing spaces with hyphens', () => {
-      expect(wrapper.find('a').at(0).prop('href')).toBe('#H-e-a-d-i-n-g-2');
+      expect(wrapper.find('a').at(0).prop('href')).toBe('#h-e-a-d-i-n-g-2');
+    });
+
+    it('sanitizes symbols', () => {
+      expect(wrapper.find('a').at(1).prop('href')).toBe(
+        '#hi-%60~!%40%23%24%25%5E%26*()_%2B%5B%5D%7B%7D%7C%3B\'%3A%22%2C.%2F%3C%3E%3F-hey-ho-symbols!',
+      );
     });
   });
 });
