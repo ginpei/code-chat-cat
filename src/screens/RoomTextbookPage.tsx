@@ -25,7 +25,7 @@ const sidebarWidth = 300;
 
 const SidebarFrame = styled.div`
   background-color: #f9f9f9;
-  border-right: solid 2px #036;
+  border-right: solid 0.2rem #036;
   box-shadow: 0px 0 10px #0003;
   overflow-y: scroll;
   padding: 1rem;
