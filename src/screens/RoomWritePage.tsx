@@ -32,6 +32,7 @@ const EditorContainer = styled.div`
   grid-template: "input output" 100% / 1fr 1fr;
   height: calc(100vh - ${headerHeight}px);
 `;
+
 const EditorInput = styled.textarea`
   background-color: ivory;
   border-style: none;
@@ -43,6 +44,7 @@ const EditorInput = styled.textarea`
     box-shadow: 0 0 50vmin #0003 inset;
   `}
 `;
+
 const EditorOutput = styled.article`
   background-color: snow;
   overflow-y: scroll;
