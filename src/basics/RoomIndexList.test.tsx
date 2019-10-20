@@ -12,6 +12,9 @@ describe('<RoomIndexList>', () => {
 # Heading 1
 ## H e a d i n g 2
 ### Hi \`~!@#$%^&*()_+[]{}|;':",./<>? Hey Ho Symbols!
+## Duplicated
+## Duplicated
+## Duplicated
         `.trim(),
     } as Room;
     wrapper = shallow((
@@ -20,7 +23,7 @@ describe('<RoomIndexList>', () => {
   });
 
   it('renders headings except for the level 1', () => {
-    expect(wrapper.find('li')).toHaveLength(2);
+    expect(wrapper.find('li')).toHaveLength(5);
   });
 
   it('prints heading content', () => {
@@ -35,5 +38,11 @@ describe('<RoomIndexList>', () => {
     expect(wrapper.find('a').at(1).prop('href')).toBe(
       '#hi-%60~!%40%23%24%25%5E%26*()_%2B%5B%5D%7B%7D%7C%3B\'%3A%22%2C.%2F%3C%3E%3F-hey-ho-symbols!',
     );
+  });
+
+  it('adds incremental numbers to duplicated item slug', () => {
+    expect(wrapper.find('a').at(2).prop('href')).toBe('#duplicated');
+    expect(wrapper.find('a').at(3).prop('href')).toBe('#duplicated-2');
+    expect(wrapper.find('a').at(4).prop('href')).toBe('#duplicated-3');
   });
 });

@@ -17,13 +17,13 @@ const RoomIndexList: React.FC<Props> = ({ room }) => {
     <OuterUl>
       {headings.map((heading) => (
         <li
-          key={heading.content}
+          key={heading.slug}
           style={{
             marginLeft: `${heading.level - 2}em`,
           }}
         >
           <a
-            href={`#${slugify(heading.content)}`}
+            href={`#${heading.slug}`}
           >
             {heading.content}
           </a>
@@ -34,13 +34,25 @@ const RoomIndexList: React.FC<Props> = ({ room }) => {
 };
 
 function getActiveTextbookHeadings(room: Room) {
+  const slugCounts = new Map<string, number>();
+
   const lines = room.textbookContent.split('\n');
   const headingLines = lines.filter((v) => v.startsWith('#'));
   const headings = headingLines.map((line) => {
     const iFirstSpace = line.indexOf(' ');
     const content = line.slice(iFirstSpace).trim();
     const level = iFirstSpace;
-    return { content, level };
+
+    let slug = slugify(content);
+    if (slugCounts.has(slug)) {
+      const count = slugCounts.get(slug)!;
+      slugCounts.set(slug, count + 1);
+      slug += `-${count + 1}`;
+    } else {
+      slugCounts.set(slug, 1);
+    }
+
+    return { content, level, slug };
   });
   const indexedHeadings = headings.filter((v) => v.level > 1);
   return indexedHeadings;
