@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ComponentPropsWithRef } from 'react';
 import styled from 'styled-components';
 
 const SectionSummary = styled.summary`
@@ -6,11 +6,19 @@ const SectionSummary = styled.summary`
   margin: 0 0 1rem;
 `;
 
-const RoomSidebarSection: React.FC<{ heading: string }> = (props) => (
-  <details className="RoomSidebarSection">
-    <SectionSummary>{props.heading}</SectionSummary>
-    {props.children}
-  </details>
-);
+type Props = ComponentPropsWithRef<'details'> & {
+  heading: string;
+}
+
+const RoomSidebarSection: React.FC<Props> = (props) => {
+  const { heading, ...domProps } = props;
+
+  return (
+    <details {...domProps} className="RoomSidebarSection">
+      <SectionSummary>{props.heading}</SectionSummary>
+      {props.children}
+    </details>
+  );
+};
 
 export default RoomSidebarSection;
