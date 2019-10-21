@@ -78,12 +78,19 @@ export interface Profile {
   id: string;
   message?: string;
   name: string;
+  type: ProfileType;
+}
+
+export enum ProfileType {
+  'anonymous',
+  'loggedIn',
 }
 
 export const emptyProfile: Readonly<Profile> = Object.freeze({
   id: '',
   message: '',
   name: '',
+  type: ProfileType.anonymous,
 });
 
 export function getInitialProfile (userId: string): Profile {
@@ -140,5 +147,6 @@ export function snapshotToProfile (
     id: data.id || '',
     message: data.message || '',
     name: data.name || '',
+    type: data.type in ProfileType ? data.type : ProfileType.anonymous,
   };
 }

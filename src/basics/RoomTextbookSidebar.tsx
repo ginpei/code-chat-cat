@@ -2,7 +2,9 @@ import React, { ChangeEvent, FormEvent, useState } from 'react';
 import styled from 'styled-components';
 import firebase from '../middleware/firebase';
 import { logInAsAnonymous } from '../models/CurrentUser';
-import { Profile, saveProfile2, useProfile } from '../models/Profiles';
+import {
+  Profile, ProfileType, saveProfile2, useProfile,
+} from '../models/Profiles';
 import { Room } from '../models/Rooms';
 import { useRoomTasks } from '../models/RoomTasks';
 import RoomIndexList from './RoomIndexList';
@@ -19,6 +21,7 @@ const AnonymousSidebar: React.FC<{
     props.onLogin({
       id: '',
       name,
+      type: ProfileType.anonymous,
     });
   };
 
