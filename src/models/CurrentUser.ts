@@ -2,6 +2,23 @@ import firebase from '../middleware/firebase';
 import { noop } from '../misc';
 import * as Profiles from './Profiles';
 
+export async function logInAsAnonymous(
+  auth: firebase.auth.Auth,
+  firestore: firebase.firestore.Firestore,
+  profile: Omit<Profiles.Profile, 'id'>,
+) {
+  if (auth.currentUser) {
+    throw new Error('User has already logged in');
+  }
+
+  const cred = await auth.signInAnonymously();
+  const newProfile: Profiles.Profile = {
+    ...profile,
+    id: cred.user!.uid,
+  };
+  await Profiles.createNewProfile(firestore, newProfile);
+}
+
 // ----------------------------------------------------------------------------
 // states
 

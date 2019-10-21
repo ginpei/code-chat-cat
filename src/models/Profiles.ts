@@ -1,14 +1,75 @@
+import { useEffect, useState } from 'react';
 import firebase from '../middleware/firebase';
 import { noop } from '../misc';
 
 const collectionName = 'profiles';
+
+export function useProfile(
+  auth: firebase.auth.Auth,
+  firestore: firebase.firestore.Firestore,
+): [Profile | null, boolean, Error | firebase.auth.Error | null] {
+  const [error, setError] = useState<Error | firebase.auth.Error | null>(null);
+  const [initialized, setInitialized] = useState(false);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [user, setUser] = useState<firebase.User | null>(null);
+  const [userInitialized, setUserInitialized] = useState(false);
+
+  // user
+  useEffect(() => auth.onAuthStateChanged(
+    (currentUser) => {
+      setUser(currentUser);
+      setUserInitialized(true);
+    },
+    (err) => {
+      setError(err);
+      setUserInitialized(true);
+      setInitialized(true);
+    },
+  ), [auth]);
+
+  useEffect(() => {
+    if (!userInitialized) {
+      return noop;
+    }
+
+    if (!user) {
+      setInitialized(true);
+      return noop;
+    }
+
+    return getColl(firestore).doc(user.uid).onSnapshot(
+      (ss) => {
+        const result = snapshotToProfile(ss);
+        setProfile(result);
+        setInitialized(true);
+      },
+      (err) => {
+        setError(err);
+        setInitialized(true);
+      },
+    );
+  }, [user, firestore, userInitialized]);
+
+  return [profile, initialized, error];
+}
+
+export async function createNewProfile(
+  firestore: firebase.firestore.Firestore,
+  profile: Profile,
+) {
+  await getColl(firestore).doc(profile.id).set(profile);
+}
+
+function getColl(firestore: firebase.firestore.Firestore) {
+  return firestore.collection(collectionName);
+}
 
 // ----------------------------------------------------------------------------
 // states
 
 export interface Profile {
   id: string;
-  message: string;
+  message?: string;
   name: string;
 }
 
