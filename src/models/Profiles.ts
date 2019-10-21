@@ -60,6 +60,13 @@ export async function createNewProfile(
   await getColl(firestore).doc(profile.id).set(profile);
 }
 
+export async function saveProfile2(
+  firestore: firebase.firestore.Firestore,
+  profile: Profile,
+) {
+  await getColl(firestore).doc(profile.id).set(profile);
+}
+
 function getColl(firestore: firebase.firestore.Firestore) {
   return firestore.collection(collectionName);
 }

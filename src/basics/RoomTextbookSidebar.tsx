@@ -2,7 +2,7 @@ import React, { ChangeEvent, FormEvent, useState } from 'react';
 import styled from 'styled-components';
 import firebase from '../middleware/firebase';
 import { logInAsAnonymous } from '../models/CurrentUser';
-import { useProfile, Profile } from '../models/Profiles';
+import { Profile, saveProfile2, useProfile } from '../models/Profiles';
 import { Room } from '../models/Rooms';
 import { useRoomTasks } from '../models/RoomTasks';
 import RoomIndexList from './RoomIndexList';
@@ -106,7 +106,8 @@ const RoomTextbookSidebarOuter = styled.div`
 
 const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
   const [loggingIn, setLoggingIn] = useState(false);
-  const [loginError, setLoginError] = useState<Error | null>(null);
+  const [error, setError] = useState<Error | null>(null);
+  const [, setSavingProfile] = useState(false);
 
   const [profile, profileInitialized, profileError] = useProfile(
     firebase.auth(),
@@ -123,15 +124,23 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
       );
     } catch (err) {
       console.error(err);
-      setLoginError(err);
+      setError(err);
     } finally {
       setLoggingIn(false);
     }
   };
 
   const onProfileChange = async (newProfile: Profile) => {
-    // TODO
-    console.log('# newProfile', newProfile);
+    try {
+      setSavingProfile(true);
+      saveProfile2(firebase.firestore(), newProfile);
+      setSavingProfile(false);
+    } catch (err) {
+      console.error(err);
+      setError(err);
+    } finally {
+      setLoggingIn(false);
+    }
   };
 
   if (profileError) {
@@ -157,7 +166,7 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
   if (!profile) {
     return (
       <AnonymousSidebar
-        error={loginError}
+        error={error}
         onLogin={onLogin}
       />
     );
