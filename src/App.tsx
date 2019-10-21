@@ -20,7 +20,7 @@ import RoomWritePage from './screens/RoomWritePage';
 import SettingsPage from './screens/SettingsPage';
 import TermsPage from './screens/TermsPage';
 
-const App2: React.FC = () => {
+const App: React.FC = () => {
   const [ready, setReady] = useState(false);
   const [store] = useState(createAppStore());
   const [user, setUser] = useState<firebase.User | null>(null);
@@ -88,4 +88,4 @@ function saveError (store: AppStore, location: string, error: ErrorLogs.AppError
   store.dispatch(ErrorLogs.add(location, error));
 }
 
-export default App2;
+export default App;
