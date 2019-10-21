@@ -1,5 +1,7 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
+import firebase from '../middleware/firebase';
 import { Room } from '../models/Rooms';
+import { createNewRoomTask, deleteRoomTask, useRoomTasks } from '../models/RoomTasks';
 
 type Task = {
   id: string;
@@ -57,22 +59,34 @@ const NewRoomTaskForm: React.FC<{
 };
 
 const RoomTaskConsole: React.FC<{ room: Room }> = ({ room }) => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, tasksInitialized, tasksError] = useRoomTasks(
+    firebase.firestore(),
+    room.id,
+  );
 
   const onDeleteTaskClick = (task: Task) => {
     const message = 'Are you sure you want to delete this task?';
     const ok = window.confirm(`${message}\n\n${task.title}`);
     if (ok) {
-      setTasks(tasks.filter((v) => v !== task));
+      deleteRoomTask(firebase.firestore(), room.id, task);
     }
   };
 
   const onSubmit = (newTask: Task) => {
-    const index = tasks.length > 0
-      ? tasks[tasks.length - 1].index + 1
-      : 1;
-    setTasks([...tasks, { ...newTask, index }]);
+    createNewRoomTask(firebase.firestore(), room.id, newTask);
   };
+
+  if (tasksError) {
+    return (
+      <div>Error: {tasksError.message || '(Unknown)'}</div>
+    );
+  }
+
+  if (!tasksInitialized) {
+    return (
+      <div>…</div>
+    );
+  }
 
   return (
     <div className="RoomTaskConsole">
