@@ -6,9 +6,9 @@ import {
   Profile, ProfileType, saveProfile2, useProfile,
 } from '../models/Profiles';
 import { Room } from '../models/Rooms';
-import { useRoomTasks } from '../models/RoomTasks';
 import RoomIndexList from './RoomIndexList';
 import SidebarSection from './RoomSidebarSection';
+import TextbookTasksSection from './TextbookTasksSection';
 
 const AnonymousSidebar: React.FC<{
   error: Error | null;
@@ -66,39 +66,6 @@ const UserInfoSection: React.FC<{
         <button onClick={onNameChangeClick} style={{ float: 'right' }}>✒</button>
         {`Name: ${name || 'Anonymous'}`}
       </p>
-    </div>
-  );
-};
-
-const TextbookTasksSection: React.FC<{ room: Room }> = (props) => {
-  const { room } = props;
-  const [tasks, tasksInitialized, tasksError] = useRoomTasks(
-    firebase.firestore(),
-    room.id,
-  );
-
-  if (tasksError) {
-    return (
-      <div>Error: {tasksError.message || '(Unknown)'}</div>
-    );
-  }
-
-  if (!tasksInitialized) {
-    return (
-      <div>…</div>
-    );
-  }
-
-  return (
-    <div>
-      {tasks.length < 1 && (
-        <p>(No tasks)</p>
-      )}
-      {tasks.map((task) => (
-        <div key={task.id}>
-          {task.title}
-        </div>
-      ))}
     </div>
   );
 };
