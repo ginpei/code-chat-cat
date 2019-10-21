@@ -45,14 +45,14 @@ const NewRoomTaskForm: React.FC<{
 
   return (
     <form onSubmit={onSubmit}>
-      <label>
+      <p>
         {'Title: '}
         <input
           onChange={onTitleChange}
           type="text"
           value={title}
         />
-      </label>
+      </p>
       <button type="submit">Add</button>
     </form>
   );
