@@ -1,7 +1,7 @@
 import { shallow, ShallowWrapper } from 'enzyme';
-import firebase from 'firebase';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import firebase from './middleware/firebase';
 import * as Rooms from './models/Rooms';
 import path, { HomeLink, RoomLink } from './path';
 
