@@ -11,5 +11,8 @@ body {
 
 summary:hover {
   cursor: pointer;
+}
+/* Chrome does not apply underline directory to summary element */
+summary:hover > * {
   text-decoration: underline;
 }

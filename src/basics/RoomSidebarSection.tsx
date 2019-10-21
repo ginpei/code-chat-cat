@@ -15,7 +15,9 @@ const RoomSidebarSection: React.FC<Props> = (props) => {
 
   return (
     <details {...domProps} className="RoomSidebarSection">
-      <SectionSummary>{props.heading}</SectionSummary>
+      <SectionSummary>
+        <span>{props.heading}</span>
+      </SectionSummary>
       {props.children}
     </details>
   );
