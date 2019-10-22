@@ -1,4 +1,6 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, {
+  ChangeEvent, FormEvent, useState, KeyboardEvent,
+} from 'react';
 import firebase from '../middleware/firebase';
 import { Room } from '../models/Rooms';
 import {
@@ -47,6 +49,13 @@ const NewRoomTaskForm: React.FC<{
     setTitle(value);
   };
 
+  const onKeyPress = (event: KeyboardEvent) => {
+    const isModified = event.ctrlKey || event.metaKey;
+    if (event.key === 'Enter' && isModified) {
+      onSubmit(event); // are you sure this works?
+    }
+  };
+
   return (
     <form onSubmit={onSubmit}>
       <p>
@@ -55,6 +64,7 @@ const NewRoomTaskForm: React.FC<{
         <textarea
           disabled={creating}
           onChange={onTitleChange}
+          onKeyPress={onKeyPress}
           value={title}
         />
       </p>
