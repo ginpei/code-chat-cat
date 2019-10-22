@@ -7,6 +7,13 @@ export type RoomTask = {
   title: string;
 }
 
+export type RoomTaskStatus = {
+  done: boolean;
+  roomId: string;
+  taskId: string;
+  userId: string;
+}
+
 export function useRoomTasks(
   firestore: firebase.firestore.Firestore,
   roomId: string,
@@ -33,6 +40,41 @@ export function useRoomTasks(
   return [tasks, initialized, error];
 }
 
+export function useUserRoomTasksStatus(
+  firestore: firebase.firestore.Firestore,
+  roomId: string,
+  taskId: string,
+  userId: string,
+): [RoomTaskStatus | null, boolean, Error | null] {
+  const [error, setError] = useState<Error | null>(null);
+  const [initialized, setInitialized] = useState(false);
+  const [status, setStatus] = useState<RoomTaskStatus | null>(null);
+
+  useEffect(() => {
+    const ref = getStatusColl(firestore, roomId, taskId).doc(userId);
+    return ref.onSnapshot({
+      next(ss) {
+        const newStatus = ss
+          ? ssToRoomTaskStatus({ roomId, id: taskId }, ss)
+          : {
+            done: false,
+            roomId,
+            taskId,
+            userId,
+          };
+        setStatus(newStatus);
+        setInitialized(true);
+      },
+      error(e) {
+        setError(e);
+        setInitialized(true);
+      },
+    });
+  }, [firestore, roomId, taskId, userId]);
+
+  return [status, initialized, error];
+}
+
 export async function createNewRoomTask(
   firestore: firebase.firestore.Firestore,
   task: RoomTask,
@@ -51,6 +93,15 @@ export async function deleteRoomTask(
   await getColl(firestore, task.roomId).doc(task.id).delete();
 }
 
+export async function setRoomTaskStatus(
+  firestore: firebase.firestore.Firestore,
+  status: RoomTaskStatus,
+) {
+  await getStatusColl(firestore, status.roomId, status.taskId)
+    .doc(status.userId)
+    .set(roomTaskStatusToData(status));
+}
+
 function getColl(
   firestore: firebase.firestore.Firestore,
   roomId: string,
@@ -58,6 +109,15 @@ function getColl(
   return firestore
     .collection('rooms').doc(roomId)
     .collection('tasks');
+}
+
+function getStatusColl(
+  firestore: firebase.firestore.Firestore,
+  roomId: string,
+  taskId: string,
+) {
+  return getColl(firestore, roomId).doc(taskId)
+    .collection('statuses');
 }
 
 async function getLastRoomTask(
@@ -94,5 +154,26 @@ function roomTaskToData(task: RoomTask) {
   return {
     index: task.index,
     title: task.title,
+  };
+}
+
+function ssToRoomTaskStatus(
+  task: Pick<RoomTask, 'id' | 'roomId'>,
+  ss: firebase.firestore.DocumentSnapshot,
+) {
+  const data = ss.data() || {};
+
+  const status: RoomTaskStatus = {
+    done: data.done || false,
+    roomId: task.roomId,
+    taskId: task.id,
+    userId: ss.id,
+  };
+  return status;
+}
+
+function roomTaskStatusToData(status: RoomTaskStatus) {
+  return {
+    done: status.done,
   };
 }

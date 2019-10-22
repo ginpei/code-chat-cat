@@ -1,15 +1,42 @@
-import React, { useState } from 'react';
+import React from 'react';
+import Markdown from '../independents/Markdown';
 import firebase from '../middleware/firebase';
 import { Room } from '../models/Rooms';
-import { useRoomTasks, RoomTask } from '../models/RoomTasks';
-import Markdown from '../independents/Markdown';
+import {
+  RoomTask, RoomTaskStatus, useRoomTasks, useUserRoomTasksStatus, setRoomTaskStatus,
+} from '../models/RoomTasks';
 
-const TaskListItem: React.FC<{ task: RoomTask }> = ({ task }) => {
-  const [done, setDone] = useState(false);
+const TaskListItem: React.FC<{
+  task: RoomTask,
+}> = (props) => {
+  const [status, statusInitialized, statusError] = useUserRoomTasksStatus(
+    firebase.firestore(),
+    props.task.roomId,
+    props.task.id,
+    firebase.auth().currentUser!.uid, // TODO
+  );
 
-  const onDoneClick = () => {
-    setDone(!done);
+  const done = status && status.done;
+
+  const onDoneClick = async () => {
+    const newStatus: RoomTaskStatus = {
+      ...status!,
+      done: !done,
+    };
+    await setRoomTaskStatus(firebase.firestore(), newStatus);
   };
+
+  if (statusError) {
+    return (
+      <div>Error: {statusError.message || '(Unknown)'}</div>
+    );
+  }
+
+  if (!statusInitialized) {
+    return (
+      <div>…</div>
+    );
+  }
 
   return (
     <div
@@ -25,13 +52,14 @@ const TaskListItem: React.FC<{ task: RoomTask }> = ({ task }) => {
       >
         {done ? '↻' : '✔'}
       </button>
-      <Markdown content={task.title} />
+      <Markdown content={props.task.title} />
     </div>
   );
 };
 
 const TextbookTasksSection: React.FC<{ room: Room }> = (props) => {
   const { room } = props;
+
   const [tasks, tasksInitialized, tasksError] = useRoomTasks(
     firebase.firestore(),
     room.id,
@@ -55,7 +83,10 @@ const TextbookTasksSection: React.FC<{ room: Room }> = (props) => {
         <p>(No tasks yet)</p>
       )}
       {tasks.map((task) => (
-        <TaskListItem key={task.id} task={task} />
+        <TaskListItem
+          key={task.id}
+          task={task}
+        />
       ))}
     </div>
   );
