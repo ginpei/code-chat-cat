@@ -4,11 +4,9 @@ import RoomIndexList from '../basics/RoomIndexList';
 import SidebarSection from '../basics/RoomSidebarSection';
 import firebase from '../middleware/firebase';
 import { logInAsAnonymous, logOut2 } from '../models/CurrentUser';
+import { Profile, ProfileType } from '../models/Profiles';
 import {
-  Profile, ProfileType, saveProfile2, useProfile,
-} from '../models/Profiles';
-import {
-  logInToRoom, Room, RoomStudent, useRoomStudents,
+  Room, RoomStudent, saveRoomStudent, useRoomStudent,
 } from '../models/Rooms';
 import TextbookTasksSection from './TextbookTasksSection';
 
@@ -50,15 +48,15 @@ const GuestSidebar: React.FC<{
 };
 
 const UserInfoSection: React.FC<{
-  profile: Profile,
-  onProfileChange: (profile: Profile) => void,
+  student: RoomStudent,
+  onProfileChange: (student: RoomStudent) => void,
 }> = (props) => {
-  const { name } = props.profile;
+  const { name } = props.student;
 
   const onNameChangeClick = () => {
     const newName = window.prompt('You name', name);
     if (newName) {
-      props.onProfileChange({ ...props.profile, name: newName });
+      props.onProfileChange({ ...props.student, name: newName });
     }
   };
 
@@ -77,17 +75,15 @@ const RoomTextbookSidebarOuter = styled.div`
 `;
 
 const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
+  const { currentUser } = firebase.auth();
+
   const [loggingIn, setLoggingIn] = useState(false);
   const [loginError, setLoginError] = useState<Error | null>(null);
   const [, setSavingProfile] = useState(false);
-  const [students, studentsInitialized, studentsError] = useRoomStudents(
+  const [student, studentInitialized, studentError] = useRoomStudent(
     firebase.firestore(),
     room,
-  );
-
-  const [profile, profileInitialized, profileError] = useProfile(
-    firebase.auth(),
-    firebase.firestore(),
+    currentUser ? currentUser.uid : '',
   );
 
   const onLogin = async (newProfile: Profile) => {
@@ -101,7 +97,7 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
           newProfile,
         );
       }
-      await logInToRoom(
+      await saveRoomStudent(
         firebase.firestore(),
         room,
         studentProfile,
@@ -115,10 +111,10 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
     }
   };
 
-  const onProfileChange = async (newProfile: Profile) => {
+  const onProfileChange = async (newStudent: RoomStudent) => {
     try {
       setSavingProfile(true);
-      saveProfile2(firebase.firestore(), newProfile);
+      saveRoomStudent(firebase.firestore(), room, newStudent);
       setSavingProfile(false);
     } catch (err) {
       console.error(err);
@@ -128,7 +124,7 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
     }
   };
 
-  const error = loginError || profileError || studentsError;
+  const error = loginError || studentError;
   if (error) {
     return (
       <div>
@@ -137,7 +133,7 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
     );
   }
 
-  if (!profileInitialized || !studentsInitialized) {
+  if (!studentInitialized) {
     return (
       <div>…</div>
     );
@@ -149,7 +145,7 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
     );
   }
 
-  if (!profile || !hasStudentsLoggedIn(students, profile)) {
+  if (!student) {
     return (
       <GuestSidebar
         error={loginError}
@@ -162,7 +158,7 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
     <RoomTextbookSidebarOuter className="RoomTextbookSidebar">
       <SidebarSection heading="You" open>
         <UserInfoSection
-          profile={profile}
+          student={student}
           onProfileChange={onProfileChange}
         />
       </SidebarSection>
@@ -176,8 +172,8 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
   );
 };
 
-function hasStudentsLoggedIn(students: RoomStudent[], profile: Profile) {
-  return students.some((v) => v.id === profile.id);
+function findStudent(students: RoomStudent[], uid: string) {
+  return students.find((v) => v.id === uid);
 }
 
 export default RoomTextbookSidebar;

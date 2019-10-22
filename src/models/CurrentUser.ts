@@ -16,7 +16,6 @@ export async function logInAsAnonymous(
     ...profile,
     id: cred.user!.uid,
   };
-  await Profiles.createNewProfile(firestore, newProfile);
   return newProfile;
 }
 

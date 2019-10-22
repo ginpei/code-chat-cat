@@ -1,9 +1,8 @@
+import { useEffect, useState } from 'react';
 import { combineReducers } from 'redux';
-import { useState, useEffect } from 'react';
 import firebase from '../middleware/firebase';
 import { noop } from '../misc';
 import { AppDispatch, AppState } from './Store';
-import { Profile } from './Profiles';
 
 export function useRoom(
   firestore: firebase.firestore.Firestore,
@@ -51,7 +50,38 @@ export function useRoomStudents(
   return [students, initialized, error];
 }
 
-export async function logInToRoom(
+export function useRoomStudent(
+  firestore: firebase.firestore.Firestore,
+  room: Room,
+  uid: string,
+): [RoomStudent | null, boolean, Error | null] {
+  const [student, setStudent] = useState<RoomStudent | null>(null);
+  const [initialized, setInitialized] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    if (!uid) {
+      setInitialized(true);
+      return noop;
+    }
+
+    return getStudentsColl(firestore, room).doc(uid).onSnapshot({
+      next(ss) {
+        const newStudent = ssToRoomStudent(ss);
+        setStudent(newStudent);
+        setInitialized(true);
+      },
+      error(e) {
+        setError(e);
+        setInitialized(true);
+      },
+    });
+  }, [firestore, room, uid]);
+
+  return [student, initialized, error];
+}
+
+export async function saveRoomStudent(
   firestore: firebase.firestore.Firestore,
   room: Room,
   student: RoomStudent,
@@ -72,7 +102,9 @@ function getStudentsColl(
     .collection('students');
 }
 
-function ssToRoomStudent(ss: firebase.firestore.QueryDocumentSnapshot) {
+function ssToRoomStudent(
+  ss: firebase.firestore.DocumentSnapshot,
+) {
   const data = ss.data() || {};
   const student: RoomStudent = {
     id: ss.id,
