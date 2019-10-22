@@ -16,7 +16,8 @@ const GuestSidebar: React.FC<{
   onLogin: (profile: Profile) => void;
   profile: Profile | null;
 }> = (props) => {
-  const [name, setName] = useState('');
+  const { error, profile } = props;
+  const [name, setName] = useState(profile ? profile.name : '');
 
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -36,8 +37,8 @@ const GuestSidebar: React.FC<{
   return (
     <form onSubmit={onSubmit}>
       <h1>Welcome!</h1>
-      {props.error && (
-        <SimpleError error={props.error} />
+      {error && (
+        <SimpleError error={error} />
       )}
       <p>
         {'Name: '}
