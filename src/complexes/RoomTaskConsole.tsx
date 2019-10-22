@@ -1,6 +1,7 @@
 import React, {
-  ChangeEvent, FormEvent, useState, KeyboardEvent,
+  ChangeEvent, FormEvent, KeyboardEvent, useState,
 } from 'react';
+import Markdown from '../independents/Markdown';
 import firebase from '../middleware/firebase';
 import { Room } from '../models/Rooms';
 import {
@@ -20,7 +21,7 @@ const TaskListItem: React.FC<{
   return (
     <div>
       <button onClick={onDeleteClick} style={{ float: 'right' }}>×</button>
-      <p>{task.title}</p>
+      <Markdown content={task.title} />
     </div>
   );
 };
