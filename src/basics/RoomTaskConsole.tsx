@@ -1,17 +1,13 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import firebase from '../middleware/firebase';
 import { Room } from '../models/Rooms';
-import { createNewRoomTask, deleteRoomTask, useRoomTasks } from '../models/RoomTasks';
-
-type Task = {
-  id: string;
-  index: number;
-  title: string;
-}
+import {
+  createNewRoomTask, deleteRoomTask, RoomTask, useRoomTasks,
+} from '../models/RoomTasks';
 
 const TaskListItem: React.FC<{
-  onDeleteClick: (task: Task) => void;
-  task: Task,
+  onDeleteClick: (task: RoomTask) => void;
+  task: RoomTask,
 }> = (props) => {
   const { task } = props;
 
@@ -28,13 +24,18 @@ const TaskListItem: React.FC<{
 };
 
 const NewRoomTaskForm: React.FC<{
-  onSubmit: (task: Task) => void;
+  onSubmit: (task: RoomTask) => void;
 }> = (props) => {
   const [title, setTitle] = useState('');
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
-    props.onSubmit({ id: `${Date.now()}`, index: 0, title });
+    props.onSubmit({
+      id: `${Date.now()}`,
+      index: 0,
+      roomId: '',
+      title,
+    });
     setTitle('');
   };
 
@@ -59,21 +60,23 @@ const NewRoomTaskForm: React.FC<{
 };
 
 const RoomTaskConsole: React.FC<{ room: Room }> = ({ room }) => {
+  const roomId = room.id;
+
   const [tasks, tasksInitialized, tasksError] = useRoomTasks(
     firebase.firestore(),
-    room.id,
+    roomId,
   );
 
-  const onDeleteTaskClick = (task: Task) => {
+  const onDeleteTaskClick = (task: RoomTask) => {
     const message = 'Are you sure you want to delete this task?';
     const ok = window.confirm(`${message}\n\n${task.title}`);
     if (ok) {
-      deleteRoomTask(firebase.firestore(), room.id, task);
+      deleteRoomTask(firebase.firestore(), task);
     }
   };
 
-  const onSubmit = (newTask: Task) => {
-    createNewRoomTask(firebase.firestore(), room.id, newTask);
+  const onSubmit = (newTask: RoomTask) => {
+    createNewRoomTask(firebase.firestore(), { ...newTask, roomId });
   };
 
   if (tasksError) {

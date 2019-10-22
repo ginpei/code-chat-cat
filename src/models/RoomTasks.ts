@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 export type RoomTask = {
   id: string;
   index: number;
+  roomId: string;
   title: string;
 }
 
@@ -18,7 +19,7 @@ export function useRoomTasks(
     const ref = getColl(firestore, roomId).orderBy('index');
     return ref.onSnapshot({
       next(ss) {
-        const newTasks = ss.docs.map((v) => ssToRoomTask(v));
+        const newTasks = ss.docs.map((v) => ssToRoomTask(roomId, v));
         setTasks(newTasks);
         setInitialized(true);
       },
@@ -34,22 +35,20 @@ export function useRoomTasks(
 
 export async function createNewRoomTask(
   firestore: firebase.firestore.Firestore,
-  roomId: string,
   task: RoomTask,
 ) {
-  const lastTask = await getLastRoomTask(firestore, roomId);
+  const lastTask = await getLastRoomTask(firestore, task.roomId);
   const index = lastTask ? lastTask.index + 1 : 1;
 
-  const newTask = { ...task, index };
-  await getColl(firestore, roomId).add(newTask);
+  const data = roomTaskToData({ ...task, index });
+  await getColl(firestore, task.roomId).add(data);
 }
 
 export async function deleteRoomTask(
   firestore: firebase.firestore.Firestore,
-  roomId: string,
   task: RoomTask,
 ) {
-  await getColl(firestore, roomId).doc(task.id).delete();
+  await getColl(firestore, task.roomId).doc(task.id).delete();
 }
 
 function getColl(
@@ -75,17 +74,25 @@ async function getLastRoomTask(
     return null;
   }
 
-  const lastTask = ssToRoomTask(ssLastTask);
+  const lastTask = ssToRoomTask(roomId, ssLastTask);
   return lastTask;
 }
 
-function ssToRoomTask(ss: firebase.firestore.QueryDocumentSnapshot) {
+function ssToRoomTask(roomId: string, ss: firebase.firestore.QueryDocumentSnapshot) {
   const data = ss.data() || {};
 
   const task: RoomTask = {
     id: ss.id,
     index: Number(data.index) || 0,
+    roomId,
     title: data.title || '',
   };
   return task;
+}
+
+function roomTaskToData(task: RoomTask) {
+  return {
+    index: task.index,
+    title: task.title,
+  };
 }
