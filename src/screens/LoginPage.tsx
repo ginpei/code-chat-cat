@@ -2,6 +2,7 @@ import * as firebaseui from 'firebaseui';
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import DefaultLayout from '../complexes/DefaultLayout';
+import ErrorView from './ErrorView';
 import LoadingView from '../independents/LoadingView';
 import firebase from '../middleware/firebase';
 import { appHistory, setTitle } from '../misc';
@@ -17,12 +18,10 @@ const LoginPage: React.FC = () => {
   );
 
   if (profileError) {
-    // TODO make component
     return (
-      <div>
-        <h1>Error</h1>
-        {profileError.message}
-      </div>
+      <ErrorView
+        error={profileError}
+      />
     );
   }
 

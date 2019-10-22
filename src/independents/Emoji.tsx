@@ -1,6 +1,7 @@
 import React from 'react';
 
 const map = {
+  'CatCry': '😿',
   'Fire': '🔥',
   'Lock': '🔒',
   'Memo': '📝',

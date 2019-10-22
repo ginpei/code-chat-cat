@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import DefaultLayout from '../complexes/DefaultLayout';
+import ErrorView from './ErrorView';
 import LoadingView from '../independents/LoadingView';
 import firebase from '../middleware/firebase';
 import { setTitle } from '../misc';
@@ -81,12 +82,10 @@ const SettingsPage: React.FC = () => {
   };
 
   if (profileError) {
-    // TODO make component
     return (
-      <div>
-        <h1>Error</h1>
-        {profileError.message}
-      </div>
+      <ErrorView
+        error={profileError}
+      />
     );
   }
 
