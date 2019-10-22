@@ -67,8 +67,10 @@ export function useRoomStudent(
 
     return getStudentsColl(firestore, room).doc(uid).onSnapshot({
       next(ss) {
-        const newStudent = ssToRoomStudent(ss);
-        setStudent(newStudent);
+        if (ss.exists) {
+          const newStudent = ssToRoomStudent(ss);
+          setStudent(newStudent);
+        }
         setInitialized(true);
       },
       error(e) {

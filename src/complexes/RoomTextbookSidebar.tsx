@@ -5,7 +5,7 @@ import SidebarSection from '../basics/RoomSidebarSection';
 import SimpleError from '../independents/SimpleError';
 import firebase from '../middleware/firebase';
 import { logInAsAnonymous, logOut2 } from '../models/CurrentUser';
-import { Profile, ProfileType } from '../models/Profiles';
+import { Profile, ProfileType, useProfile } from '../models/Profiles';
 import {
   Room, RoomStudent, saveRoomStudent, useRoomStudent,
 } from '../models/Rooms';
@@ -17,10 +17,18 @@ const GuestSidebar: React.FC<{
 }> = (props) => {
   const [name, setName] = useState('');
 
+  const [profile, profileInitialized, profileError] = useProfile(
+    firebase.auth(),
+    firebase.firestore(),
+  );
+
+  const error = props.error || profileError;
+
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
+
     props.onLogin({
-      id: '',
+      id: profile ? profile.id : '',
       name,
       type: ProfileType.anonymous,
     });
@@ -31,11 +39,17 @@ const GuestSidebar: React.FC<{
     setName(value);
   };
 
+  if (!profileInitialized) {
+    return (
+      <div>…</div>
+    );
+  }
+
   return (
     <form onSubmit={onSubmit}>
       <h1>Welcome!</h1>
-      {props.error && (
-        <SimpleError error={props.error} />
+      {error && (
+        <SimpleError error={error} />
       )}
       <p>
         {'Name: '}
@@ -91,7 +105,7 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
     try {
       setLoggingIn(true);
       let studentProfile = newProfile;
-      if (!studentProfile.id) {
+      if (!studentProfile.id && !newProfile.id) {
         studentProfile = await logInAsAnonymous(
           firebase.auth(),
           firebase.firestore(),
