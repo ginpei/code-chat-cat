@@ -78,11 +78,11 @@ function setCurrentUser (user: firebase.User | null): CurrentUserState {
 }
 
 interface SetCurrentUserProfileAction {
-  profile: Profiles.Profile;
+  profile: Profiles.Profile | null;
   type: 'CURRENT_USER_SET_PROFILE';
 }
 
-export function setProfile (profile: Profiles.Profile): SetCurrentUserProfileAction {
+export function setProfile (profile: Profiles.Profile | null): SetCurrentUserProfileAction {
   return {
     profile,
     type: 'CURRENT_USER_SET_PROFILE',
@@ -106,7 +106,7 @@ export function reduceCurrentUser (
     case 'CURRENT_USER_SET_PROFILE':
       return {
         ...state,
-        name: action.profile.name,
+        name: action.profile ? action.profile.name : '',
         profile: action.profile,
       };
     default:

@@ -6,14 +6,29 @@ import Header from './Header';
 import { HeaderMenuGroup } from './HeaderMenu';
 
 function getLoggedInMenu (profile: Profiles.Profile, room: Rooms.Room): HeaderMenuGroup[] {
-  const menu: HeaderMenuGroup[] = [
-    {
+  const menu: HeaderMenuGroup[] = [];
+
+  if (profile.id === room.userId) {
+    menu.push({
       links: [
-        { title: 'Home', href: path('home') },
+        { title: 'Top', href: path('room', { id: room.id }) },
+        { title: 'Write', href: path('room-write', { id: room.id }) },
+        { title: 'Settings', href: path('room-settings', { id: room.id }) },
       ],
-      name: 'CCC',
-    },
-    {
+      name: 'Room',
+    });
+  }
+
+  menu.push({
+    links: [
+      { title: 'Home', href: path('home') },
+    ],
+    name: 'CCC',
+  });
+
+  console.log('# profile', profile);
+  if (profile) {
+    menu.push({
       links: [
         { title: 'Room list', href: path('room-list') },
         { title: 'Create new room', href: path('room-new') },
@@ -21,17 +36,6 @@ function getLoggedInMenu (profile: Profiles.Profile, room: Rooms.Room): HeaderMe
         { title: 'Log out', href: path('logout') },
       ],
       name: profile.name,
-    },
-  ];
-
-  if (profile.id === room.userId) {
-    menu.unshift({
-      links: [
-        { title: 'Top', href: path('room', { id: room.id }) },
-        { title: 'Write', href: path('room-write', { id: room.id }) },
-        { title: 'Settings', href: path('room-settings', { id: room.id }) },
-      ],
-      name: 'Room',
     });
   }
 

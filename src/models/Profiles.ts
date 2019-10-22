@@ -106,7 +106,7 @@ export function getInitialProfile (userId: string): Profile {
 
 export function connectProfile (
   userId: string,
-  onNext: (profile: Profile) => void,
+  onNext: (profile: Profile | null) => void,
   onError: (error: Error) => void = noop,
   onEach: () => void = noop,
 ): () => void {
@@ -118,8 +118,12 @@ export function connectProfile (
   const userRef = firebase.firestore().collection(collectionName).doc(userId);
   const unsubscribeNotes = userRef.onSnapshot(
     (snapshot) => {
-      const profile = snapshotToProfile(snapshot) || getInitialProfile(userId);
-      onNext(profile);
+      if (snapshot.exists) {
+        const profile = snapshotToProfile(snapshot) || getInitialProfile(userId);
+        onNext(profile);
+      } else {
+        onNext(null);
+      }
       onEach();
     },
     (error) => {
