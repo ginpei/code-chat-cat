@@ -24,18 +24,21 @@ const TaskListItem: React.FC<{
 };
 
 const NewRoomTaskForm: React.FC<{
-  onSubmit: (task: RoomTask) => void;
+  onSubmit: (task: RoomTask) => Promise<void>;
 }> = (props) => {
   const [title, setTitle] = useState('');
+  const [creating, setCreating] = useState(false);
 
-  const onSubmit = (event: FormEvent) => {
+  const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    props.onSubmit({
+    setCreating(true);
+    await props.onSubmit({
       id: `${Date.now()}`,
       index: 0,
       roomId: '',
       title,
     });
+    setCreating(false);
     setTitle('');
   };
 
@@ -50,11 +53,12 @@ const NewRoomTaskForm: React.FC<{
         Title:
         <br/>
         <textarea
+          disabled={creating}
           onChange={onTitleChange}
           value={title}
         />
       </p>
-      <button type="submit">Add</button>
+      <button disabled={creating} type="submit">Add</button>
     </form>
   );
 };
@@ -75,8 +79,8 @@ const RoomTaskConsole: React.FC<{ room: Room }> = ({ room }) => {
     }
   };
 
-  const onSubmit = (newTask: RoomTask) => {
-    createNewRoomTask(firebase.firestore(), { ...newTask, roomId });
+  const onSubmit = async (newTask: RoomTask) => {
+    await createNewRoomTask(firebase.firestore(), { ...newTask, roomId });
   };
 
   if (tasksError) {
