@@ -39,7 +39,6 @@ describe('<Header>', () => {
         id: 'user-id-123',
         message: 'user-message',
         name: 'user-name',
-        type: Profiles.ProfileType.anonymous,
       };
       wrapper = mount((
         <BrowserRouter>
