@@ -1,9 +1,10 @@
 import React from 'react';
 import Markdown from '../independents/Markdown';
+import SimpleError from '../independents/SimpleError';
 import firebase from '../middleware/firebase';
 import { Room } from '../models/Rooms';
 import {
-  RoomTask, RoomTaskStatus, useRoomTasks, useUserRoomTasksStatus, setRoomTaskStatus,
+  RoomTask, RoomTaskStatus, setRoomTaskStatus, useRoomTasks, useUserRoomTasksStatus,
 } from '../models/RoomTasks';
 
 const TaskListItem: React.FC<{
@@ -28,7 +29,7 @@ const TaskListItem: React.FC<{
 
   if (statusError) {
     return (
-      <div>Error: {statusError.message || '(Unknown)'}</div>
+      <SimpleError error={statusError} />
     );
   }
 
@@ -67,7 +68,7 @@ const TextbookTasksSection: React.FC<{ room: Room }> = (props) => {
 
   if (tasksError) {
     return (
-      <div>Error: {tasksError.message || '(Unknown)'}</div>
+      <SimpleError error={tasksError} />
     );
   }
 

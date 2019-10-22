@@ -2,6 +2,7 @@ import React, { ChangeEvent, FormEvent, useState } from 'react';
 import styled from 'styled-components';
 import RoomIndexList from '../basics/RoomIndexList';
 import SidebarSection from '../basics/RoomSidebarSection';
+import SimpleError from '../independents/SimpleError';
 import firebase from '../middleware/firebase';
 import { logInAsAnonymous, logOut2 } from '../models/CurrentUser';
 import { Profile, ProfileType } from '../models/Profiles';
@@ -34,7 +35,7 @@ const GuestSidebar: React.FC<{
     <form onSubmit={onSubmit}>
       <h1>Welcome!</h1>
       {props.error && (
-        <p>Error: {props.error.message}</p>
+        <SimpleError error={props.error} />
       )}
       <p>
         {'Name: '}
@@ -127,9 +128,7 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
   const error = loginError || studentError;
   if (error) {
     return (
-      <div>
-        {error.message}
-      </div>
+      <SimpleError error={error} />
     );
   }
 

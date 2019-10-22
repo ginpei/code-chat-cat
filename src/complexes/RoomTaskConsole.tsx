@@ -183,7 +183,7 @@ const RoomTaskConsole: React.FC<{ room: Room }> = ({ room }) => {
 
   if (tasksError) {
     return (
-      <div>Error: {tasksError.message || '(Unknown)'}</div>
+      <SimpleError error={tasksError} />
     );
   }
 
