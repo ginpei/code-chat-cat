@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 import { headerHeight } from '../basics/Header';
 import RoomHeader from '../basics/RoomHeader';
-import RoomTextbookSidebar from '../basics/RoomTextbookSidebar';
+import RoomTextbookSidebar from '../complexes/RoomTextbookSidebar';
 import TextbookContent from '../basics/TextbookContent';
 import Container from '../independents/Container';
 import LoadingView from '../independents/LoadingView';

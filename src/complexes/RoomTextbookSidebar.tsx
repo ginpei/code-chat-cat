@@ -6,8 +6,8 @@ import {
   Profile, ProfileType, saveProfile2, useProfile,
 } from '../models/Profiles';
 import { Room } from '../models/Rooms';
-import RoomIndexList from './RoomIndexList';
-import SidebarSection from './RoomSidebarSection';
+import RoomIndexList from '../basics/RoomIndexList';
+import SidebarSection from '../basics/RoomSidebarSection';
 import TextbookTasksSection from './TextbookTasksSection';
 
 const AnonymousSidebar: React.FC<{

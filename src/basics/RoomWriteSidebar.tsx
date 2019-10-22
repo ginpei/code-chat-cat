@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Room } from '../models/Rooms';
 import RoomIndexList from './RoomIndexList';
 import RoomSidebarSection from './RoomSidebarSection';
-import RoomTaskConsole from './RoomTaskConsole';
+import RoomTaskConsole from '../complexes/RoomTaskConsole';
 
 const Outer = styled.div`
   padding: 1rem 1rem 5rem;
