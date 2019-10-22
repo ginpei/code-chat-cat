@@ -6,15 +6,7 @@ import Header from './Header';
 import { HeaderMenuGroup } from './HeaderMenu';
 
 function getLoggedInMenu (profile: Profiles.Profile, room: Rooms.Room): HeaderMenuGroup[] {
-  return [
-    {
-      links: [
-        { title: 'Top', href: path('room', { id: room.id }) },
-        { title: 'Write', href: path('room-write', { id: room.id }) },
-        { title: 'Settings', href: path('room-settings', { id: room.id }) },
-      ],
-      name: 'Room',
-    },
+  const menu: HeaderMenuGroup[] = [
     {
       links: [
         { title: 'Home', href: path('home') },
@@ -31,6 +23,19 @@ function getLoggedInMenu (profile: Profiles.Profile, room: Rooms.Room): HeaderMe
       name: profile.name,
     },
   ];
+
+  if (profile.id === room.userId) {
+    menu.unshift({
+      links: [
+        { title: 'Top', href: path('room', { id: room.id }) },
+        { title: 'Write', href: path('room-write', { id: room.id }) },
+        { title: 'Settings', href: path('room-settings', { id: room.id }) },
+      ],
+      name: 'Room',
+    });
+  }
+
+  return menu;
 }
 
 function getAnonymousMenu (): HeaderMenuGroup[] {
