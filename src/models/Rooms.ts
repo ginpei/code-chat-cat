@@ -1,7 +1,91 @@
 import { combineReducers } from 'redux';
+import { useState, useEffect } from 'react';
 import firebase from '../middleware/firebase';
 import { noop } from '../misc';
 import { AppDispatch, AppState } from './Store';
+import { Profile } from './Profiles';
+
+export function useRoom(
+  firestore: firebase.firestore.Firestore,
+  roomId: string,
+): [Room | null, boolean, Error | null] {
+  const [room, setRoom] = useState<Room | null>(null);
+  const [initialized, setInitialized] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => getColl(firestore).doc(roomId).onSnapshot({
+    next(ss) {
+      const newRoom = snapshotToRoom(ss);
+      setRoom(newRoom);
+      setInitialized(true);
+    },
+    error(e) {
+      setError(e);
+      setInitialized(true);
+    },
+  }), [firestore, roomId]);
+
+  return [room, initialized, error];
+}
+
+export function useRoomStudents(
+  firestore: firebase.firestore.Firestore,
+  room: Room,
+): [RoomStudent[], boolean, Error | null] {
+  const [students, setStudents] = useState<RoomStudent[]>([]);
+  const [initialized, setInitialized] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => getStudentsColl(firestore, room).onSnapshot({
+    next(ss) {
+      const newStudents = ss.docs.map((v) => ssToRoomStudent(v));
+      setStudents(newStudents);
+      setInitialized(true);
+    },
+    error(e) {
+      setError(e);
+      setInitialized(true);
+    },
+  }), [firestore, room]);
+
+  return [students, initialized, error];
+}
+
+export async function logInToRoom(
+  firestore: firebase.firestore.Firestore,
+  room: Room,
+  student: RoomStudent,
+) {
+  await getStudentsColl(firestore, room).doc(student.id)
+    .set(roomStudentToData(student));
+}
+
+function getColl(firestore: firebase.firestore.Firestore) {
+  return firestore.collection(collectionName);
+}
+
+function getStudentsColl(
+  firestore: firebase.firestore.Firestore,
+  room: Room,
+) {
+  return getColl(firestore).doc(room.id)
+    .collection('students');
+}
+
+function ssToRoomStudent(ss: firebase.firestore.QueryDocumentSnapshot) {
+  const data = ss.data() || {};
+  const student: RoomStudent = {
+    id: ss.id,
+    name: data.name || 'Anonymous',
+  };
+  return student;
+}
+
+function roomStudentToData(student: RoomStudent) {
+  return {
+    name: student.name,
+  };
+}
 
 const collectionName = 'rooms';
 
@@ -31,6 +115,11 @@ export interface RoomState {
   activeRoomIds: string[];
   docs: IdMap<Room>;
   userRoomIds: string[];
+}
+
+export type RoomStudent = {
+  name: string;
+  id: string;
 }
 
 interface IdMap<T> { [id: string]: T; }

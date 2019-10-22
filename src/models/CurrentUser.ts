@@ -17,6 +17,11 @@ export async function logInAsAnonymous(
     id: cred.user!.uid,
   };
   await Profiles.createNewProfile(firestore, newProfile);
+  return newProfile;
+}
+
+export async function logOut2(auth: firebase.auth.Auth) {
+  await auth.signOut();
 }
 
 // ----------------------------------------------------------------------------

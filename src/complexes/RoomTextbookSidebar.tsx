@@ -1,16 +1,18 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import styled from 'styled-components';
+import RoomIndexList from '../basics/RoomIndexList';
+import SidebarSection from '../basics/RoomSidebarSection';
 import firebase from '../middleware/firebase';
-import { logInAsAnonymous } from '../models/CurrentUser';
+import { logInAsAnonymous, logOut2 } from '../models/CurrentUser';
 import {
   Profile, ProfileType, saveProfile2, useProfile,
 } from '../models/Profiles';
-import { Room } from '../models/Rooms';
-import RoomIndexList from '../basics/RoomIndexList';
-import SidebarSection from '../basics/RoomSidebarSection';
+import {
+  logInToRoom, Room, RoomStudent, useRoomStudents,
+} from '../models/Rooms';
 import TextbookTasksSection from './TextbookTasksSection';
 
-const AnonymousSidebar: React.FC<{
+const GuestSidebar: React.FC<{
   error: Error | null;
   onLogin: (profile: Profile) => void;
 }> = (props) => {
@@ -76,8 +78,12 @@ const RoomTextbookSidebarOuter = styled.div`
 
 const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
   const [loggingIn, setLoggingIn] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const [loginError, setLoginError] = useState<Error | null>(null);
   const [, setSavingProfile] = useState(false);
+  const [students, studentsInitialized, studentsError] = useRoomStudents(
+    firebase.firestore(),
+    room,
+  );
 
   const [profile, profileInitialized, profileError] = useProfile(
     firebase.auth(),
@@ -87,14 +93,23 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
   const onLogin = async (newProfile: Profile) => {
     try {
       setLoggingIn(true);
-      await logInAsAnonymous(
-        firebase.auth(),
+      let studentProfile = newProfile;
+      if (!studentProfile.id) {
+        studentProfile = await logInAsAnonymous(
+          firebase.auth(),
+          firebase.firestore(),
+          newProfile,
+        );
+      }
+      await logInToRoom(
         firebase.firestore(),
-        newProfile,
+        room,
+        studentProfile,
       );
     } catch (err) {
       console.error(err);
-      setError(err);
+      setLoginError(err);
+      logOut2(firebase.auth());
     } finally {
       setLoggingIn(false);
     }
@@ -107,21 +122,22 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
       setSavingProfile(false);
     } catch (err) {
       console.error(err);
-      setError(err);
+      setLoginError(err);
     } finally {
       setLoggingIn(false);
     }
   };
 
-  if (profileError) {
+  const error = loginError || profileError || studentsError;
+  if (error) {
     return (
       <div>
-        {profileError.message}
+        {error.message}
       </div>
     );
   }
 
-  if (!profileInitialized) {
+  if (!profileInitialized || !studentsInitialized) {
     return (
       <div>…</div>
     );
@@ -133,10 +149,10 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
     );
   }
 
-  if (!profile) {
+  if (!profile || !hasStudentsLoggedIn(students, profile)) {
     return (
-      <AnonymousSidebar
-        error={error}
+      <GuestSidebar
+        error={loginError}
         onLogin={onLogin}
       />
     );
@@ -159,5 +175,9 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
     </RoomTextbookSidebarOuter>
   );
 };
+
+function hasStudentsLoggedIn(students: RoomStudent[], profile: Profile) {
+  return students.some((v) => v.id === profile.id);
+}
 
 export default RoomTextbookSidebar;
