@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import DefaultLayout from '../complexes/DefaultLayout';
 import LoadingView from '../independents/LoadingView';
 import firebase from '../middleware/firebase';
+import { setTitle } from '../misc';
 import * as Profiles from '../models/Profiles';
 import path from '../path';
 
@@ -68,6 +69,8 @@ const ProfileForm: React.FC<{
 };
 
 const SettingsPage: React.FC = () => {
+  setTitle('Settings');
+
   const [profile, profileInitialized, profileError] = Profiles.useProfile(
     firebase.auth(),
     firebase.firestore(),
