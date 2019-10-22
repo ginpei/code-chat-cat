@@ -16,3 +16,7 @@ summary:hover {
 summary:hover > * {
   text-decoration: underline;
 }
+
+textarea {
+  width: 100%;
+}

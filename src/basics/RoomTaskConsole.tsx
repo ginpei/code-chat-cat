@@ -38,7 +38,7 @@ const NewRoomTaskForm: React.FC<{
     setTitle('');
   };
 
-  const onTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const onTitleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = event.currentTarget;
     setTitle(value);
   };
@@ -46,10 +46,10 @@ const NewRoomTaskForm: React.FC<{
   return (
     <form onSubmit={onSubmit}>
       <p>
-        {'Title: '}
-        <input
+        Title:
+        <br/>
+        <textarea
           onChange={onTitleChange}
-          type="text"
           value={title}
         />
       </p>

@@ -52,7 +52,7 @@ const TextbookTasksSection: React.FC<{ room: Room }> = (props) => {
   return (
     <div className="TextbookTasksSection">
       {tasks.length < 1 && (
-        <p>(No tasks)</p>
+        <p>(No tasks yet)</p>
       )}
       {tasks.map((task) => (
         <TaskListItem key={task.id} task={task} />

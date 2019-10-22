@@ -47,6 +47,7 @@ const EditorInput = styled.textarea`
   overflow-y: scroll;
   padding: 1rem;
   resize: none;
+  width: auto;
 
   ${(props) => props.disabled && css`
     box-shadow: 0 0 50vmin #0003 inset;
