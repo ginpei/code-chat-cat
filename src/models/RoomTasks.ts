@@ -40,6 +40,32 @@ export function useRoomTasks(
   return [tasks, initialized, error];
 }
 
+export function useRoomTaskStatuses(
+  firestore: firebase.firestore.Firestore,
+  task: RoomTask,
+): [RoomTaskStatus[], boolean, Error | null] {
+  const [error, setError] = useState<Error | null>(null);
+  const [initialized, setInitialized] = useState(false);
+  const [statuses, setStatuses] = useState<RoomTaskStatus[]>([]);
+
+  useEffect(() => {
+    const ref = getStatusColl(firestore, task.roomId, task.id);
+    return ref.onSnapshot({
+      next(ss) {
+        const newStatus = ss.docs.map((v) => ssToRoomTaskStatus(task, v));
+        setStatuses(newStatus);
+        setInitialized(true);
+      },
+      error(e) {
+        setError(e);
+        setInitialized(true);
+      },
+    });
+  }, [firestore, task]);
+
+  return [statuses, initialized, error];
+}
+
 export function useUserRoomTasksStatus(
   firestore: firebase.firestore.Firestore,
   roomId: string,
