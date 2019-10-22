@@ -82,8 +82,8 @@ export interface Profile {
 }
 
 export enum ProfileType {
-  'anonymous',
-  'loggedIn',
+  anonymous = 'anonymous',
+  loggedIn = 'loggedIn',
 }
 
 export const emptyProfile: Readonly<Profile> = Object.freeze({
