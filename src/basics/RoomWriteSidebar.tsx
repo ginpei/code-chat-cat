@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import RoomTaskConsole from '../complexes/RoomTaskConsole';
 import { Room } from '../models/Rooms';
 import RoomIndexList from './RoomIndexList';
 import RoomSidebarSection from './RoomSidebarSection';
-import RoomTaskConsole from '../complexes/RoomTaskConsole';
+import RoomStudentsConsole from '../complexes/RoomStudentsConsole';
 
 const Outer = styled.div`
   padding: 1rem 1rem 5rem;
@@ -13,6 +14,9 @@ const Outer = styled.div`
 const RoomWriteSidebar: React.FC<{ room: Room }> = ({ room }) => {
   return (
     <Outer className="RoomWriteSidebar">
+      <RoomSidebarSection heading="Students">
+        <RoomStudentsConsole room={room} />
+      </RoomSidebarSection>
       <RoomSidebarSection heading="Index">
         <RoomIndexList room={room} />
       </RoomSidebarSection>
