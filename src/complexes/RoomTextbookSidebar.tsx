@@ -14,21 +14,15 @@ import TextbookTasksSection from './TextbookTasksSection';
 const GuestSidebar: React.FC<{
   error: Error | null;
   onLogin: (profile: Profile) => void;
+  profile: Profile | null;
 }> = (props) => {
   const [name, setName] = useState('');
-
-  const [profile, profileInitialized, profileError] = useProfile(
-    firebase.auth(),
-    firebase.firestore(),
-  );
-
-  const error = props.error || profileError;
 
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
     props.onLogin({
-      id: profile ? profile.id : '',
+      id: props.profile ? props.profile.id : '',
       name,
       type: ProfileType.anonymous,
     });
@@ -39,17 +33,11 @@ const GuestSidebar: React.FC<{
     setName(value);
   };
 
-  if (!profileInitialized) {
-    return (
-      <div>…</div>
-    );
-  }
-
   return (
     <form onSubmit={onSubmit}>
       <h1>Welcome!</h1>
-      {error && (
-        <SimpleError error={error} />
+      {props.error && (
+        <SimpleError error={props.error} />
       )}
       <p>
         {'Name: '}
@@ -95,6 +83,12 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
   const [loggingIn, setLoggingIn] = useState(false);
   const [loginError, setLoginError] = useState<Error | null>(null);
   const [, setSavingProfile] = useState(false);
+
+  const [profile, profileInitialized, profileError] = useProfile(
+    firebase.auth(),
+    firebase.firestore(),
+  );
+
   const [student, studentInitialized, studentError] = useRoomStudent(
     firebase.firestore(),
     room,
@@ -139,14 +133,18 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
     }
   };
 
-  const error = loginError || studentError;
+  const isOwner = profile
+    ? profile.id === room.userId
+    : false;
+
+  const error = loginError || profileError || studentError;
   if (error) {
     return (
       <SimpleError error={error} />
     );
   }
 
-  if (!studentInitialized) {
+  if (!profileInitialized || !studentInitialized) {
     return (
       <div>…</div>
     );
@@ -158,11 +156,12 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
     );
   }
 
-  if (!student) {
+  if (!isOwner && !student) {
     return (
       <GuestSidebar
         error={loginError}
         onLogin={onLogin}
+        profile={profile}
       />
     );
   }
@@ -170,10 +169,14 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
   return (
     <RoomTextbookSidebarOuter className="RoomTextbookSidebar">
       <SidebarSection heading="You" open>
-        <UserInfoSection
-          student={student}
-          onProfileChange={onProfileChange}
-        />
+        {isOwner ? (
+          <p>{profile!.name} (Owner)</p>
+        ) : (
+          <UserInfoSection
+            student={student!}
+            onProfileChange={onProfileChange}
+          />
+        )}
       </SidebarSection>
       <SidebarSection heading="Index">
         <RoomIndexList room={room} />
