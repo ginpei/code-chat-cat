@@ -171,8 +171,4 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
   );
 };
 
-function findStudent(students: RoomStudent[], uid: string) {
-  return students.find((v) => v.id === uid);
-}
-
 export default RoomTextbookSidebar;
