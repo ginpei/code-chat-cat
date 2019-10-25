@@ -27,6 +27,30 @@ export function useRoom(
   return [room, initialized, error];
 }
 
+export function useActiveRooms(
+  firestore: firebase.firestore.Firestore,
+): [Room[], boolean, Error | null] {
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [initialized, setInitialized] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => getColl(firestore)
+    .where('status', '==', RoomStatus.active)
+    .onSnapshot({
+      next(ss) {
+        const newRooms = ss.docs.map((v) => snapshotToRoom(v));
+        setRooms(newRooms);
+        setInitialized(true);
+      },
+      error(e) {
+        setError(e);
+        setInitialized(true);
+      },
+    }), [firestore]);
+
+  return [rooms, initialized, error];
+}
+
 export function useRoomStudents(
   firestore: firebase.firestore.Firestore,
   room: Room,
