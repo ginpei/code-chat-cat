@@ -4,8 +4,9 @@ import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 import { headerHeight } from '../basics/Header';
 import RoomHeader from '../basics/RoomHeader';
-import RoomTextbookSidebar from '../complexes/RoomTextbookSidebar';
+import RoomTextbookSidebarArchived from '../basics/RoomTextbookSidebarArchived';
 import TextbookContent from '../basics/TextbookContent';
+import RoomTextbookSidebar from '../complexes/RoomTextbookSidebar';
 import Container from '../independents/Container';
 import LoadingView from '../independents/LoadingView';
 import { setTitle } from '../misc';
@@ -14,8 +15,6 @@ import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
 import { AppDispatch, AppState } from '../models/Store';
 import NotFoundPage from './NotFoundPage';
-import RoomIndexList from '../basics/RoomIndexList';
-import Emoji from '../independents/Emoji';
 
 const TextbookContainer = styled.div`
   display: flex;
@@ -114,13 +113,7 @@ function RoomTextbookPage (props: Props) {
       <TextbookContainer>
         <SidebarFrame>
           {room.status === Rooms.RoomStatus.archived ? (
-            <>
-              <p>
-                <Emoji label="Package" />
-                This room has been archived.
-              </p>
-              <RoomIndexList room={room} />
-            </>
+            <RoomTextbookSidebarArchived room={room} />
           ) : (
             <RoomTextbookSidebar room={room} />
           )}
