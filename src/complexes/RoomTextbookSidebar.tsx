@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import RoomIndexList from '../basics/RoomIndexList';
 import RoomSidebarOuter from '../basics/RoomSidebarOuter';
-import SidebarSection from '../basics/RoomSidebarSection';
+import RoomSidebarSection from '../basics/RoomSidebarSection';
 import SimpleError from '../independents/SimpleError';
 import firebase from '../middleware/firebase';
 import { logInAsAnonymous, logOut2 } from '../models/CurrentUser';
@@ -164,7 +164,7 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
 
   return (
     <RoomSidebarOuter className="RoomTextbookSidebar">
-      <SidebarSection heading="You" open>
+      <RoomSidebarSection heading="You" open>
         {isOwner ? (
           <p>{profile!.name} (Owner)</p>
         ) : (
@@ -173,13 +173,13 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
             onProfileChange={onProfileChange}
           />
         )}
-      </SidebarSection>
-      <SidebarSection heading="Index">
+      </RoomSidebarSection>
+      <RoomSidebarSection heading="Index">
         <RoomIndexList room={room} />
-      </SidebarSection>
-      <SidebarSection heading="Tasks">
+      </RoomSidebarSection>
+      <RoomSidebarSection heading="Tasks">
         <TextbookTasksSection room={room} />
-      </SidebarSection>
+      </RoomSidebarSection>
     </RoomSidebarOuter>
   );
 };
