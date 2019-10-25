@@ -20,6 +20,7 @@ const TaskProgressLineOuter = styled.div`
 const TaskProgressLineInner = styled.div`
   background-color: #036;
   height: 100%;
+  transition: width 300ms ease-out;
   width: 0;
 `;
 
@@ -37,6 +38,11 @@ const TaskProgressLine: React.FC<{
   const sDoneNames = doneStudents.map((v) => v.name).join(', ') || '(None)';
   const sUndoneNames = undoneStudents.map((v) => v.name).join(', ') || '(None)';
 
+  const lineStyle: React.CSSProperties = {
+    backgroundColor: progress === 1 ? '#0c0' : undefined,
+    width: `${100 * progress}%`,
+  };
+
   const [open, setOpen] = useState(false);
 
   const onClick = () => {
@@ -46,7 +52,7 @@ const TaskProgressLine: React.FC<{
   return (
     <>
       <TaskProgressLineOuter onClick={onClick}>
-        <TaskProgressLineInner style={{ width: `${100 * progress}%` }} />
+        <TaskProgressLineInner style={lineStyle} />
       </TaskProgressLineOuter>
       {open && (
         <TaskProgressNames>
