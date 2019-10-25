@@ -26,7 +26,6 @@ function getLoggedInMenu (profile: Profiles.Profile, room: Rooms.Room): HeaderMe
     name: 'CCC',
   });
 
-  console.log('# profile', profile);
   if (profile) {
     menu.push({
       links: [
