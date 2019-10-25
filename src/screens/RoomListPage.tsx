@@ -34,7 +34,9 @@ class RoomListPage extends React.Component<Props> {
           <Emoji label="White Heavy Check Mark" />
           {' Public room / '}
           <Emoji label="Fire" />
-          {' Active room'}
+          {' Active room / '}
+          <Emoji label="Package" />
+          {' Archived room'}
         </p>
         {rooms.length < 1 ? (
           <p>No rooms found.</p>

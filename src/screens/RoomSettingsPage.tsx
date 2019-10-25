@@ -30,7 +30,9 @@ function RoomStatusInput (props: RoomStatusInputProps) {
     ? 'Draft'
     : props.type === Rooms.RoomStatus.public
       ? 'Public'
-      : 'Active';
+      : props.type === Rooms.RoomStatus.active
+        ? 'Active'
+        : 'Archived';
 
   const onChange = () => props.onChange(props.type);
 
@@ -61,6 +63,7 @@ function RoomStatusInputGroup (props: RoomStatusInputGroupProps) {
     Rooms.RoomStatus.draft,
     Rooms.RoomStatus.public,
     Rooms.RoomStatus.active,
+    Rooms.RoomStatus.archived,
   ];
   return (
     <>

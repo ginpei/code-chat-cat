@@ -143,6 +143,7 @@ export enum RoomStatus {
   draft = 0, // only owner can access
   public = 1, // public for those who know the URL
   active = 2, // public and listed
+  archived = 3, // public but frozen
 }
 
 export interface RoomState {

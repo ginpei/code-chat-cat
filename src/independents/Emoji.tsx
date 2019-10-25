@@ -6,6 +6,7 @@ const map = {
   'Lock': '🔒',
   'Memo': '📝',
   'Open Book': '📖',
+  'Package': '📦',
   'Speech Balloon': '💬',
   'White Heavy Check Mark': '✅',
 };

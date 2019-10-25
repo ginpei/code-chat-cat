@@ -14,6 +14,8 @@ import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
 import { AppDispatch, AppState } from '../models/Store';
 import NotFoundPage from './NotFoundPage';
+import RoomIndexList from '../basics/RoomIndexList';
+import Emoji from '../independents/Emoji';
 
 const TextbookContainer = styled.div`
   display: flex;
@@ -111,7 +113,17 @@ function RoomTextbookPage (props: Props) {
       />
       <TextbookContainer>
         <SidebarFrame>
-          <RoomTextbookSidebar room={room} />
+          {room.status === Rooms.RoomStatus.archived ? (
+            <>
+              <p>
+                <Emoji label="Package" />
+                This room has been archived.
+              </p>
+              <RoomIndexList room={room} />
+            </>
+          ) : (
+            <RoomTextbookSidebar room={room} />
+          )}
         </SidebarFrame>
         <MainFrame>
           <TextbookWrapper>

@@ -16,7 +16,9 @@ export default function RoomListItem (props: Prop) {
     ? <Emoji title="Draft" label="Lock" />
     : status === Rooms.RoomStatus.public
       ? <Emoji title="Public" label="White Heavy Check Mark" />
-      : <Emoji title="Active" label="Fire" />;
+      : status === Rooms.RoomStatus.active
+        ? <Emoji title="Active" label="Fire" />
+        : <Emoji title="Archived" label="Package" />;
 
   return (
     <tr {...restProps}>
