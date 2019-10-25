@@ -1,10 +1,12 @@
 import React from 'react';
 
 const map = {
+  'CatCry': '😿',
   'Fire': '🔥',
   'Lock': '🔒',
   'Memo': '📝',
   'Open Book': '📖',
+  'Package': '📦',
   'Speech Balloon': '💬',
   'White Heavy Check Mark': '✅',
 };

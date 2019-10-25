@@ -4,7 +4,9 @@ import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 import { headerHeight } from '../basics/Header';
 import RoomHeader from '../basics/RoomHeader';
+import RoomTextbookSidebarArchived from '../basics/RoomTextbookSidebarArchived';
 import TextbookContent from '../basics/TextbookContent';
+import RoomTextbookSidebar from '../complexes/RoomTextbookSidebar';
 import Container from '../independents/Container';
 import LoadingView from '../independents/LoadingView';
 import { setTitle } from '../misc';
@@ -15,14 +17,32 @@ import { AppDispatch, AppState } from '../models/Store';
 import NotFoundPage from './NotFoundPage';
 
 const TextbookContainer = styled.div`
+  display: flex;
   height: calc(100vh - ${headerHeight}px);
-  overflow-y: scroll;
+  overflow: hidden;
 `;
+
+const sidebarWidth = 300;
+
+const SidebarFrame = styled.div`
+  background-color: #f9f9f9;
+  border-right: solid 0.2rem #036;
+  box-shadow: 0px 0 10px #0003;
+  overflow-y: scroll;
+  padding: 1rem;
+  width: ${sidebarWidth}px;
+`;
+
+const MainFrame = styled.div`
+  overflow-y: scroll;
+  width: 100%;
+`;
+
 const TextbookWrapper = styled(Container)`
   background-color: snow;
   box-shadow: 0 0 10px #0003;
   min-height: 100%;
-  padding: 0.01px 1rem;
+  padding: 0.01px 1rem 10rem;
 `;
 
 interface PageParams {
@@ -91,9 +111,18 @@ function RoomTextbookPage (props: Props) {
         userProfile={props.userProfile}
       />
       <TextbookContainer>
-        <TextbookWrapper>
-          <TextbookContent content={room.textbookContent} />
-        </TextbookWrapper>
+        <SidebarFrame>
+          {room.status === Rooms.RoomStatus.archived ? (
+            <RoomTextbookSidebarArchived room={room} />
+          ) : (
+            <RoomTextbookSidebar room={room} />
+          )}
+        </SidebarFrame>
+        <MainFrame>
+          <TextbookWrapper>
+            <TextbookContent content={room.textbookContent} />
+          </TextbookWrapper>
+        </MainFrame>
       </TextbookContainer>
     </div>
   );

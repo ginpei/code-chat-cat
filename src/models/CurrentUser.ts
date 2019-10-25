@@ -2,6 +2,27 @@ import firebase from '../middleware/firebase';
 import { noop } from '../misc';
 import * as Profiles from './Profiles';
 
+export async function logInAsAnonymous(
+  auth: firebase.auth.Auth,
+  firestore: firebase.firestore.Firestore,
+  profile: Omit<Profiles.Profile, 'id'>,
+) {
+  if (auth.currentUser) {
+    throw new Error('User has already logged in');
+  }
+
+  const cred = await auth.signInAnonymously();
+  const newProfile: Profiles.Profile = {
+    ...profile,
+    id: cred.user!.uid,
+  };
+  return newProfile;
+}
+
+export async function logOut2(auth: firebase.auth.Auth) {
+  await auth.signOut();
+}
+
 // ----------------------------------------------------------------------------
 // states
 
@@ -57,11 +78,11 @@ function setCurrentUser (user: firebase.User | null): CurrentUserState {
 }
 
 interface SetCurrentUserProfileAction {
-  profile: Profiles.Profile;
+  profile: Profiles.Profile | null;
   type: 'CURRENT_USER_SET_PROFILE';
 }
 
-export function setProfile (profile: Profiles.Profile): SetCurrentUserProfileAction {
+export function setProfile (profile: Profiles.Profile | null): SetCurrentUserProfileAction {
   return {
     profile,
     type: 'CURRENT_USER_SET_PROFILE',
@@ -85,7 +106,7 @@ export function reduceCurrentUser (
     case 'CURRENT_USER_SET_PROFILE':
       return {
         ...state,
-        name: action.profile.name,
+        name: action.profile ? action.profile.name : '',
         profile: action.profile,
       };
     default:

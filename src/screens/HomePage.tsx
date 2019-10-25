@@ -8,11 +8,13 @@ import Header from '../basics/Header';
 import { getDefaultHeaderMenu } from '../complexes/DefaultLayout';
 import Container from '../independents/Container';
 import LoadingView from '../independents/LoadingView';
+import firebase from '../middleware/firebase';
 import * as ErrorLogs from '../models/ErrorLogs';
 import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
 import { AppDispatch, AppState } from '../models/Store';
 import path, { RoomLink } from '../path';
+import ErrorView from './ErrorView';
 
 const LogoImageContainer = styled.div`
   text-align: center;
@@ -33,7 +35,6 @@ type StateProps = {
 };
 
 type DispatchProps = {
-  connectActiveRooms: (setReady: () => void) => () => void;
   connectUserRooms: (userId: string, setReady: () => void) => () => void;
 };
 
@@ -42,12 +43,12 @@ type Props =
   & DispatchProps;
 
 function HomePage (props: Props) {
-  const { connectActiveRooms, connectUserRooms } = props;
-
-  const [activeRoomsReady, setActiveRoomsReady] = useState(false);
-  useEffect(() => connectActiveRooms(
-    () => setActiveRoomsReady(true),
-  ), [connectActiveRooms]);
+  const { connectUserRooms } = props;
+  const [
+    activeRooms,
+    activeRoomsInitialized,
+    activeRoomsError,
+  ] = Rooms.useActiveRooms(firebase.firestore());
 
   const [userRoomsReady, setUserRoomsReady] = useState(false);
   useEffect(() => connectUserRooms(
@@ -55,7 +56,13 @@ function HomePage (props: Props) {
     () => setUserRoomsReady(true),
   ), [connectUserRooms, props.userId]);
 
-  if (!activeRoomsReady || !userRoomsReady) {
+  if (activeRoomsError) {
+    return (
+      <ErrorView error={activeRoomsError} />
+    );
+  }
+
+  if (!activeRoomsInitialized || !userRoomsReady) {
     return (
       <LoadingView/>
     );
@@ -76,7 +83,7 @@ function HomePage (props: Props) {
         </LogoImageContainer>
         <p>Active rooms</p>
         <ul>
-          {props.activeRooms.map((room) => (
+          {activeRooms.map((room) => (
             <li key={room.id}>
               <RoomLink room={room}/>
             </li>
@@ -116,11 +123,6 @@ export default connect<StateProps, DispatchProps, {}, AppState>(
     userRooms: Rooms.pickUserRooms(state),
   }),
   (dispatch: AppDispatch) => ({
-    connectActiveRooms: (setReady) => Rooms.connectActiveRooms(
-      (rooms) => dispatch(Rooms.setActiveRooms(rooms)),
-      (error) => dispatch(ErrorLogs.add('connect active rooms', error)),
-      () => setReady(),
-    ),
     connectUserRooms: (userId, setReady) => Rooms.connectUserRooms(
       userId,
       (rooms) => dispatch(Rooms.setUserRooms(rooms)),

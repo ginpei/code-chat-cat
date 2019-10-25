@@ -1,127 +1,122 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import DefaultLayout from '../complexes/DefaultLayout';
+import ErrorView from './ErrorView';
+import LoadingView from '../independents/LoadingView';
+import firebase from '../middleware/firebase';
 import { setTitle } from '../misc';
-import * as CurrentUser from '../models/CurrentUser';
 import * as Profiles from '../models/Profiles';
-import { AppState } from '../models/Store';
 import path from '../path';
 
-interface Props {
-  currentUser: CurrentUser.CurrentUserState;
-  userProfile: Profiles.Profile | null;
-}
-interface State {
-  ready: boolean;
-  savingProfile: boolean;
-  userName: string;
-}
+const ProfileForm: React.FC<{
+  onSubmit: (profile: Profiles.Profile) => Promise<void>;
+  profile: Profiles.Profile,
+}> = (props) => {
+  const { profile } = props;
+  const [saving, setSaving] = useState(false);
+  const [userName, setUserName] = useState(profile.name);
 
-class SettingsPage extends React.Component<Props, State> {
-  public constructor (props: Props) {
-    super(props);
-    this.state = {
-      ready: false,
-      savingProfile: false,
-      userName: '',
+  const onProfileSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const newProfile: Profiles.Profile = {
+      ...profile!,
+      name: userName,
     };
-    this.onProfileSubmit = this.onProfileSubmit.bind(this);
-    this.onUserNameChange = this.onUserNameChange.bind(this);
+
+    setSaving(true);
+    await props.onSubmit(newProfile);
+    setSaving(false);
+  };
+
+  const onUserNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUserName(event.currentTarget.value);
+  };
+
+  return (
+    <form onSubmit={onProfileSubmit}>
+      <table>
+        <tbody>
+          <tr>
+            <th>ID</th>
+            <td>
+              <input
+                readOnly={true}
+                type="text"
+                value={profile.id}
+              />
+            </td>
+          </tr>
+          <tr>
+            <th>Name</th>
+            <td>
+              <input
+                disabled={saving}
+                onChange={onUserNameChange}
+                type="text"
+                value={userName}
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button
+        disabled={saving}
+      >
+      Save
+      </button>
+    </form>
+  );
+};
+
+const SettingsPage: React.FC = () => {
+  setTitle('Settings');
+
+  const [profile, profileInitialized, profileError] = Profiles.useProfile(
+    firebase.auth(),
+    firebase.firestore(),
+  );
+
+  const onProfileSubmit = async (newProfile: Profiles.Profile) => {
+    await Profiles.saveProfile(newProfile);
+  };
+
+  if (profileError) {
+    return (
+      <ErrorView
+        error={profileError}
+      />
+    );
   }
 
-  public render () {
-    if (!this.props.currentUser.loggedIn) {
-      return (
-        <DefaultLayout>
-          <p><Link to={path('login')}>Login</Link></p>
-        </DefaultLayout>
-      );
-    }
+  if (!profileInitialized) {
+    return (
+      <LoadingView />
+    );
+  }
 
+  if (!firebase.auth().currentUser || !profile) {
     return (
       <DefaultLayout>
-        <h1>Settings</h1>
-        <section>
-          <h2>Profile</h2>
-          <form onSubmit={this.onProfileSubmit}>
-            <table>
-              <tbody>
-                <tr>
-                  <th>ID</th>
-                  <td>
-                    <input
-                      readOnly={true}
-                      type="text"
-                      value={this.props.currentUser.firebaseUser!.uid}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <th>Name</th>
-                  <td>
-                    <input
-                      disabled={this.state.savingProfile}
-                      onChange={this.onUserNameChange}
-                      type="text"
-                      value={this.state.userName}
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <button
-              disabled={this.state.savingProfile}
-            >
-              Save
-            </button>
-          </form>
-        </section>
+        <p>
+          <Link to={path('login')}>Login</Link>
+        </p>
       </DefaultLayout>
     );
   }
 
-  public componentDidMount () {
-    setTitle('Settings');
-    const wait = () => {
-      if (this.props.currentUser.ready && !this.state.ready) {
-        const profile = this.props.userProfile;
-        this.setState({
-          ready: true,
-          userName: profile ? profile.name : '',
-        });
-      } else {
-        setTimeout(() => wait, 100);
-      }
-    };
-    wait();
-  }
+  return (
+    <DefaultLayout>
+      <h1>Settings</h1>
+      <section>
+        <h2>Profile</h2>
+        <ProfileForm
+          onSubmit={onProfileSubmit}
+          profile={profile}
+        />
+      </section>
+    </DefaultLayout>
+  );
+};
 
-  public async onProfileSubmit (event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    this.setState({
-      savingProfile: true,
-    });
-
-    await Profiles.saveProfile({
-      ...this.props.userProfile!,
-      name: this.state.userName,
-    });
-    this.setState({
-      savingProfile: false,
-    });
-  }
-
-  public onUserNameChange (event: React.ChangeEvent<HTMLInputElement>) {
-    const el = event.currentTarget;
-    const userName = el.value;
-    this.setState({ userName });
-  }
-}
-
-export default connect(
-  (state: AppState) => ({
-    currentUser: state.currentUser,
-    userProfile: state.currentUser.profile,
-  }),
-)(SettingsPage);
+export default SettingsPage;
