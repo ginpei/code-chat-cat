@@ -26,7 +26,8 @@ service cloud.firestore {
 
     function isPublicRoom(roomId) {
       return getRoomData(roomId).status == 1 // public
-        || getRoomData(roomId).status == 2; // active
+        || getRoomData(roomId).status == 2 // active
+        || getRoomData(roomId).status == 3; // archived
     }
 
     function isRoomOwner(roomId) {
