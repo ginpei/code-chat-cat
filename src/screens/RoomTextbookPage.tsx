@@ -42,7 +42,7 @@ const TextbookWrapper = styled(Container)`
   background-color: snow;
   box-shadow: 0 0 10px #0003;
   min-height: 100%;
-  padding: 0.01px 1rem;
+  padding: 0.01px 1rem 10rem;
 `;
 
 interface PageParams {
