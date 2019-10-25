@@ -3,8 +3,8 @@ import * as ErrorLogs from './ErrorLogs';
 
 describe('ErrorLogs', () => {
   let error: ErrorLogs.AppError;
-  let state: ErrorLogs.IErrorLog[];
-  let result: ErrorLogs.IErrorLog[];
+  let state: ErrorLogs.ErrorLog[];
+  let result: ErrorLogs.ErrorLog[];
   let consoleError: jest.SpyInstance;
 
   beforeEach(() => {

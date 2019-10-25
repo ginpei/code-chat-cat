@@ -75,6 +75,8 @@ describe('misc', () => {
     let dateNow: jest.SpyInstance<number, []>;
 
     beforeEach(() => {
+      // Note: TZ=America/Vancouver is expected
+
       dateNow = jest.spyOn(Date, 'now');
       dateNow.mockReturnValue(new Date('2000-01-23').getTime());
       now = Date.now();

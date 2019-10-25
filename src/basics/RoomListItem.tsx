@@ -4,11 +4,11 @@ import { getReadableElapse } from '../misc';
 import * as Rooms from '../models/Rooms';
 import { RoomLink } from '../path';
 
-interface IRoomListItemProp extends React.ComponentPropsWithRef<'tr'> {
-  room: Rooms.IRoom;
+interface Prop extends React.ComponentPropsWithRef<'tr'> {
+  room: Rooms.Room;
 }
 
-export default function RoomListItem (props: IRoomListItemProp) {
+export default function RoomListItem (props: Prop) {
   const { room, ...restProps } = props;
   const { status, name } = room;
 
@@ -16,7 +16,9 @@ export default function RoomListItem (props: IRoomListItemProp) {
     ? <Emoji title="Draft" label="Lock" />
     : status === Rooms.RoomStatus.public
       ? <Emoji title="Public" label="White Heavy Check Mark" />
-      : <Emoji title="Active" label="Fire" />;
+      : status === Rooms.RoomStatus.active
+        ? <Emoji title="Active" label="Fire" />
+        : <Emoji title="Archived" label="Package" />;
 
   return (
     <tr {...restProps}>

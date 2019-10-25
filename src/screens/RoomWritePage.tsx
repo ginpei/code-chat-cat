@@ -5,6 +5,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { headerHeight } from '../basics/Header';
 import RoomHeader from '../basics/RoomHeader';
+import RoomWriteSidebar from '../basics/RoomWriteSidebar';
 import TextbookContent from '../basics/TextbookContent';
 import syncScroll from '../functions/syncScroll';
 import LoadingView from '../independents/LoadingView';
@@ -15,70 +16,88 @@ import * as Rooms from '../models/Rooms';
 import { AppDispatch, AppState } from '../models/Store';
 import NotFoundPage from './NotFoundPage';
 
+
+function setDirty () {
+  window.onbeforeunload = (event: BeforeUnloadEvent) => {
+    event.preventDefault();
+    event.returnValue = ''; // for Chrome
+  };
+}
+
+function unsetDirty () {
+  window.onbeforeunload = null;
+}
+
 const EditorContainer = styled.div`
   display: grid;
-  grid-template: "input output" 100% / 1fr 1fr;
+  grid-template: "sidebar input output" 100% / 300px 1fr 1fr;
   height: calc(100vh - ${headerHeight}px);
 `;
+
+const SidebarFrame = styled.div`
+  background-color: #f9f9f9;
+  border-right: solid 0.2rem #036;
+  box-shadow: 0px 0 10px #0003;
+  overflow-y: scroll;
+`;
+
 const EditorInput = styled.textarea`
   background-color: ivory;
   border-style: none;
   overflow-y: scroll;
   padding: 1rem;
   resize: none;
+  width: auto;
 
   ${(props) => props.disabled && css`
     box-shadow: 0 0 50vmin #0003 inset;
   `}
 `;
+
 const EditorOutput = styled.article`
   background-color: snow;
   overflow-y: scroll;
   padding: 1rem;
 `;
 
-interface IRoomWritePageParams {
+interface PageParams {
   id: string;
 }
 
-interface IRoomWritePageStateProps {
+interface StateProps {
   firebaseUser: firebase.User | null;
-  loggedIn: boolean;
-  pickRoom: (roomId: string) => Rooms.IRoom;
-  userProfile: Profiles.IProfile | null;
-  userRooms: Rooms.IRoom[];
+  pickRoom: (roomId: string) => Rooms.Room;
+  userProfile: Profiles.Profile | null;
 }
 
-const mapStateToProps = (state: AppState): IRoomWritePageStateProps => ({
+const mapStateToProps = (state: AppState): StateProps => ({
   firebaseUser: state.currentUser.firebaseUser,
-  loggedIn: state.currentUser.loggedIn,
   pickRoom: (roomId: string) => Rooms.pickRoom(state, roomId),
   userProfile: state.currentUser.profile,
-  userRooms: Rooms.pickUserRooms(state),
 });
 
-interface IRoomWritePageDispatchProps {
+interface DispatchProps {
   saveError: (location: string, error: ErrorLogs.AppError) => void;
-  saveRoom: (room: Rooms.IRoom) => void;
+  saveRoom: (room: Rooms.Room) => void;
 }
 
-const mapDispatchToProps = (dispatch: AppDispatch): IRoomWritePageDispatchProps => ({
+const mapDispatchToProps = (dispatch: AppDispatch): DispatchProps => ({
   saveError: (location: string, error: ErrorLogs.AppError) => dispatch(ErrorLogs.add(location, error)),
-  saveRoom: (room: Rooms.IRoom) => dispatch(Rooms.saveRoom(room)),
+  saveRoom: (room: Rooms.Room) => dispatch(Rooms.saveRoom(room)),
 });
 
-type IRoomWritePageProps =
-  & RouteComponentProps<IRoomWritePageParams>
-  & IRoomWritePageStateProps
-  & IRoomWritePageDispatchProps;
+type Props =
+  & RouteComponentProps<PageParams>
+  & StateProps
+  & DispatchProps;
 
-interface IRoomWritePageState {
+interface State {
   editingContent: string;
   previewingContent: string;
-  room: Rooms.IRoom | null;
+  room: Rooms.Room | null;
 }
 
-class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageState> {
+class RoomWritePage extends React.Component<Props, State> {
   protected refInput = createRef<HTMLTextAreaElement>();
   protected refOutput = createRef<HTMLElement>();
   protected unsubscribeSyncScroll: (() => void) | null = null;
@@ -88,9 +107,9 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     return this.props.match.params.id;
   }
 
-  constructor (props: IRoomWritePageProps) {
+  public constructor (props: Props) {
     super(props);
-    const room = props.pickRoom(this.roomId);
+    const room = props.pickRoom(this.roomId) || Rooms.emptyRoom;
     const content = room ? room.textbookContent : '';
     this.state = {
       editingContent: content,
@@ -136,6 +155,9 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
           userProfile={this.props.userProfile}
         />
         <EditorContainer>
+          <SidebarFrame>
+            <RoomWriteSidebar room={room} />
+          </SidebarFrame>
           <EditorInput
             ref={this.refInput}
             onChange={this.onContentInput}
@@ -187,7 +209,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     setTitle('Write', room ? room.name : '...');
   }
 
-  protected setRoom (room: Rooms.IRoom | null) {
+  protected setRoom (room: Rooms.Room | null) {
     this.setState({ room });
     this.updateTitle();
 
@@ -203,7 +225,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
     }
     this.setState({ editingContent: content });
     this.setRenderingContent(content);
-    this.setDirty();
+    setDirty();
     this.saveContent();
   }
 
@@ -212,17 +234,6 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
    */
   protected setRenderingContent (previewingContent: string) {
     this.setState({ previewingContent });
-  }
-
-  protected setDirty () {
-    window.onbeforeunload = (event) => {
-      event.preventDefault();
-      event.returnValue = ''; // for Chrome
-    };
-  }
-
-  protected unsetDirty () {
-    window.onbeforeunload = null;
   }
 
   /**
@@ -238,7 +249,7 @@ class RoomWritePage extends React.Component<IRoomWritePageProps, IRoomWritePageS
       ...room,
       textbookContent: this.state.editingContent,
     });
-    this.unsetDirty();
+    unsetDirty();
   }
 
   protected subscribeSyncScroll () {

@@ -6,7 +6,10 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 script:
-  - npm test -- --coverage
+  - npx tsc
+  - npm run lint
+  # - npm test -- --coverage
+  - npm test -- --coverage --watchAll=false # TODO replace when Jest fixed
 before_deploy:
   - npm run build
 deploy:

@@ -56,16 +56,4 @@ describe('<Markdown>', () => {
         .toBe(encodeURI('#日本語です'));
     });
   });
-
-  describe('markdown-it-toc-done-right', () => {
-    beforeEach(() => {
-      const content = '${toc}\n# Header\n## 日本語です\n# Lv1 2nd';
-      wrapper = render(<Markdown content={content} />);
-    });
-
-    it('generates table of contents', () => {
-      const toc = wrapper.find('.table-of-contents');
-      expect(toc.text()).toBe('Header 日本語です Lv1 2nd ');
-    });
-  });
 });

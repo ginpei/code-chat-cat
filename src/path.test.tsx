@@ -1,7 +1,7 @@
 import { shallow, ShallowWrapper } from 'enzyme';
-import firebase from 'firebase';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import firebase from './middleware/firebase';
 import * as Rooms from './models/Rooms';
 import path, { HomeLink, RoomLink } from './path';
 
@@ -34,8 +34,8 @@ describe('path', () => {
       });
 
       it('settings', () => {
-        expect(path('room-settings', { id: 'roomId123' })).
-          toBe('/rooms/roomId123/settings');
+        expect(path('room-settings', { id: 'roomId123' }))
+          .toBe('/rooms/roomId123/settings');
       });
     });
   });
@@ -52,7 +52,7 @@ describe('path', () => {
   describe('<RoomLink>', () => {
     let wrapper: ShallowWrapper;
 
-    const room: Rooms.IRoom = {
+    const room: Rooms.Room = {
       createdAt: firebase.firestore.Timestamp.now(),
       id: 'roomId123',
       name: 'Room Name',

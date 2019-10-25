@@ -3,25 +3,31 @@ import * as Profiles from '../models/Profiles';
 import * as Rooms from '../models/Rooms';
 import path from '../path';
 import Header from './Header';
-import { IHeaderMenu } from './HeaderMenu';
+import { HeaderMenuGroup } from './HeaderMenu';
 
-function getLoggedInMenu (profile: Profiles.IProfile, room: Rooms.IRoom): IHeaderMenu[] {
-  return [
-    {
+function getLoggedInMenu (profile: Profiles.Profile, room: Rooms.Room): HeaderMenuGroup[] {
+  const menu: HeaderMenuGroup[] = [];
+
+  if (profile.id === room.userId) {
+    menu.push({
       links: [
         { title: 'Top', href: path('room', { id: room.id }) },
         { title: 'Write', href: path('room-write', { id: room.id }) },
         { title: 'Settings', href: path('room-settings', { id: room.id }) },
       ],
       name: 'Room',
-    },
-    {
-      links: [
-        { title: 'Home', href: path('home') },
-      ],
-      name: 'CCC',
-    },
-    {
+    });
+  }
+
+  menu.push({
+    links: [
+      { title: 'Home', href: path('home') },
+    ],
+    name: 'CCC',
+  });
+
+  if (profile) {
+    menu.push({
       links: [
         { title: 'Room list', href: path('room-list') },
         { title: 'Create new room', href: path('room-new') },
@@ -29,11 +35,13 @@ function getLoggedInMenu (profile: Profiles.IProfile, room: Rooms.IRoom): IHeade
         { title: 'Log out', href: path('logout') },
       ],
       name: profile.name,
-    },
-  ];
+    });
+  }
+
+  return menu;
 }
 
-function getAnonymousMenu (): IHeaderMenu[] {
+function getAnonymousMenu (): HeaderMenuGroup[] {
   return [
     {
       links: [
@@ -45,18 +53,17 @@ function getAnonymousMenu (): IHeaderMenu[] {
   ];
 }
 
-interface IRoomHeaderProps {
+interface Props {
   fullscreen?: boolean;
-  room: Rooms.IRoom;
-  userProfile: Profiles.IProfile | null;
+  room: Rooms.Room;
+  userProfile: Profiles.Profile | null;
 }
 
-export default function RoomHeader (props: IRoomHeaderProps) {
+export default function RoomHeader (props: Props) {
   const { userProfile, room } = props;
-  const menus =
-    userProfile
-      ? getLoggedInMenu(userProfile, room)
-      : getAnonymousMenu();
+  const menus = userProfile
+    ? getLoggedInMenu(userProfile, room)
+    : getAnonymousMenu();
 
   return (
     <div>

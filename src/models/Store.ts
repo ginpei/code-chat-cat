@@ -1,16 +1,15 @@
-import { combineReducers, Store as ReduxStore } from 'redux';
-import { applyMiddleware, createStore } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
-import thunk from 'redux-thunk';
+import {
+  applyMiddleware, combineReducers, createStore, Store as ReduxStore,
+} from 'redux';
+import thunk, { ThunkDispatch } from 'redux-thunk';
 import * as CurrentUser from './CurrentUser';
 import * as ErrorLogs from './ErrorLogs';
 import * as Rooms from './Rooms';
 
-// tslint:disable-next-line:interface-name
 export interface AppState {
-  currentUser: CurrentUser.ICurrentUserState;
-  errorLogs: ErrorLogs.IErrorLog[];
-  rooms: Rooms.IRoomState;
+  currentUser: CurrentUser.CurrentUserState;
+  errorLogs: ErrorLogs.ErrorLog[];
+  rooms: Rooms.RoomState;
 }
 
 export type AppAction =

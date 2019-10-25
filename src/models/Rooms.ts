@@ -1,20 +1,162 @@
+import { useEffect, useState } from 'react';
 import { combineReducers } from 'redux';
 import firebase from '../middleware/firebase';
 import { noop } from '../misc';
 import { AppDispatch, AppState } from './Store';
+
+export function useRoom(
+  firestore: firebase.firestore.Firestore,
+  roomId: string,
+): [Room | null, boolean, Error | null] {
+  const [room, setRoom] = useState<Room | null>(null);
+  const [initialized, setInitialized] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => getColl(firestore).doc(roomId).onSnapshot({
+    next(ss) {
+      const newRoom = snapshotToRoom(ss);
+      setRoom(newRoom);
+      setInitialized(true);
+    },
+    error(e) {
+      setError(e);
+      setInitialized(true);
+    },
+  }), [firestore, roomId]);
+
+  return [room, initialized, error];
+}
+
+export function useActiveRooms(
+  firestore: firebase.firestore.Firestore,
+): [Room[], boolean, Error | null] {
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [initialized, setInitialized] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => getColl(firestore)
+    .where('status', '==', RoomStatus.active)
+    .onSnapshot({
+      next(ss) {
+        const newRooms = ss.docs.map((v) => snapshotToRoom(v));
+        setRooms(newRooms);
+        setInitialized(true);
+      },
+      error(e) {
+        setError(e);
+        setInitialized(true);
+      },
+    }), [firestore]);
+
+  return [rooms, initialized, error];
+}
+
+export function useRoomStudents(
+  firestore: firebase.firestore.Firestore,
+  room: Room,
+): [RoomStudent[], boolean, Error | null] {
+  const [students, setStudents] = useState<RoomStudent[]>([]);
+  const [initialized, setInitialized] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => getStudentsColl(firestore, room).onSnapshot({
+    next(ss) {
+      const newStudents = ss.docs.map((v) => ssToRoomStudent(v));
+      setStudents(newStudents);
+      setInitialized(true);
+    },
+    error(e) {
+      setError(e);
+      setInitialized(true);
+    },
+  }), [firestore, room]);
+
+  return [students, initialized, error];
+}
+
+export function useRoomStudent(
+  firestore: firebase.firestore.Firestore,
+  room: Room,
+  uid: string,
+): [RoomStudent | null, boolean, Error | null] {
+  const [student, setStudent] = useState<RoomStudent | null>(null);
+  const [initialized, setInitialized] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    if (!uid) {
+      setInitialized(true);
+      return noop;
+    }
+
+    return getStudentsColl(firestore, room).doc(uid).onSnapshot({
+      next(ss) {
+        if (ss.exists) {
+          const newStudent = ssToRoomStudent(ss);
+          setStudent(newStudent);
+        }
+        setInitialized(true);
+      },
+      error(e) {
+        setError(e);
+        setInitialized(true);
+      },
+    });
+  }, [firestore, room, uid]);
+
+  return [student, initialized, error];
+}
+
+export async function saveRoomStudent(
+  firestore: firebase.firestore.Firestore,
+  room: Room,
+  student: RoomStudent,
+) {
+  await getStudentsColl(firestore, room).doc(student.id)
+    .set(roomStudentToData(student));
+}
+
+function getColl(firestore: firebase.firestore.Firestore) {
+  return firestore.collection(collectionName);
+}
+
+function getStudentsColl(
+  firestore: firebase.firestore.Firestore,
+  room: Room,
+) {
+  return getColl(firestore).doc(room.id)
+    .collection('students');
+}
+
+function ssToRoomStudent(
+  ss: firebase.firestore.DocumentSnapshot,
+) {
+  const data = ss.data() || {};
+  const student: RoomStudent = {
+    id: ss.id,
+    name: data.name || 'Anonymous',
+  };
+  return student;
+}
+
+function roomStudentToData(student: RoomStudent) {
+  return {
+    name: student.name,
+  };
+}
 
 const collectionName = 'rooms';
 
 // ----------------------------------------------------------------------------
 // states
 
-interface IRecord {
+interface Record {
   createdAt: firebase.firestore.Timestamp;
   id: string;
   updatedAt: firebase.firestore.Timestamp;
 }
 
-export interface IRoom extends IRecord {
+export interface Room extends Record {
   name: string;
   status: RoomStatus;
   textbookContent: string;
@@ -25,17 +167,23 @@ export enum RoomStatus {
   draft = 0, // only owner can access
   public = 1, // public for those who know the URL
   active = 2, // public and listed
+  archived = 3, // public but frozen
 }
 
-export interface IRoomState {
+export interface RoomState {
   activeRoomIds: string[];
-  docs: IIdMap<IRoom>;
+  docs: IdMap<Room>;
   userRoomIds: string[];
 }
 
-interface IIdMap<T> { [id: string]: T; }
+export type RoomStudent = {
+  name: string;
+  id: string;
+}
 
-export const emptyRoom = Object.freeze<IRoom>({
+interface IdMap<T> { [id: string]: T; }
+
+export const emptyRoom = Object.freeze<Room>({
   createdAt: new firebase.firestore.Timestamp(0, 0),
   id: '',
   name: '',
@@ -66,24 +214,24 @@ export function pickActiveRooms (state: AppState) {
 // ----------------------------------------------------------------------------
 // actions
 
-interface ISetUserRoomsAction {
-  rooms: IRoom[];
+interface SetUserRoomsAction {
+  rooms: Room[];
   type: 'Rooms/setUserRooms';
 }
 
-export function setUserRooms (rooms: IRoom[]): ISetUserRoomsAction {
+export function setUserRooms (rooms: Room[]): SetUserRoomsAction {
   return {
     rooms,
     type: 'Rooms/setUserRooms',
   };
 }
 
-interface ICreateRoomAction {
-  room: IRoom;
+interface CreateRoomAction {
+  room: Room;
   type: 'Rooms/createRoom';
 }
 
-export function createRoom (room: IRoom) {
+export function createRoom (room: Room) {
   if (room.id) {
     throw new Error('New room must not have ID');
   }
@@ -96,8 +244,8 @@ export function createRoom (room: IRoom) {
     throw new Error('Room must have name');
   }
 
-  return async (dispatch: AppDispatch): Promise<IRoom> => {
-    const newRoom: IRoom = {
+  return async (dispatch: AppDispatch): Promise<Room> => {
+    const newRoom: Room = {
       ...room,
       createdAt: firebase.firestore.Timestamp.now(),
       status: room.status || RoomStatus.draft,
@@ -110,7 +258,7 @@ export function createRoom (room: IRoom) {
 
     newRoom.id = docRef.id;
 
-    dispatch<ICreateRoomAction>({
+    dispatch<CreateRoomAction>({
       room: newRoom,
       type: 'Rooms/createRoom',
     });
@@ -119,12 +267,12 @@ export function createRoom (room: IRoom) {
   };
 }
 
-interface ISaveRoomAction {
-  room: IRoom;
+interface SaveRoomAction {
+  room: Room;
   type: 'Rooms/saveRoom';
 }
 
-export function saveRoom (room: IRoom) {
+export function saveRoom (room: Room) {
   return (dispatch: AppDispatch) => {
     const roomValues = {
       ...room,
@@ -132,7 +280,7 @@ export function saveRoom (room: IRoom) {
       updatedAt: firebase.firestore.Timestamp.now(),
     };
 
-    dispatch<ISaveRoomAction>({
+    dispatch<SaveRoomAction>({
       room: roomValues,
       type: 'Rooms/saveRoom',
     });
@@ -142,30 +290,30 @@ export function saveRoom (room: IRoom) {
   };
 }
 
-interface IStoreRoomAction {
-  room: IRoom;
+interface StoreRoomAction {
+  room: Room;
   type: 'Rooms/storeRoom';
 }
 
-export function storeRoom (room: IRoom): IStoreRoomAction {
+export function storeRoom (room: Room): StoreRoomAction {
   return {
     room,
     type: 'Rooms/storeRoom',
   };
 }
 
-interface IRemoveRoomAction {
-  room: IRoom;
+interface RemoveRoomAction {
+  room: Room;
   type: 'Rooms/removeRoom';
 }
 
-export function removeRoom (room: IRoom) {
+export function removeRoom (room: Room) {
   if (!room.id) {
     throw new Error('Room must have ID');
   }
 
   return (dispatch: AppDispatch) => {
-    dispatch<IRemoveRoomAction>({
+    dispatch<RemoveRoomAction>({
       room,
       type: 'Rooms/removeRoom',
     });
@@ -175,12 +323,12 @@ export function removeRoom (room: IRoom) {
   };
 }
 
-interface ISetActiveRoomsAction {
-  rooms: IRoom[];
+interface SetActiveRoomsAction {
+  rooms: Room[];
   type: 'Rooms/setActiveRooms';
 }
 
-export function setActiveRooms (rooms: IRoom[]): ISetActiveRoomsAction {
+export function setActiveRooms (rooms: Room[]): SetActiveRoomsAction {
   return {
     rooms,
     type: 'Rooms/setActiveRooms',
@@ -188,12 +336,12 @@ export function setActiveRooms (rooms: IRoom[]): ISetActiveRoomsAction {
 }
 
 export type RoomsAction =
-  | ISetUserRoomsAction
-  | ICreateRoomAction
-  | IStoreRoomAction
-  | IRemoveRoomAction
-  | ISaveRoomAction
-  | ISetActiveRoomsAction;
+  | SetUserRoomsAction
+  | CreateRoomAction
+  | StoreRoomAction
+  | RemoveRoomAction
+  | SaveRoomAction
+  | SetActiveRoomsAction;
 
 // ----------------------------------------------------------------------------
 // reducers
@@ -221,9 +369,9 @@ export function reduceActiveRoomIds (
 }
 
 export function reduceDocs (
-  state: IIdMap<IRoom> = {},
+  state: IdMap<Room> = {},
   action: RoomsAction,
-): IIdMap<IRoom> {
+): IdMap<Room> {
   switch (action.type) {
     case 'Rooms/createRoom':
     case 'Rooms/saveRoom':
@@ -270,7 +418,7 @@ export function reduceUserRoomIds (
   }
 }
 
-export const reduceRooms = combineReducers<IRoomState>({
+export const reduceRooms = combineReducers<RoomState>({
   activeRoomIds: reduceActiveRoomIds,
   docs: reduceDocs,
   userRoomIds: reduceUserRoomIds,
@@ -281,7 +429,7 @@ export const reduceRooms = combineReducers<IRoomState>({
 
 export function connectRoom (
   roomId: string,
-  onNext: (room: IRoom | null) => void,
+  onNext: (room: Room | null) => void,
   onError: (error: Error) => void = noop,
   onEach: () => void = noop,
 ): () => void {
@@ -305,7 +453,7 @@ export function connectRoom (
 
 export function connectUserRooms (
   userId: string,
-  onNext: (rooms: IRoom[]) => void,
+  onNext: (rooms: Room[]) => void,
   onError: (error: Error) => void = noop,
   onEach: () => void = noop,
 ): () => void {
@@ -332,7 +480,7 @@ export function connectUserRooms (
 }
 
 export function connectActiveRooms (
-  onNext: (rooms: IRoom[]) => void,
+  onNext: (rooms: Room[]) => void,
   onError: (error: Error) => void = noop,
   onEach: () => void = noop,
 ): () => void {
@@ -354,13 +502,13 @@ export function connectActiveRooms (
 
 export function snapshotToRoom (
   snapshot: firebase.firestore.QueryDocumentSnapshot,
-): IRoom;
+): Room;
 export function snapshotToRoom (
   snapshot: firebase.firestore.DocumentSnapshot,
-): IRoom | null;
+): Room | null;
 export function snapshotToRoom (
   snapshot: firebase.firestore.DocumentSnapshot,
-): IRoom | null {
+): Room | null {
   const data = snapshot.data();
   if (!data) {
     return null;

@@ -51,13 +51,18 @@ describe('<RoomListPage>', () => {
               name: 'Active room',
               status: RoomStatus.active,
             },
+            {
+              ...emptyRoom,
+              name: 'Archived room',
+              status: RoomStatus.archived,
+            },
           ]}
         />
       ));
     });
 
     it('renders each row', () => {
-      expect(wrapper.find('RoomListItem')).toHaveLength(3);
+      expect(wrapper.find('RoomListItem')).toHaveLength(4);
     });
 
     it('matches to snapshot', () => {

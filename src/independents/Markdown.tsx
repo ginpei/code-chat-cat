@@ -6,18 +6,17 @@ import styled from 'styled-components';
 import './Markdown.css';
 
 // html-to-react does not have type definition
-// tslint:disable-next-line:no-var-requires
 const HtmlToReactParser = require('html-to-react').Parser;
 
 const MarkdownBlock = styled.div.attrs({
   className: 'Markdown-Container',
 })``;
 
-interface IMarkdownProps {
+interface Props {
   content: string;
 }
 
-export default class Markdown extends React.Component<IMarkdownProps> {
+export default class Markdown extends React.Component<Props> {
   protected mdit = new MarkdownIt({
     highlight: (text, language) => {
       if (language && hljs.getLanguage(language)) {
@@ -42,12 +41,11 @@ export default class Markdown extends React.Component<IMarkdownProps> {
     return this.mdit.render(this.props.content);
   }
 
-  constructor (props: IMarkdownProps) {
+  public constructor (props: Props) {
     super(props);
     this.mdit.use(markdownItAnchor, {
       permalink: true,
     });
-    this.mdit.use(require('markdown-it-toc-done-right'));
   }
 
   public render () {

@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Container from '../independents/Container';
 import Header, { FullscreenContainer } from './Header';
-import { IHeaderMenu } from './HeaderMenu';
+import { HeaderMenuGroup } from './HeaderMenu';
 
 describe('<Header>', () => {
   let wrapper: ShallowWrapper;
@@ -85,7 +85,7 @@ describe('<Header>', () => {
 
   describe('menu', () => {
     beforeEach(() => {
-      const menus: IHeaderMenu[] = [
+      const menus: HeaderMenuGroup[] = [
         {
           links: [],
           name: 'Menu Group 1',

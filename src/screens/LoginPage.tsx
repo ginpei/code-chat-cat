@@ -1,21 +1,37 @@
-import firebaseui from 'firebaseui';
+import * as firebaseui from 'firebaseui';
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import { connect } from 'react-redux';
 import DefaultLayout from '../complexes/DefaultLayout';
+import ErrorView from './ErrorView';
+import LoadingView from '../independents/LoadingView';
 import firebase from '../middleware/firebase';
 import { appHistory, setTitle } from '../misc';
-import { AppState } from '../models/Store';
+import * as Profiles from '../models/Profiles';
 import { HomeLink } from '../path';
 
-interface ILoginPageProps {
-  loggedIn: boolean;
-}
-
-function LoginPage (props: ILoginPageProps) {
+const LoginPage: React.FC = () => {
   setTitle('Login');
 
-  if (props.loggedIn) {
+  const [profile, profileInitialized, profileError] = Profiles.useProfile(
+    firebase.auth(),
+    firebase.firestore(),
+  );
+
+  if (profileError) {
+    return (
+      <ErrorView
+        error={profileError}
+      />
+    );
+  }
+
+  if (!profileInitialized) {
+    return (
+      <LoadingView />
+    );
+  }
+
+  if (profile) {
     return (
       <DefaultLayout>
         <h1>Logged in ✓</h1>
@@ -44,10 +60,6 @@ function LoginPage (props: ILoginPageProps) {
       />
     </DefaultLayout>
   );
-}
+};
 
-export default connect(
-  (state: AppState) => ({
-    loggedIn: state.currentUser.loggedIn,
-  }),
-)(LoginPage);
+export default LoginPage;

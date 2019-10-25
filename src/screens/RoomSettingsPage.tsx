@@ -18,19 +18,21 @@ const RoomStatusInputLabel = styled.label`
   margin-right: 1em;
 `;
 
-interface IRoomStatusInputProps {
+interface RoomStatusInputProps {
   disabled: boolean;
   name: string;
   onChange: (roomStatus: Rooms.RoomStatus) => void;
   type: Rooms.RoomStatus;
   value: Rooms.RoomStatus;
 }
-function RoomStatusInput (props: IRoomStatusInputProps) {
+function RoomStatusInput (props: RoomStatusInputProps) {
   const sLabel = props.type === Rooms.RoomStatus.draft
     ? 'Draft'
     : props.type === Rooms.RoomStatus.public
       ? 'Public'
-      : 'Active';
+      : props.type === Rooms.RoomStatus.active
+        ? 'Active'
+        : 'Archived';
 
   const onChange = () => props.onChange(props.type);
 
@@ -48,12 +50,12 @@ function RoomStatusInput (props: IRoomStatusInputProps) {
   );
 }
 
-interface IRoomStatusInputGroupProps {
+interface RoomStatusInputGroupProps {
   disabled: boolean;
   onChange: (roomStatus: Rooms.RoomStatus) => void;
   value: Rooms.RoomStatus;
 }
-function RoomStatusInputGroup (props: IRoomStatusInputGroupProps) {
+function RoomStatusInputGroup (props: RoomStatusInputGroupProps) {
   const randomKey = String(Math.floor(Math.random() * 1000));
   const initialName = `RoomStatusInputGroup-${Date.now()}-${randomKey}`;
   const [name] = useState(initialName);
@@ -61,6 +63,7 @@ function RoomStatusInputGroup (props: IRoomStatusInputGroupProps) {
     Rooms.RoomStatus.draft,
     Rooms.RoomStatus.public,
     Rooms.RoomStatus.active,
+    Rooms.RoomStatus.archived,
   ];
   return (
     <>
@@ -83,37 +86,48 @@ const DangerZone = styled.div`
   padding: 1rem;
 `;
 
-interface IRoomSettingsPageParams {
+type PageParams = {
   id: string;
-}
-interface IRoomSettingsPageProps
-  extends RouteComponentProps<IRoomSettingsPageParams> {
-  pickRoom: (roomId: string) => Rooms.IRoom;
-  removeRoom: (room: Rooms.IRoom) => Promise<void>;
+};
+
+type StateProps = {
+  pickRoom: (roomId: string) => Rooms.Room;
+  userProfile: Profiles.Profile | null;
+  userRooms: Rooms.Room[];
+};
+
+type DispatchProps = {
+  removeRoom: (room: Rooms.Room) => Promise<void>;
   saveError: (location: string, error: ErrorLogs.AppError) => void;
-  saveRoom: (room: Rooms.IRoom) => void;
-  storeRoom: (room: Rooms.IRoom) => void;
-  userProfile: Profiles.IProfile | null;
-  userRooms: Rooms.IRoom[];
-}
-interface IRoomSettingsPageState {
-  room: Rooms.IRoom | null;
+  saveRoom: (room: Rooms.Room) => void;
+  storeRoom: (room: Rooms.Room) => void;
+};
+
+type Props =
+  & RouteComponentProps<PageParams>
+  & StateProps
+  & DispatchProps;
+
+type State = {
+  initialized: boolean;
+  room: Rooms.Room | null;
   roomName: string;
   roomSaving: boolean;
   roomStatus: Rooms.RoomStatus;
 }
 
-class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSettingsPageState> {
+class RoomSettingsPage extends React.Component<Props, State> {
   protected unsubscribeRoom = noop;
 
   protected get roomId () {
     return this.props.match.params.id;
   }
 
-  constructor (props: IRoomSettingsPageProps) {
+  public constructor (props: Props) {
     super(props);
     const room = props.pickRoom(this.roomId);
     this.state = {
+      initialized: false,
       room,
       roomName: room ? room.name : '',
       roomSaving: false,
@@ -126,7 +140,13 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
   }
 
   public render () {
-    const { room } = this.state;
+    const { initialized, room } = this.state;
+
+    if (!initialized) {
+      return (
+        <LoadingView/>
+      );
+    }
 
     if (!room) {
       return (
@@ -217,6 +237,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
         this.setRoom(null);
         this.props.saveError('connect room', error);
       },
+      () => this.setState({ initialized: true }),
     );
   }
 
@@ -241,7 +262,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
       roomSaving: true,
     });
 
-    const room: Rooms.IRoom = {
+    const room: Rooms.Room = {
       ...this.state.room!,
       name: this.state.roomName,
       status: this.state.roomStatus,
@@ -273,7 +294,7 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
     setTitle('Settings', room ? room.name : '...');
   }
 
-  protected setRoom (room: Rooms.IRoom | null) {
+  protected setRoom (room: Rooms.Room | null) {
     this.setState({
       room,
       roomName: room ? room.name : '',
@@ -286,17 +307,18 @@ class RoomSettingsPage extends React.Component<IRoomSettingsPageProps, IRoomSett
   }
 }
 
-export default connect(
-  (state: AppState) => ({
+export default connect<StateProps, DispatchProps, {}, AppState>(
+  (state) => ({
     pickRoom: (roomId: string) => Rooms.pickRoom(state, roomId),
     userProfile: state.currentUser.profile,
     userRooms: Rooms.pickUserRooms(state),
   }),
   (dispatch: AppDispatch) => ({
-    removeRoom: (room: Rooms.IRoom) => dispatch(Rooms.removeRoom(room)),
-    saveError: (location: string, error: ErrorLogs.AppError) =>
-      dispatch(ErrorLogs.add(location, error)),
-    saveRoom: (room: Rooms.IRoom) => dispatch(Rooms.saveRoom(room)),
-    storeRoom: (room: Rooms.IRoom) => dispatch(Rooms.storeRoom(room)),
+    removeRoom: (room: Rooms.Room) => dispatch(Rooms.removeRoom(room)),
+    saveError: (location: string, error: ErrorLogs.AppError) => dispatch(
+      ErrorLogs.add(location, error),
+    ),
+    saveRoom: (room: Rooms.Room) => dispatch(Rooms.saveRoom(room)),
+    storeRoom: (room: Rooms.Room) => dispatch(Rooms.storeRoom(room)),
   }),
 )(RoomSettingsPage);

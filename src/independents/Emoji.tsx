@@ -1,10 +1,12 @@
 import React from 'react';
 
 const map = {
+  'CatCry': '😿',
   'Fire': '🔥',
   'Lock': '🔒',
   'Memo': '📝',
   'Open Book': '📖',
+  'Package': '📦',
   'Speech Balloon': '💬',
   'White Heavy Check Mark': '✅',
 };
@@ -17,11 +19,11 @@ export function getEmojiChar (label: EmojiLabel) {
 
 type ISpanProps = React.ComponentPropsWithRef<'span'>;
 
-interface IEmojiProps extends ISpanProps {
+interface Props extends ISpanProps {
   label: EmojiLabel;
 }
 
-export default function Emoji (props: IEmojiProps) {
+export default function Emoji (props: Props) {
   const { label, ...spanProps } = props;
   const emoji = getEmojiChar(label);
 

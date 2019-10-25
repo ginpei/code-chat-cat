@@ -13,20 +13,20 @@ const ErrorBlock = styled.div`
   padding: 0.2rem;
 `;
 
-interface IRoomNewPageProps {
-  createRoom: (room: Rooms.IRoom) => Promise<Rooms.IRoom>;
+interface Props {
+  createRoom: (room: Rooms.Room) => Promise<Rooms.Room>;
   userId: string;
 }
-interface IRoomNewPageState {
+interface State {
   errorMessage: string;
   roomName: string;
   roomSaving: boolean;
 }
 
-class RoomNewPage extends React.Component<IRoomNewPageProps, IRoomNewPageState> {
+class RoomNewPage extends React.Component<Props, State> {
   // protected unsubscribe: (() => void) | null = null;
 
-  constructor (props: IRoomNewPageProps) {
+  public constructor (props: Props) {
     super(props);
     this.state = {
       errorMessage: '',
@@ -92,7 +92,7 @@ class RoomNewPage extends React.Component<IRoomNewPageProps, IRoomNewPageState> 
     });
 
     try {
-      const roomData: Rooms.IRoom = {
+      const roomData: Rooms.Room = {
         ...Rooms.emptyRoom,
         name: this.state.roomName,
         userId: this.props.userId,
@@ -114,6 +114,6 @@ export default connect(
     userId: state.currentUser.id,
   }),
   (dispatch: AppDispatch) => ({
-    createRoom: (room: Rooms.IRoom) => dispatch(Rooms.createRoom(room)),
+    createRoom: (room: Rooms.Room) => dispatch(Rooms.createRoom(room)),
   }),
 )(RoomNewPage);
