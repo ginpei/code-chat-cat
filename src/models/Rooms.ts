@@ -4,6 +4,37 @@ import firebase from '../middleware/firebase';
 import { noop } from '../misc';
 import { AppDispatch, AppState } from './Store';
 
+interface Record {
+  createdAt: firebase.firestore.Timestamp;
+  id: string;
+  updatedAt: firebase.firestore.Timestamp;
+}
+
+export interface Room extends Record {
+  name: string;
+  status: RoomStatus;
+  textbookContent: string;
+  userId: string;
+}
+
+export enum RoomStatus {
+  draft = 0, // only owner can access
+  public = 1, // public for those who know the URL
+  active = 2, // public and listed
+  archived = 3, // public but frozen
+}
+
+export interface RoomState {
+  activeRoomIds: string[];
+  docs: IdMap<Room>;
+  userRoomIds: string[];
+}
+
+export type RoomStudent = {
+  name: string;
+  id: string;
+}
+
 export function useRoom(
   firestore: firebase.firestore.Firestore,
   roomId: string,
@@ -149,37 +180,6 @@ const collectionName = 'rooms';
 
 // ----------------------------------------------------------------------------
 // states
-
-interface Record {
-  createdAt: firebase.firestore.Timestamp;
-  id: string;
-  updatedAt: firebase.firestore.Timestamp;
-}
-
-export interface Room extends Record {
-  name: string;
-  status: RoomStatus;
-  textbookContent: string;
-  userId: string;
-}
-
-export enum RoomStatus {
-  draft = 0, // only owner can access
-  public = 1, // public for those who know the URL
-  active = 2, // public and listed
-  archived = 3, // public but frozen
-}
-
-export interface RoomState {
-  activeRoomIds: string[];
-  docs: IdMap<Room>;
-  userRoomIds: string[];
-}
-
-export type RoomStudent = {
-  name: string;
-  id: string;
-}
 
 interface IdMap<T> { [id: string]: T; }
 
