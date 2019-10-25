@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
-import styled from 'styled-components';
 import RoomIndexList from '../basics/RoomIndexList';
+import RoomSidebarOuter from '../basics/RoomSidebarOuter';
 import SidebarSection from '../basics/RoomSidebarSection';
 import SimpleError from '../independents/SimpleError';
 import firebase from '../middleware/firebase';
@@ -72,10 +72,6 @@ const UserInfoSection: React.FC<{
     </div>
   );
 };
-
-const RoomTextbookSidebarOuter = styled.div`
-  padding-bottom: 5em;
-`;
 
 const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
   const { currentUser } = firebase.auth();
@@ -167,7 +163,7 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
   }
 
   return (
-    <RoomTextbookSidebarOuter className="RoomTextbookSidebar">
+    <RoomSidebarOuter className="RoomTextbookSidebar">
       <SidebarSection heading="You" open>
         {isOwner ? (
           <p>{profile!.name} (Owner)</p>
@@ -184,7 +180,7 @@ const RoomTextbookSidebar: React.FC<{ room: Room }> = ({ room }) => {
       <SidebarSection heading="Tasks">
         <TextbookTasksSection room={room} />
       </SidebarSection>
-    </RoomTextbookSidebarOuter>
+    </RoomSidebarOuter>
   );
 };
 
