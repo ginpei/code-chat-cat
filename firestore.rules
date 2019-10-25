@@ -2,26 +2,39 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /rooms/{roomId} {
       allow create: if request.resource.data.userId == request.auth.uid;
-      allow read: if resource.data.status == 1 || resource.data.status == 2 || resource.data.userId == request.auth.uid;
+      allow read: if isPublicRoom(roomId) || isRoomOwner(roomId);
       allow update: if resource.data.userId == request.auth.uid;
       allow delete: if resource.data.userId == request.auth.uid;
     }
     match /rooms/{roomId}/tasks/{taskId} {
-      allow create: if get(/databases/$(database)/documents/rooms/$(roomId)).data.userId == request.auth.uid;
-      allow read: if get(/databases/$(database)/documents/rooms/$(roomId)).data.status == 1 || get(/databases/$(database)/documents/rooms/$(roomId)).data.status == 2 || get(/databases/$(database)/documents/rooms/$(roomId)).data.userId == request.auth.uid;
-      allow update: if get(/databases/$(database)/documents/rooms/$(roomId)).data.userId == request.auth.uid;
-      allow delete: if get(/databases/$(database)/documents/rooms/$(roomId)).data.userId == request.auth.uid;
+      allow create: if isRoomOwner(roomId);
+      allow read: if isPublicRoom(roomId) || isRoomOwner(roomId);
+      allow update: if isRoomOwner(roomId);
+      allow delete: if isRoomOwner(roomId);
     }
     match /rooms/{roomId}/tasks/{taskId}/statuses/{userId} {
-      allow read: if get(/databases/$(database)/documents/rooms/$(roomId)).data.status == 1 || get(/databases/$(database)/documents/rooms/$(roomId)).data.status == 2 || get(/databases/$(database)/documents/rooms/$(roomId)).data.userId == request.auth.uid;
+      allow read: if isPublicRoom(roomId) || isRoomOwner(roomId);
       allow write: if userId == request.auth.uid;
     }
     match /rooms/{roomId}/students/{userId} {
-      allow read: if get(/databases/$(database)/documents/rooms/$(roomId)).data.status == 1 || get(/databases/$(database)/documents/rooms/$(roomId)).data.status == 2 || get(/databases/$(database)/documents/rooms/$(roomId)).data.userId == request.auth.uid;
+      allow read: if isPublicRoom(roomId) || isRoomOwner(roomId);
       allow write: if userId == request.auth.uid;
     }
     match /profiles/{userId} {
       allow read, write: if userId == request.auth.uid;
+    }
+
+    function isPublicRoom(roomId) {
+      return getRoomData(roomId).status == 1 // public
+        || getRoomData(roomId).status == 2; // active
+    }
+
+    function isRoomOwner(roomId) {
+      return  getRoomData(roomId).userId == request.auth.uid;
+    }
+
+    function getRoomData(roomId) {
+      return get(/databases/$(database)/documents/rooms/$(roomId)).data;
     }
   }
 }
