@@ -44,7 +44,7 @@ const GuestSidebar: React.FC<{
         <input type="text" value={name} onChange={onNameChange}/>
       </p>
       <p>
-        <button type="submit">Start</button>
+        <button type="submit">Join this room</button>
       </p>
     </form>
   );
