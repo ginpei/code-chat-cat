@@ -35,6 +35,7 @@ const TaskProgressLine: React.FC<{
   const numStudents = doneStudents.length + undoneStudents.length;
   const progress = doneStudents.length / numStudents;
   const sDoneNames = doneStudents.map((v) => v.name).join(', ') || '(None)';
+  const sUndoneNames = undoneStudents.map((v) => v.name).join(', ') || '(None)';
 
   const [open, setOpen] = useState(false);
 
@@ -48,7 +49,10 @@ const TaskProgressLine: React.FC<{
         <TaskProgressLineInner style={{ width: `${100 * progress}%` }} />
       </TaskProgressLineOuter>
       {open && (
-        <TaskProgressNames>✔ {sDoneNames}</TaskProgressNames>
+        <TaskProgressNames>
+          <div>✔ {sDoneNames} ({doneStudents.length})</div>
+          <div>… {sUndoneNames} ({undoneStudents.length})</div>
+        </TaskProgressNames>
       )}
     </>
   );
