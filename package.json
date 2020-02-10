@@ -29,7 +29,7 @@
     "markdown-it-anchor": "^5.2.5",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-firebaseui": "^4.0.0",
+    "react-firebaseui": "^4.1.0",
     "react-redux": "^7.1.3",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
